@@ -1,0 +1,9 @@
+node_modules
+dist
+.DS_Store
+
+# scans de test (données personnelles)
+apps/api/src/*.jpeg
+apps/api/src/*.jpg
+apps/api/src/*.png
+apps/api/src/*.pdf

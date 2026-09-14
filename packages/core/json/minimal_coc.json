@@ -1,0 +1,78 @@
+{
+    "A": {
+        "libelle": "Numéro d'immatriculation",
+        "valeur": null
+    },
+    "B": {
+        "libelle": "Date de première immatriculation",
+        "valeur": null
+    },
+    "C.1": {
+        "libelle": "Titulaire du certificat",
+        "valeur": null
+    },
+    "D.1": {
+        "libelle": "Marque",
+        "valeur": null
+    },
+    "D.2": {
+        "libelle": "Type – variante – version",
+        "valeur": null
+    },
+    "D.3": {
+        "libelle": "Dénomination commerciale",
+        "valeur": null
+    },
+    "E": {
+        "libelle": "Numéro d'identification du véhicule (VIN)",
+        "valeur": null
+    },
+    "F.1": {
+        "libelle": "Masse en charge maximale techniquement admissible (kg)",
+        "valeur": null
+    },
+    "G": {
+        "libelle": "Masse du véhicule en service (kg)",
+        "valeur": null
+    },
+    "H": {
+        "libelle": "Période de validité",
+        "valeur": null
+    },
+    "I": {
+        "libelle": "Date de l'immatriculation à laquelle se réfère le certificat",
+        "valeur": null
+    },
+    "J": {
+        "libelle": "Catégorie du véhicule",
+        "valeur": null
+    },
+    "K": {
+        "libelle": "Numéro de réception par type",
+        "valeur": null
+    },
+    "P.1": {
+        "libelle": "Cylindrée (cm3)",
+        "valeur": null
+    },
+    "P.2": {
+        "libelle": "Puissance nette maximale (kW)",
+        "valeur": null
+    },
+    "P.3": {
+        "libelle": "Type de carburant ou source d'énergie",
+        "valeur": null
+    },
+    "S.1": {
+        "libelle": "Nombre de places assises, conducteur inclus",
+        "valeur": null
+    },
+    "V.7": {
+        "libelle": "CO2 (g/km)",
+        "valeur": null
+    },
+    "V.9": {
+        "libelle": "Classe environnementale de réception CE",
+        "valeur": null
+    }
+}

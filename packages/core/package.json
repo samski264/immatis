@@ -1,0 +1,12 @@
+{
+  "name": "@immatis/core",
+  "version": "1.0.0",
+  "description": "Types du certificat, catalogue des champs et évaluateur de règles",
+  "private": true,
+  "license": "ISC",
+  "type": "module",
+  "exports": {
+    "./*": "./*.ts",
+    "./*.json": "./*.json"
+  }
+}

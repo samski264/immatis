@@ -1,0 +1,23 @@
+{
+  "name": "immatis",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "license": "ISC",
+  "type": "commonjs",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace @immatis/web",
+    "dev:api": "npm run dev --workspace @immatis/api",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@types/node": "^26.5.0",
+    "typescript": "^7.0.2"
+  }
+}

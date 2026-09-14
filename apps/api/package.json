@@ -1,0 +1,22 @@
+{
+  "name": "@immatis/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --env-file=.env src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@google/genai": "^2.22.0",
+    "@hono/node-server": "^2.1.1",
+    "@immatis/core": "*",
+    "hono": "^4.13.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "tsx": "^4.23.0",
+    "typescript": "^7.0.2"
+  }
+}

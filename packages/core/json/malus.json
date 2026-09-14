@@ -1,0 +1,25 @@
+{
+
+    "tranches": [
+      { "min": 1,   "max": 3,    "decote": 3 },
+      { "min": 4,   "max": 6,    "decote": 6 },
+      { "min": 7,   "max": 9,    "decote": 9 },
+      { "min": 10,  "max": 12,   "decote": 12 },
+      { "min": 13,  "max": 18,   "decote": 16 },
+      { "min": 19,  "max": 24,   "decote": 20 },
+      { "min": 25,  "max": 36,   "decote": 28 },
+      { "min": 37,  "max": 48,   "decote": 33 },
+      { "min": 49,  "max": 60,   "decote": 38 },
+      { "min": 61,  "max": 72,   "decote": 43 },
+      { "min": 73,  "max": 84,   "decote": 48 },
+      { "min": 85,  "max": 96,   "decote": 53 },
+      { "min": 97,  "max": 108,  "decote": 58 },
+      { "min": 109, "max": 120,  "decote": 64 },
+      { "min": 121, "max": 132,  "decote": 70 },
+      { "min": 133, "max": 144,  "decote": 76 },
+      { "min": 145, "max": 156,  "decote": 82 },
+      { "min": 157, "max": 168,  "decote": 88 },
+      { "min": 169, "max": 180,  "decote": 94 },
+      { "min": 181, "max": null, "decote": 100 }
+    ]
+  }

@@ -1,0 +1,254 @@
+{
+    "A": {
+        "libelle": "Numéro d'immatriculation",
+        "valeur": null
+    },
+    "B": {
+        "libelle": "Date de première immatriculation",
+        "valeur": null
+    },
+    "C.1": {
+        "libelle": "Titulaire du certificat",
+        "valeur": null
+    },
+    "C.1.1": {
+        "libelle": "Nom ou raison sociale",
+        "valeur": null
+    },
+    "C.1.2": {
+        "libelle": "Prénom(s) ou initiale(s)",
+        "valeur": null
+    },
+    "C.1.3": {
+        "libelle": "Adresse",
+        "valeur": null
+    },
+    "C.2": {
+        "libelle": "Propriétaire du véhicule",
+        "valeur": null
+    },
+    "C.2.1": {
+        "libelle": "Nom ou raison sociale",
+        "valeur": null
+    },
+    "C.2.2": {
+        "libelle": "Prénom(s) ou initiale(s)",
+        "valeur": null
+    },
+    "C.2.3": {
+        "libelle": "Adresse",
+        "valeur": null
+    },
+    "C.3": {
+        "libelle": "Personne pouvant disposer du véhicule à un autre titre que propriétaire",
+        "valeur": null
+    },
+    "C.3.1": {
+        "libelle": "Nom ou raison sociale",
+        "valeur": null
+    },
+    "C.3.2": {
+        "libelle": "Prénom(s) ou initiale(s)",
+        "valeur": null
+    },
+    "C.3.3": {
+        "libelle": "Adresse",
+        "valeur": null
+    },
+    "C.4": {
+        "libelle": "Titulaire propriétaire / non propriétaire / non identifié comme propriétaire",
+        "valeur": null
+    },
+    "C.5": {
+        "libelle": "Changement de données nominatives sans nouveau certificat",
+        "valeur": null
+    },
+    "C.6": {
+        "libelle": "Changement de données nominatives sans nouveau certificat",
+        "valeur": null
+    },
+    "C.7": {
+        "libelle": "Changement de données nominatives sans nouveau certificat",
+        "valeur": null
+    },
+    "C.8": {
+        "libelle": "Changement de données nominatives sans nouveau certificat",
+        "valeur": null
+    },
+    "D.1": {
+        "libelle": "Marque",
+        "valeur": null
+    },
+    "D.2": {
+        "libelle": "Type – variante – version",
+        "valeur": null
+    },
+    "D.3": {
+        "libelle": "Dénomination(s) commerciale(s)",
+        "valeur": null
+    },
+    "E": {
+        "libelle": "Numéro d'identification du véhicule (VIN)",
+        "valeur": null
+    },
+    "F.1": {
+        "libelle": "Masse en charge maximale techniquement admissible (kg)",
+        "valeur": null
+    },
+    "F.2": {
+        "libelle": "Masse en charge maximale admissible en service dans l'État membre (kg)",
+        "valeur": null
+    },
+    "F.3": {
+        "libelle": "Masse en charge maximale admissible de l'ensemble (kg)",
+        "valeur": null
+    },
+    "G": {
+        "libelle": "Masse du véhicule en service (kg)",
+        "valeur": null
+    },
+    "H": {
+        "libelle": "Période de validité",
+        "valeur": null
+    },
+    "I": {
+        "libelle": "Date de l'immatriculation à laquelle se réfère le certificat",
+        "valeur": null
+    },
+    "J": {
+        "libelle": "Catégorie du véhicule",
+        "valeur": null
+    },
+    "K": {
+        "libelle": "Numéro de réception par type",
+        "valeur": null
+    },
+    "L": {
+        "libelle": "Nombre d'essieux",
+        "valeur": null
+    },
+    "M": {
+        "libelle": "Empattement (mm)",
+        "valeur": null
+    },
+    "N.1": {
+        "libelle": "Masse max. admissible essieu 1 (kg)",
+        "valeur": null
+    },
+    "N.2": {
+        "libelle": "Masse max. admissible essieu 2 (kg)",
+        "valeur": null
+    },
+    "N.3": {
+        "libelle": "Masse max. admissible essieu 3 (kg)",
+        "valeur": null
+    },
+    "N.4": {
+        "libelle": "Masse max. admissible essieu 4 (kg)",
+        "valeur": null
+    },
+    "N.5": {
+        "libelle": "Masse max. admissible essieu 5 (kg)",
+        "valeur": null
+    },
+    "O.1": {
+        "libelle": "Masse max. remorquable – remorque freinée (kg)",
+        "valeur": null
+    },
+    "O.2": {
+        "libelle": "Masse max. remorquable – remorque non freinée (kg)",
+        "valeur": null
+    },
+    "P.1": {
+        "libelle": "Cylindrée (cm3)",
+        "valeur": null
+    },
+    "P.2": {
+        "libelle": "Puissance nette maximale (kW)",
+        "valeur": null
+    },
+    "P.3": {
+        "libelle": "Type de carburant ou source d'énergie",
+        "valeur": null
+    },
+    "P.4": {
+        "libelle": "Vitesse nominale du moteur (min-1)",
+        "valeur": null
+    },
+    "P.5": {
+        "libelle": "Numéro d'identification du moteur",
+        "valeur": null
+    },
+    "Q": {
+        "libelle": "Rapport puissance/poids (kW/kg) – motocycles",
+        "valeur": null
+    },
+    "R": {
+        "libelle": "Couleur",
+        "valeur": null
+    },
+    "S.1": {
+        "libelle": "Nombre de places assises, conducteur inclus",
+        "valeur": null
+    },
+    "S.2": {
+        "libelle": "Nombre de places debout",
+        "valeur": null
+    },
+    "T": {
+        "libelle": "Vitesse maximale (km/h)",
+        "valeur": null
+    },
+    "U.1": {
+        "libelle": "Niveau sonore à l'arrêt dB(A)",
+        "valeur": null
+    },
+    "U.2": {
+        "libelle": "Régime moteur pour U.1 (min-1)",
+        "valeur": null
+    },
+    "U.3": {
+        "libelle": "Niveau sonore en marche dB(A)",
+        "valeur": null
+    },
+    "V.1": {
+        "libelle": "CO (g/km ou g/kWh)",
+        "valeur": null
+    },
+    "V.2": {
+        "libelle": "HC (g/km ou g/kWh)",
+        "valeur": null
+    },
+    "V.3": {
+        "libelle": "NOx (g/km ou g/kWh)",
+        "valeur": null
+    },
+    "V.4": {
+        "libelle": "HC + NOx (g/km)",
+        "valeur": null
+    },
+    "V.5": {
+        "libelle": "Particules diesel (g/km ou g/kWh)",
+        "valeur": null
+    },
+    "V.6": {
+        "libelle": "Coefficient d'absorption corrigé diesel (m-1)",
+        "valeur": null
+    },
+    "V.7": {
+        "libelle": "CO2 (g/km)",
+        "valeur": null
+    },
+    "V.8": {
+        "libelle": "Consommation combinée (l/100 km)",
+        "valeur": null
+    },
+    "V.9": {
+        "libelle": "Classe environnementale de réception CE",
+        "valeur": null
+    },
+    "W": {
+        "libelle": "Capacité du/des réservoir(s) (litres)",
+        "valeur": null
+    }
+}
