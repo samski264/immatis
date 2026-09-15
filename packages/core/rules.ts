@@ -2,38 +2,38 @@ import type { CarCertificate, DrealStatus, Fiscale, Malus, TVA } from './types.t
 import malusTable from "./json/malus.json" with { type: "json" };
 
 const complet: CarCertificate = {
-    "A": { libelle: "Immat", valeur: "AB-123-CD" },
-    "B": { libelle: "Date 1ère immat", valeur: new Date("2025-03-31") },
-    "C.1": { libelle: "Titulaire", valeur: "Dupont" },
-    "D.1": { libelle: "Marque", valeur: "Renault" },
-    "D.2": { libelle: "Type", valeur: "XXX" },
-    "D.3": { libelle: "Dénomination", valeur: "Clio" },
-    "E": { libelle: "VIN", valeur: "VF1XXXX" },
-    "F.1": { libelle: "Masse max", valeur: null },
-    "G": { libelle: "Masse service", valeur: 1200 },
-    "H": { libelle: "Validité", valeur: null },
-    "I": { libelle: "Date immat", valeur: "01/01/2020" },
-    "J": { libelle: "Catégorie", valeur: "M1" },
-    "K": { libelle: "Réception", valeur: null },
-    "P.1": { libelle: "Cylindrée", valeur: 999 },
-    "P.2": { libelle: "Puissance", valeur: 67 },
-    "P.3": { libelle: "Carburant", valeur: "Essence" },
-    "S.1": { libelle: "Places", valeur: 5 },
-    "V.7": { libelle: "CO2", valeur: 120 },
-    "V.9": { libelle: "Classe env", valeur: "Euro 6" },
+    "A": "AB-123-CD",                  // Immat
+    "B": new Date("2025-03-31"),       // Date 1ère immat
+    "C.1": "Dupont",                   // Titulaire
+    "D.1": "Renault",                  // Marque
+    "D.2": "XXX",                      // Type
+    "D.3": "Clio",                     // Dénomination
+    "E": "VF1XXXX",                    // VIN
+    "F.1": null,                       // Masse max
+    "G": 1200,                         // Masse service
+    "H": null,                         // Validité
+    "I": new Date("2020-01-01"),       // Date immat
+    "J": "M1",                         // Catégorie
+    "K": null,                         // Réception
+    "P.1": 999,                        // Cylindrée
+    "P.2": 67,                         // Puissance
+    "P.3": "Essence",                  // Carburant
+    "S.1": 5,                          // Places
+    "V.7": 120,                        // CO2
+    "V.9": "Euro 6",                   // Classe env
 }
 
 
 
 function hasReception(certificate: CarCertificate): DrealStatus {
-    if (certificate.K.valeur != null) {   //do the car have a reception ?
+    if (certificate.K != null) {   //do the car have a reception ?
         return null
     }
     return isAnAVDT(certificate)
 }
 
 function fiscal(certificate: CarCertificate): Fiscale {
-    const from = certificate.B.valeur
+    const from = certificate.B
 
     if (from == null) return null
     const months =
@@ -57,8 +57,8 @@ function fiscal(certificate: CarCertificate): Fiscale {
 function isAnAVDT(certificate: CarCertificate): DrealStatus {
     const { K, J, "V.7": v7, "V.9": v9, ...rest } = certificate    //destructuration for requiered and minimal RTI/AVDT fields 
 
-    for (const field of Object.values(rest)) {
-        if (field.valeur == null) return 'RTI'
+    for (const valeur of Object.values(rest)) {
+        if (valeur == null) return 'RTI'
     }
     return 'AVDT'
 }

@@ -2,6 +2,9 @@ node_modules
 dist
 .DS_Store
 
+# sources graphiques
+_others/
+
 # scans de test (données personnelles)
 apps/api/src/*.jpeg
 apps/api/src/*.jpg
