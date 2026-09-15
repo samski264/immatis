@@ -1,12 +1,12 @@
 import { GoogleGenAI } from "@google/genai";
 import minimal_coc from "@immatis/core/json/minimal_coc.json" with {type: "json"}
 import type { CarCertificate } from "@immatis/core/types";
-import type { Certificate } from "node:crypto";
+import { cocSchema, conformSchema } from "@immatis/core/schema"
+import * as z from "zod";
+
 
 
 const client = new GoogleGenAI({});
-
-
 const prompt = `
 Tu es un expert de l'immatriculation en France de véhicules importés.
 
@@ -48,138 +48,69 @@ Règles d'extraction :
 Réponds uniquement par le JSON, sans texte ni commentaire autour.
 `;
 
-
 type ScanMimeType = "image/jpeg" | "image/png" | "image/webp" | "application/pdf";
 
 type certificateScan = {
-    file: string | Blob;
-    mimeType: ScanMimeType;
+  file: string | Blob;
+  mimeType: ScanMimeType;
 };
 
-type upStream = [
-    {
-        type: "image",
-        uri: string,
-        mime_type: string
-    }
-]
-
-
-let scans: certificateScan[] = [{ file: "./kettentkard.jpeg", mimeType: "image/jpeg" }, { file: "./kettentkard2.jpeg", mimeType: "image/jpeg" }, { file: "./kettentkard3.jpeg", mimeType: "image/jpeg" }]
-
-async function ocr(scans: certificateScan[]): Promise<CarCertificate> {
-
-
-    scans.forEach(
-        async (scan, index) => {
-            const uploadedFile = await client.files.upload({
-                file: scan.file,
-                config: { mimeType: scan.mimeType }
-            });
-        })
-
-
-    async function upStream (scans: certificateScan[]): Promise<upStream[]> {
-
-        await Promise.all(
-            scans.map(async (scan) => {
-    
-                await client.files.upload({
-                    file: scan.file,
-                    config: { mimeType: scan.mimeType }
-                });
-
-            })
-        )
-
-        return 
-    }
-
-
-
-
-    let lksfdj = [
-        { type: "text", text: prompt },
-        {
-            type: "image",
-            uri: uploadedFile.uri,
-            mime_type: uploadedFile.mimeType
-        },
-        {
-            type: "image",
-            uri: uploadedFile2.uri,
-            mime_type: uploadedFile2.mimeType
-        },
-        {
-            type: "image",
-            uri: uploadedFile3.uri,
-            mime_type: uploadedFile3.mimeType
-
-        }
-    ]
-
-
-
-    const interaction = await client.interactions.create({
-        model: "gemini-3.8-flash",
-        input: [
-            { type: "text", text: prompt },
-            {
-                type: "image",
-                uri: uploadedFile.uri,
-                mime_type: uploadedFile.mimeType
-            },
-            {
-                type: "image",
-                uri: uploadedFile2.uri,
-                mime_type: uploadedFile2.mimeType
-            },
-            {
-                type: "image",
-                uri: uploadedFile3.uri,
-                mime_type: uploadedFile3.mimeType
-
-            }
-        ],
-        response_format: {
-            type: 'text',
-            mime_type: 'application/json',
-            schema: minimal_coc
-        },
-    });
-
-
-    return
+type upStream = {
+  type: "image",
+  uri: string,
+  mime_type: string
 }
 
 
-// const uploadedFile = await client.files.upload({
-//     file: "./kettentkard.jpeg",
-//     config: { mimeType: "image/jpeg" }
-// });
-
-
-// const uploadedFile2 = await client.files.upload({
-//     file: "./kettentkard2.jpeg",
-//     config: { mimeType: "image/jpeg" }
-// });
-
-// const uploadedFile3 = await client.files.upload({
-//     file: "./kettentkard3.jpeg",
-//     config: { mimeType: "image/jpeg" }
-// });
+let scans: certificateScan[] = [{ file: "./src/kettentkard.jpeg", mimeType: "image/jpeg" }, { file: "./src/kettentkard2.jpeg", mimeType: "image/jpeg" }, { file: "./src/kettentkard3.jpeg", mimeType: "image/jpeg" }]
 
 
 
 
+async function uploadScans(scans: certificateScan[]): Promise<upStream[]> {
+
+  let scanStreamed: upStream[] = await Promise.all(
+    scans.map(async (scan) => {
+
+      let uploadFile = await client.files.upload({
+        file: scan.file,
+        config: { mimeType: scan.mimeType }
+      });
+
+      if (uploadFile.uri === undefined || uploadFile.mimeType === undefined) throw new Error('Upload sans uri exploitable');
+      
+      else return {       //construct object for GoogleGenAI
+        type: "image",
+        uri: uploadFile.uri,
+        mime_type: uploadFile.mimeType
+      }
+    })
+  )
+
+  return scanStreamed
+}
+
+async function ocr(scans: certificateScan[]): Promise<CarCertificate> {
+
+  const interaction = await client.interactions.create({
+    model: "gemini-3.8-flash",
+    input: [
+      { type: "text", text: prompt },
+      
+      ...await uploadScans(scans)
+
+    ],
+    response_format: {
+      type: 'text',
+      mime_type: 'application/json',
+      schema: z.toJSONSchema(cocSchema)
+    },
+  });
+
+  if (interaction.output_text === undefined) throw new Error('Erreur google gen AI repsonse')
+  return conformSchema(cocSchema.parse(JSON.parse(interaction.output_text)))
+}
 
 
 
-
-
-
-
-
-
-
-console.log(interaction.output_text);
+console.log(await ocr(scans))
