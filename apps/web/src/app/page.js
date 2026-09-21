@@ -1,69 +1,81 @@
 import Image from "next/image";
+import Dropzone from "./Dropzone";
+import LandscapeStrip from "./LandscapeStrip";
+import StepBloc from "./StepBloc";
 import styles from "./page.module.css";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.js</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className={styles.main}>
+      <LandscapeStrip className={styles.strip} />
+      <div className={styles.veil} aria-hidden="true">
+        <div />
+        <div />
+        <div />
+        <div />
+      </div>
+
+      <Image
+        className={styles.logo}
+        src="/logo.svg"
+        alt="immatis"
+        width={125}
+        height={204}
+        priority
+        unoptimized
+      />
+
+      <header className={styles.hero}>
+        <h1 className={styles.title}>L&apos;ANTS en moins de dix secondes.</h1>
+        <p className={styles.lead}>
+          Immatis simule l&apos;instruction de votre dossier à partir de la carte grise
+          étrangère, avant que vous n&apos;achetiez le véhicule
+        </p>
+      </header>
+
+      <section className={styles.upload}>
+        <Dropzone />
+      </section>
+
+      <section className={styles.bloc}>
+        <h2 className={styles.heading}>Comment ça marche ?</h2>
+        <p className={styles.text}>
+          La carte grise étrangère contient déjà la réponse. L&apos;administration française la
+          lira champ par champ pour décider du sort de votre dossier. Immatis fait la même
+          lecture, avant que vous n&apos;ayez versé un euro.
+        </p>
+      </section>
+
+      <section className={styles.steps}>
+        <StepBloc background="#e7e7e7" color="#505050" scene="drop" title="1 Déposez la photo">
+          La carte grise que le vendeur vous a envoyée suffit. Rien à saisir.
+        </StepBloc>
+        <StepBloc background="#c8f57a" scene="scan" title="2 Immatis lit le document">
+          Les champs harmonisés sont extraits un par un, puis passés dans les règles françaises.
+        </StepBloc>
+        <StepBloc background="#d9f3ff" scene="stamp" title="3 Vous obtenez le verdict">
+          AVDT ou RTI, radiation, TVA, coût de la carte grise. Pour chaque résultat : le champ lu
+          et la règle appliquée.
+        </StepBloc>
+      </section>
+
+      <div className={styles.duo}>
+        <section className={styles.bloc}>
+          <h2 className={styles.heading}>Après l&apos;acompte, c&apos;est trop tard.</h2>
+          <p className={styles.text}>
+            Un champ manquant sur le certificat, et le dossier part en RTI : des mois de délai
+            et des frais que personne ne vous avait annoncés. Ça se voit sur la photo. Autant le
+            voir avant.
           </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+        </section>
+        <section className={styles.bloc}>
+          <h2 className={styles.heading}>Ce qu&apos;Immatis n&apos;est pas</h2>
+          <p className={styles.text}>
+            Pas de compte. Pas d&apos;e-mail. Pas d&apos;abonnement. Pas de mandataire derrière.
+            Le résultat s&apos;affiche, il ne se déverrouille pas.
+          </p>
+        </section>
+      </div>
+    </main>
   );
 }

@@ -90,7 +90,7 @@ async function uploadScans(scans: certificateScan[]): Promise<upStream[]> {
   return scanStreamed
 }
 
-async function ocr(scans: certificateScan[]): Promise<CarCertificate> {
+export async function ocr(scans: certificateScan[]): Promise<CarCertificate> {
 
   const interaction = await client.interactions.create({
     model: "gemini-3.8-flash",

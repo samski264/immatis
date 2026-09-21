@@ -20,8 +20,6 @@ type CarCertificate = {
     "V.9": string | null;
 };
 
-
-
 type TVA = 'TVA' | null
 type DrealStatus = 'AVDT' | 'RTI' | null
 type Malus = number | null

@@ -1,150 +1,144 @@
-.page {
-  --background: #fafafa;
-  --foreground: #fff;
-
-  --text-primary: #000;
-  --text-secondary: #666;
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
-
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
-}
+/* Maquette Figma 1728 x 2153 : toutes les cotes sont en unité --u (1/1728 de la largeur) */
 
 .main {
-  display: flex;
-  flex: 1;
-  width: 100%;
-  max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
-}
+  --u: calc(100vw / 1728);
+  --radius: calc(17 * var(--u));
 
-.intro {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  text-align: left;
-  gap: 24px;
-}
-
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
-}
-
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
-}
-
-.intro a {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.ctas {
-  display: flex;
-  flex-direction: row;
   width: 100%;
-  max-width: 440px;
-  gap: 16px;
-  font-size: 14px;
+  padding: 0 calc(172 * var(--u)) calc(214 * var(--u));
+  background: #fff;
+  color: #000;
+  overflow-x: clip;
 }
 
-.ctas a {
+/* Bande de paysages, pleine largeur, derrière la zone de dépôt. Elle remonte sous le titre
+   et l'accroche (tuiles de 413 mesurées dans la capture 38:210, posée à y = 255 + 70) */
+.strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(325 * var(--u));
+  height: calc(413 * var(--u));
+  z-index: 0;
+}
+
+/* Voile à flou progressif (Rectangle 49:318, 0 -> 517) : flou nul à 97 % de sa hauteur,
+   maximal (12.9 px CSS) à partir de 35 %. CSS n'a pas de backdrop-filter en dégradé : on
+   empile 4 couches floutées masquées sur des bandes successives ; les flous se cumulent en
+   quadrature (b_k = 12.9/4 * sqrt(2k-1)) pour approcher une rampe linéaire.
+   Sans pointer-events pour que le pointeur continue d'agir sur les particules. */
+.veil {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(517 * var(--u));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.veil > * {
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(calc(var(--b) * var(--u)));
+  mask-image: linear-gradient(to bottom, #000 var(--from), transparent var(--to));
+}
+
+.veil > :nth-child(1) { --b: 3.2; --from: 81.5%; --to: 96.9%; }
+.veil > :nth-child(2) { --b: 5.6; --from: 66.1%; --to: 81.5%; }
+.veil > :nth-child(3) { --b: 7.2; --from: 50.7%; --to: 66.1%; }
+.veil > :nth-child(4) { --b: 8.5; --from: 35.2%; --to: 50.7%; }
+
+.main > :not(.strip, .veil) {
+  position: relative;
+  z-index: 1;
+}
+
+.logo {
+  width: calc(125 * var(--u));
+  height: calc(204 * var(--u));
+}
+
+/* Titre + accroche (Frame 2 : 1078 x 239) */
+.hero {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
-  cursor: pointer;
-  width: fit-content;
+  gap: calc(10 * var(--u));
+  width: calc(1078 * var(--u));
+  height: calc(239 * var(--u));
+  padding: calc(3 * var(--u)) calc(39 * var(--u));
+}
+
+.title {
+  font-family: "Aquawax Fx", sans-serif;
   font-weight: 500;
+  font-size: 63px;
+  line-height: normal;
+  letter-spacing: -1.89px;
 }
 
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
-  gap: 8px;
+.lead {
+  width: calc(859 * var(--u));
+  font-family: "Parabole Trial", sans-serif;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: normal;
 }
 
-a.secondary {
-  border-color: var(--button-secondary-border);
+/* Zone de dépôt centrée sur la bande (Frame 12 : 1384 x 398) */
+.upload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: calc(398 * var(--u));
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
+/* Bloc de texte titre + paragraphe (Frames 4, 13, 14 : 719 x 338) */
+.bloc {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: calc(10 * var(--u));
+  width: calc(719 * var(--u));
+  height: calc(338 * var(--u));
+  padding: calc(3 * var(--u)) calc(39 * var(--u));
+  flex-shrink: 0;
 }
 
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
-  }
-
-  .intro {
-    gap: 16px;
-  }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
+.heading {
+  font-family: "Aquawax Fx", sans-serif;
+  font-weight: 200;
+  font-size: 35px;
+  line-height: normal;
+  letter-spacing: -1.05px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
-
-  .page {
-    --background: #000;
-    --foreground: #000;
-
-    --text-primary: #ededed;
-    --text-secondary: #999;
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
-  }
+.text {
+  font-family: "Parabole Trial", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: normal;
+  overflow-wrap: break-word;
 }
 
-.code {
-  font-family: var(--font-geist-mono);
-  font-size: 0.9em;
-  background: color-mix(in srgb, currentColor 8%, transparent);
-  padding: 0.1em 0.4em;
-  border-radius: 6px;
+/* Trois étapes (Frame 9 : 1432 de large, gap 81) */
+.steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(81 * var(--u));
+  width: calc(1432 * var(--u));
+}
+
+/* Deux blocs côte à côte (Frame 15) */
+.duo {
+  display: flex;
+  align-items: center;
+  width: 100%;
 }

@@ -1,38 +1,39 @@
 import type { CarCertificate, DrealStatus, Fiscale, Malus, TVA } from './types.ts'
 import malusTable from "./json/malus.json" with { type: "json" };
 
-const complet: CarCertificate = {
-    "A": "AB-123-CD",                  // Immat
-    "B": new Date("2025-03-31"),       // Date 1ère immat
-    "C.1": "Dupont",                   // Titulaire
-    "D.1": "Renault",                  // Marque
-    "D.2": "XXX",                      // Type
-    "D.3": "Clio",                     // Dénomination
-    "E": "VF1XXXX",                    // VIN
-    "F.1": null,                       // Masse max
-    "G": 1200,                         // Masse service
-    "H": null,                         // Validité
-    "I": new Date("2020-01-01"),       // Date immat
-    "J": "M1",                         // Catégorie
-    "K": null,                         // Réception
-    "P.1": 999,                        // Cylindrée
-    "P.2": 67,                         // Puissance
-    "P.3": "Essence",                  // Carburant
-    "S.1": 5,                          // Places
-    "V.7": 120,                        // CO2
-    "V.9": "Euro 6",                   // Classe env
-}
+// const complet: CarCertificate = {
+//     "A": "AB-123-CD",                  // Immat
+//     "B": new Date("2025-03-31"),       // Date 1ère immat
+//     "C.1": "Dupont",                   // Titulaire
+//     "D.1": "Renault",                  // Marque
+//     "D.2": "XXX",                      // Type
+//     "D.3": "Clio",                     // Dénomination
+//     "E": "VF1XXXX",                    // VIN
+//     "F.1": null,                       // Masse max
+//     "G": 1200,                         // Masse service
+//     "H": null,                         // Validité
+//     "I": new Date("2020-01-01"),       // Date immat
+//     "J": "M1",                         // Catégorie
+//     "K": null,                         // Réception
+//     "P.1": 999,                        // Cylindrée
+//     "P.2": 67,                         // Puissance
+//     "P.3": "Essence",                  // Carburant
+//     "S.1": 5,                          // Places
+//     "V.7": 120,                        // CO2
+//     "V.9": "Euro 6",                   // Classe env
+// }
 
 
 
-function hasReception(certificate: CarCertificate): DrealStatus {
+
+export function hasReception(certificate: CarCertificate): DrealStatus {
     if (certificate.K != null) {   //do the car have a reception ?
         return null
     }
     return isAnAVDT(certificate)
 }
 
-function fiscal(certificate: CarCertificate): Fiscale {
+export function getFiscal(certificate: CarCertificate): Fiscale {
     const from = certificate.B
 
     if (from == null) return null
@@ -43,10 +44,6 @@ function fiscal(certificate: CarCertificate): Fiscale {
     console.log(from.getFullYear())
 
     if (exemptedMalus(months, from)) return null
-    
-
-
-
     
     return {
         malus: abbatement(certificate, months),
@@ -89,6 +86,3 @@ function exemptedMalus(months: number, from: Date): boolean {
     if (from <= new Date("2015-01-01")) return true
     return false
 }
-
-
-fiscal(complet)
