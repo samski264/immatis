@@ -1,3 +1,37 @@
+/* Polices alignées sur la maquette Figma immatis (node 36:111) */
+
+@font-face {
+  font-family: "Aquawax Fx";
+  src: url("/fonts/aquawaxfx-extralight.otf") format("opentype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Aquawax Fx";
+  src: url("/fonts/aquawaxfx-medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Parabole Trial";
+  src: url("/fonts/ParaboleTrial-RegularText.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Parabole Trial";
+  src: url("/fonts/ParaboleTrial-BoldText.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -26,7 +60,8 @@ body {
   flex-direction: column;
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Parabole Trial", Arial, sans-serif;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

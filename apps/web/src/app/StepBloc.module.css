@@ -1,0 +1,48 @@
+/* Dimensions Figma (step_bloc 295 de large, hauteur au contenu) en unité --u (1/1728 de la largeur) */
+
+.bloc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: calc(17 * var(--u));
+  width: calc(295 * var(--u));
+  padding: 0 0 calc(45 * var(--u));
+  border-radius: var(--radius);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Illustration pleine largeur */
+.picture {
+  width: 100%;
+  height: calc(229.5 * var(--u));
+  pointer-events: none;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: calc(17 * var(--u));
+  width: 100%;
+  padding: 0 calc(14 * var(--u));
+  overflow-wrap: break-word;
+}
+
+.title,
+.body {
+  line-height: normal;
+}
+
+.title {
+  font-family: "Aquawax Fx", sans-serif;
+  font-weight: 200;
+  font-size: 35px;
+  letter-spacing: -1.05px;
+}
+
+.body {
+  font-family: "Parabole", "DIN Pro", Arial, sans-serif;
+  font-weight: 90;
+  font-size: 14px;
+}

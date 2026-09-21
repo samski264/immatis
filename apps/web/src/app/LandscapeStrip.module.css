@@ -1,0 +1,24 @@
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.road {
+  fill: none;
+  stroke: var(--road-color, #fff);
+  stroke-width: 8;
+  opacity: 0.94;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.arrow path {
+  stroke: #fff;
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.28));
+}

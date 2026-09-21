@@ -1,0 +1,61 @@
+/* Figma 36:195 : 786 x 249, verre blanc flouté, liseré blanc, halo intérieur */
+
+.zone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(7 * var(--u));
+  width: calc(786 * var(--u));
+  height: calc(249 * var(--u));
+  padding: calc(3 * var(--u)) calc(39 * var(--u));
+  border: 0.5px solid #fff;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 0 calc(18 * var(--u)) calc(16 * var(--u)) rgba(255, 255, 255, 0.25);
+  /* pas de -webkit-backdrop-filter manuel : le compilateur ne garderait que le préfixé */
+  backdrop-filter: blur(calc(17.6 * var(--u)));
+  color: #000;
+  text-align: center;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.zone:hover,
+.zone:focus-visible,
+.over {
+  background: rgba(255, 255, 255, 0.45);
+  outline: none;
+}
+
+.input {
+  display: none;
+}
+
+.icon {
+  width: calc(63 * var(--u));
+  height: calc(62.76 * var(--u));
+  transform: scaleX(-1);
+}
+
+.label,
+.hint {
+  font-family: "Parabole Trial", sans-serif;
+  line-height: normal;
+  overflow-wrap: break-word;
+}
+
+.label {
+  width: calc(176 * var(--u));
+  font-weight: 700;
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.66);
+}
+
+.hint {
+  width: calc(297 * var(--u));
+  font-weight: 400;
+  font-size: 12px;
+}
