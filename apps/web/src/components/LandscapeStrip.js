@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import styles from "./LandscapeStrip.module.css";
+import { useEffect, useRef } from "react";
+import styles from "./css/LandscapeStrip.module.css";
 import {
   DEFAULT_GRADE,
   DISCARD_FS,
@@ -19,7 +19,7 @@ import {
   shuffledAssignment,
 } from "./lib/particles";
 
-const DEFAULT_SETTINGS = {
+const SETTINGS = {
   ...DEFAULT_GRADE,
   palette: "aero",
   road: "#ffffff",
@@ -167,10 +167,6 @@ void main() {
 }`;
 
 export default function LandscapeStrip({ className }) {
-  const [settings] = useState(DEFAULT_SETTINGS);
-  const settingsRef = useRef(settings);
-  settingsRef.current = settings;
-
   const rootRef = useRef(null);
   const canvasRef = useRef(null);
   const roadRef = useRef(null);
@@ -243,7 +239,7 @@ export default function LandscapeStrip({ className }) {
       // Pas entre particules (px CSS) : réglage `cell`, ou auto (0) = ~1px device en points,
       // ASCII_AUTO_CELL en ASCII. Toujours borné par le budget MAX_PARTICLES et la taille max
       // des points GL. `size` = taille du point / glyphe en px CSS (0 = auto = le pas).
-      const { ascii, cell, size } = settingsRef.current;
+      const { ascii, cell, size } = SETTINGS;
       const budget = Math.max(1 / dpr, Math.sqrt((tiles * tile * tile) / MAX_PARTICLES));
       const wanted = cell > 0 ? cell : ascii ? ASCII_AUTO_CELL : budget;
       const step = Math.min(Math.max(wanted, budget), maxPointSize / dpr);
@@ -290,7 +286,6 @@ export default function LandscapeStrip({ className }) {
         width: rect.width,
         cell: s,
         pointSize,
-        builtWith: { ascii, cell, size },
         resolution: [rect.width, rect.height],
         homeBuf: createVBO(gl, home),
         colorBuf: createVBO(gl, color),
@@ -334,10 +329,6 @@ export default function LandscapeStrip({ className }) {
     const frame = (now) => {
       raf = requestAnimationFrame(frame);
       if (!state) return;
-      // Le mode de rendu, le pas ou la taille changent la grille -> reconstruction
-      const { ascii, cell, size } = settingsRef.current;
-      const b = state.builtWith;
-      if (ascii !== b.ascii || cell !== b.cell || size !== b.size) build(images);
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
       if (!mouse.inside) mouse.power *= 0.95;
@@ -385,10 +376,11 @@ export default function LandscapeStrip({ className }) {
       gl.uniform1f(drawU.scroll, scroll);
       gl.uniform1f(drawU.loopLength, state.loopLength);
       gl.uniform1f(drawU.pitch, state.pitch);
-      setGradeUniforms(gl, drawU, settingsRef.current, state.cell);
+      setGradeUniforms(gl, drawU, SETTINGS, state.cell);
+      const { ascii } = SETTINGS;
       gl.uniform1i(drawU.uAscii, ascii ? 1 : 0);
       if (ascii) {
-        gl.uniform1f(drawU.uAsciiInvert, settingsRef.current.asciiInvert ? 1 : 0);
+        gl.uniform1f(drawU.uAsciiInvert, SETTINGS.asciiInvert ? 1 : 0);
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, glyphs.tex);
         gl.uniform1i(drawU.uGlyphs, 0);
@@ -446,9 +438,9 @@ export default function LandscapeStrip({ className }) {
       ref={rootRef}
       className={className}
       style={{
-        "--road-color": settings.road,
-        "--arrow-color": settings.arrow,
-        "--arrow-light": lighten(settings.arrow, 0.45),
+        "--road-color": SETTINGS.road,
+        "--arrow-color": SETTINGS.arrow,
+        "--arrow-light": lighten(SETTINGS.arrow, 0.45),
       }}
     >
       <canvas ref={canvasRef} className={styles.layer} />

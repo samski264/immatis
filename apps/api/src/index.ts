@@ -1,10 +1,14 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
+import { cors } from 'hono/cors'
+import { streamSSE } from 'hono/streaming'
+import { bodyLimit } from 'hono/body-limit'
 import type { CarCertificate } from '@immatis/core/types'
 import { getFiscal, hasReception } from '@immatis/core/rules'
 import { ocr } from './ocr.js'
 
 const app = new Hono()
+app.use('/scans', cors({ origin: 'http://localhost:3000' }))
 
 type ScanMimeType = "image/jpeg" | "image/png" | "image/webp" | "application/pdf";
 
@@ -13,29 +17,58 @@ type certificateScan = {
   mimeType: ScanMimeType;
 };
 
-type upStream = {
-  type: "image",
-  uri: string,
-  mime_type: string
-}
 
 
-let scans: certificateScan[] = [{ file: "./src/kettentkard.jpeg", mimeType: "image/jpeg" }, { file: "./src/kettentkard2.jpeg", mimeType: "image/jpeg" }, { file: "./src/kettentkard3.jpeg", mimeType: "image/jpeg" }]
+
+// let scans: certificateScan[] = [{ file: "./src/kettentkard.jpeg", mimeType: "image/jpeg" }, { file: "./src/kettentkard2.jpeg", mimeType: "image/jpeg" }, { file: "./src/kettentkard3.jpeg", mimeType: "image/jpeg" }]
+
+// let ocrResult = await ocr(scans)
+
+// console.log(getFiscal(ocrResult))
+// console.log(hasReception(ocrResult))
 
 
-let oscResult = await ocr(scans)
+let id = 0
 
-console.log(getFiscal(oscResult))
-console.log(hasReception(oscResult))
+app.post('/scans', bodyLimit({ maxSize: 3 * 10 * 1024 * 1024, onError: (c) => { return c.text('overflow :(', 413) }, }),
+  async (c) => {
+    const body = await c.req.parseBody({ all: true })
+    // champ `file` répété : 1 à 3 volets
+    const files = [body['file']].flat().filter((f) => f instanceof File).slice(0, 3)
+    if (!files.length) return c.text('no file :(', 400)
+
+    return streamSSE(c, async (stream) => {
+      const scans: certificateScan[] = files.map((f) => ({ file: f, mimeType: f.type as ScanMimeType }))
+
+      const certificate = await ocr(scans, () =>
+        stream.writeSSE({ event: 'upload', data: 'done', id: String(id++) })
+      )
+      await stream.writeSSE({ event: 'certificate', data: JSON.stringify(certificate), id: String(id++) })
+
+      const verdict = { dreal: hasReception(certificate), fiscal: getFiscal(certificate) }
+      await stream.writeSSE({ event: 'verdict', data: JSON.stringify(verdict), id: String(id++) })
+    }, async (err, stream) => {
+      await stream.writeSSE({ event: 'error', data: err.message, id: String(id++) })
+    })
+  }
+)
+
+
+
+
 
 
 app.get('/', (c) => {
   return c.text('Hello Hono!')
 })
 
+
+
+
+
 serve({
   fetch: app.fetch,
-  port: 3000
+  port: 3001 // 3000 est pris par Next
 }, (info) => {
   console.log(`Server is running on http://localhost:${info.port}`)
 })

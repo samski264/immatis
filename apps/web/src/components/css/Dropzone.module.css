@@ -42,20 +42,20 @@
 
 .label,
 .hint {
-  font-family: "Parabole Trial", sans-serif;
+  font-family: var(--font-parabole);
   line-height: normal;
   overflow-wrap: break-word;
 }
 
 .label {
   width: calc(176 * var(--u));
-  font-weight: 700;
+  font-weight: var(--wght-bold);
   font-size: 18px;
   color: rgba(0, 0, 0, 0.66);
 }
 
 .hint {
   width: calc(297 * var(--u));
-  font-weight: 400;
+  font-weight: var(--wght-text);
   font-size: 12px;
 }

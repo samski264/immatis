@@ -1,4 +1,5 @@
-// Helpers partagés : WebGL2 (transform feedback) + échantillonnage dithering des paysages
+// Helpers partagés : WebGL2 (transform feedback), grading + dithering GPU, atlas ASCII,
+// échantillonnage des paysages
 
 export const LANDSCAPES = [
   "/landscapes/champ-colza.png",
@@ -7,76 +8,28 @@ export const LANDSCAPES = [
   "/landscapes/saentis.png",
 ];
 
-export const LEVELS = 4; // niveaux par canal pour le dithering
-export const SATURATION = 1.9; // boost de saturation avant quantification (look "aero")
-export const CONTRAST = 1.15; // léger boost de contraste autour du gris moyen
-const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+const LEVELS = 4; // niveaux par canal pour le dithering
+const SATURATION = 1.9; // boost de saturation avant quantification (look "aero")
+const CONTRAST = 1.15; // léger boost de contraste autour du gris moyen
 
 export const DISCARD_FS = `#version 300 es
 precision highp float;
 void main() { discard; }`;
-
-export const DRAW_FS = `#version 300 es
-precision highp float;
-in vec3 vColor;
-out vec4 outColor;
-void main() { outColor = vec4(vColor, 1.0); }`;
 
 // Palettes fixes pour le dithering.
 // `colors: null` = quantification uniforme par canal (réglage "Niveaux").
 // `luma: true`    = rampe monochrome (du sombre au clair) indexée par la luminance tramée,
 //                   sinon tramage ordonné vers la couleur la plus proche.
 export const PALETTE_MAX = 32;
-export const PALETTES = [
-  { id: "libre", label: "Libre (niveaux)", colors: null },
+const PALETTES = [
+  { id: "libre", colors: null },
   {
     id: "aero",
-    label: "Aero",
     colors: [
       "#ffffff", "#d9f3ff", "#8fd6ff", "#2e9bff", "#0a5ec2", "#c8f57a",
       "#5bd440", "#1a8a3a", "#ffe066", "#ff9f1c",
     ],
   },
-  {
-    id: "gameboy",
-    label: "Game Boy",
-    luma: true,
-    colors: ["#0f380f", "#306230", "#8bac0f", "#9bbc0f"],
-  },
-  {
-    id: "pico8",
-    label: "PICO-8",
-    colors: [
-      "#000000", "#1d2b53", "#7e2553", "#008751", "#ab5236", "#5f574f",
-      "#c2c3c7", "#fff1e8", "#ff004d", "#ffa300", "#ffec27", "#00e436",
-      "#29adff", "#83769c", "#ff77a8", "#ffccaa",
-    ],
-  },
-  {
-    id: "c64",
-    label: "Commodore 64",
-    colors: [
-      "#000000", "#ffffff", "#880000", "#aaffee", "#cc44cc", "#00cc55",
-      "#0000aa", "#eeee77", "#dd8855", "#664400", "#ff7777", "#333333",
-      "#777777", "#aaff66", "#0088ff", "#bbbbbb",
-    ],
-  },
-  {
-    id: "cga",
-    label: "CGA",
-    colors: [
-      "#000000", "#0000aa", "#00aa00", "#00aaaa", "#aa0000", "#aa00aa",
-      "#aa5500", "#aaaaaa", "#555555", "#5555ff", "#55ff55", "#55ffff",
-      "#ff5555", "#ff55ff", "#ffff55", "#ffffff",
-    ],
-  },
-  {
-    id: "gris",
-    label: "Gris (4)",
-    luma: true,
-    colors: ["#000000", "#555555", "#aaaaaa", "#ffffff"],
-  },
-  { id: "mono", label: "1 bit", luma: true, colors: ["#000000", "#ffffff"] },
 ];
 
 // "#abc" | "#aabbcc" -> [r, g, b] 0..255
@@ -338,44 +291,6 @@ export function setGradeUniforms(gl, u, grade, cell) {
   gl.uniform1i(u.uPaletteSize, pal.size);
   gl.uniform1i(u.uPaletteLuma, pal.luma);
   gl.uniform1f(u.uDither, grade.dither);
-}
-
-// Échantillonne l'image en w x h (crop "cover" centré) + dithering ordonné (Bayer 4x4) côté CPU
-export function sampleDithered(img, w, h) {
-  const c = document.createElement("canvas");
-  c.width = w;
-  c.height = h;
-  const ctx = c.getContext("2d");
-  const scale = Math.max(w / img.width, h / img.height);
-  const sw = w / scale;
-  const sh = h / scale;
-  ctx.drawImage(img, (img.width - sw) / 2, (img.height - sh) / 2, sw, sh, 0, 0, w, h);
-  const data = ctx.getImageData(0, 0, w, h).data;
-
-  const out = new Float32Array(w * h * 3);
-  const rgb = [0, 0, 0];
-  for (let y = 0; y < h; y++) {
-    for (let x = 0; x < w; x++) {
-      const i = y * w + x;
-      const t = (BAYER[(y & 3) * 4 + (x & 3)] + 0.5) / 16;
-
-      // Saturation : on écarte chaque canal de la luminance
-      const r = data[i * 4] / 255;
-      const g = data[i * 4 + 1] / 255;
-      const b = data[i * 4 + 2] / 255;
-      const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-      rgb[0] = luma + (r - luma) * SATURATION;
-      rgb[1] = luma + (g - luma) * SATURATION;
-      rgb[2] = luma + (b - luma) * SATURATION;
-
-      for (let ch = 0; ch < 3; ch++) {
-        let v = (rgb[ch] - 0.5) * CONTRAST + 0.5;
-        v = Math.min(1, Math.max(0, v));
-        out[i * 3 + ch] = Math.floor(v * (LEVELS - 1) + t) / (LEVELS - 1);
-      }
-    }
-  }
-  return out;
 }
 
 // Mélange Fisher-Yates d'une répartition équilibrée des paysages sur n cases

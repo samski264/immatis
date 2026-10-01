@@ -75,7 +75,7 @@
 }
 
 .title {
-  font-family: "Aquawax Fx", sans-serif;
+  font-family: var(--font-aquawax);
   font-weight: 500;
   font-size: 63px;
   line-height: normal;
@@ -84,8 +84,8 @@
 
 .lead {
   width: calc(859 * var(--u));
-  font-family: "Parabole Trial", sans-serif;
-  font-weight: 400;
+  font-family: var(--font-parabole);
+  font-weight: var(--wght-text);
   font-size: 22px;
   line-height: normal;
 }
@@ -112,7 +112,7 @@
 }
 
 .heading {
-  font-family: "Aquawax Fx", sans-serif;
+  font-family: var(--font-aquawax);
   font-weight: 200;
   font-size: 35px;
   line-height: normal;
@@ -120,8 +120,8 @@
 }
 
 .text {
-  font-family: "Parabole Trial", sans-serif;
-  font-weight: 400;
+  font-family: var(--font-parabole);
+  font-weight: var(--wght-text);
   font-size: 14px;
   line-height: normal;
   overflow-wrap: break-word;
