@@ -1,7 +1,7 @@
 import Image from "next/image";
-import Dropzone from "./Dropzone";
-import LandscapeStrip from "./LandscapeStrip";
-import StepBloc from "./StepBloc";
+import Scan from "@/components/Scan";
+import LandscapeStrip from "@/components/LandscapeStrip";
+import StepBloc from "@/components/StepBloc";
 import styles from "./page.module.css";
 
 export default function Home() {
@@ -34,7 +34,7 @@ export default function Home() {
       </header>
 
       <section className={styles.upload}>
-        <Dropzone />
+        <Scan />
       </section>
 
       <section className={styles.bloc}>

@@ -35,14 +35,14 @@
 }
 
 .title {
-  font-family: "Aquawax Fx", sans-serif;
+  font-family: var(--font-aquawax);
   font-weight: 200;
   font-size: 35px;
   letter-spacing: -1.05px;
 }
 
 .body {
-  font-family: "Parabole", "DIN Pro", Arial, sans-serif;
-  font-weight: 90;
+  font-family: var(--font-parabole);
+  font-weight: var(--wght-text);
   font-size: 14px;
 }
