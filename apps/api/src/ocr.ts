@@ -88,11 +88,9 @@ async function uploadScans(scans: certificateScan[]): Promise<upStream[]> {
   return scanStreamed
 }
 
-// `onUploaded` : appelé une fois tous les volets téléversés chez Gemini, avant l'OCR
-export async function ocr(scans: certificateScan[], onUploaded?: () => void | Promise<void>): Promise<CarCertificate> {
+export async function ocr(scans: certificateScan[]): Promise<CarCertificate> {
 
   const uploaded = await uploadScans(scans)
-  await onUploaded?.()
 
   const interaction = await client.interactions.create({
     model: "gemini-3.8-flash",

@@ -40,9 +40,10 @@ app.post('/scans', bodyLimit({ maxSize: 3 * 10 * 1024 * 1024, onError: (c) => { 
     return streamSSE(c, async (stream) => {
       const scans: certificateScan[] = files.map((f) => ({ file: f, mimeType: f.type as ScanMimeType }))
 
-      const certificate = await ocr(scans, () =>
-        stream.writeSSE({ event: 'upload', data: 'done', id: String(id++) })
-      )
+      // le corps est déjà lu par parseBody : l'envoi du navigateur est fini
+      await stream.writeSSE({ event: 'upload', data: 'done', id: String(id++) })
+
+      const certificate = await ocr(scans)
       await stream.writeSSE({ event: 'certificate', data: JSON.stringify(certificate), id: String(id++) })
 
       const verdict = { dreal: hasReception(certificate), fiscal: getFiscal(certificate) }
@@ -52,19 +53,6 @@ app.post('/scans', bodyLimit({ maxSize: 3 * 10 * 1024 * 1024, onError: (c) => { 
     })
   }
 )
-
-
-
-
-
-
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
-
-
-
-
 
 serve({
   fetch: app.fetch,
