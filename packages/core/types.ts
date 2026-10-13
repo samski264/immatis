@@ -31,6 +31,7 @@ type Fiscale = {
 
 type Bilan = {
     DREAL: DrealStatus;
+    fiscale : Fiscale;
 }
 
 export type { CarCertificate, DrealStatus, Bilan, Fiscale, Malus, TVA }

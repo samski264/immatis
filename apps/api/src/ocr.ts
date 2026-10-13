@@ -5,7 +5,6 @@ import { cocSchema, conformSchema } from "@immatis/core/schema"
 import * as z from "zod";
 
 
-
 const client = new GoogleGenAI({});
 const prompt = `
 Tu es un expert de l'immatriculation en France de véhicules importés.
@@ -61,8 +60,7 @@ type upStream = {
   mime_type: string
 }
 
-
-let scans: certificateScan[] = [{ file: "./src/kettentkard.jpeg", mimeType: "image/jpeg" }, { file: "./src/kettentkard2.jpeg", mimeType: "image/jpeg" }, { file: "./src/kettentkard3.jpeg", mimeType: "image/jpeg" }]
+// let scans: certificateScan[] = [{ file: "./src/kettentkard.jpeg", mimeType: "image/jpeg" }, { file: "./src/kettentkard2.jpeg", mimeType: "image/jpeg" }, { file: "./src/kettentkard3.jpeg", mimeType: "image/jpeg" }]
 
 
 
@@ -92,13 +90,13 @@ async function uploadScans(scans: certificateScan[]): Promise<upStream[]> {
 
 export async function ocr(scans: certificateScan[]): Promise<CarCertificate> {
 
+  const uploaded = await uploadScans(scans)
+
   const interaction = await client.interactions.create({
     model: "gemini-3.8-flash",
     input: [
       { type: "text", text: prompt },
-      
-      ...await uploadScans(scans)
-
+      ...uploaded
     ],
     response_format: {
       type: 'text',
@@ -112,5 +110,3 @@ export async function ocr(scans: certificateScan[]): Promise<CarCertificate> {
 }
 
 
-
-console.log(await ocr(scans))
