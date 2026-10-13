@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import styles from "./ParticleScene.module.css";
+import styles from "./css/ParticleScene.module.css";
 import {
   DEFAULT_GRADE,
   DISCARD_FS,

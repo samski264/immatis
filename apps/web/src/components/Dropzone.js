@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
-import styles from "./Dropzone.module.css";
+import styles from "./css/Dropzone.module.css";
 
 // Zone de dépôt de la carte grise (Figma 36:195) : clic pour choisir, ou glisser-déposer.
 // Jusqu'à 3 fichiers (les 3 volets du certificat). `onFiles` reçoit la liste retenue.

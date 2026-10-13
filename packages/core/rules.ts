@@ -61,9 +61,6 @@ function isAnAVDT(certificate: CarCertificate): DrealStatus {
 }
 
 
-
-
-
 function abbatement(certificate: CarCertificate, months: number): Malus {
     function searchForMalus(x: any) {
         if (x.max >= months && months >= x.min) return true

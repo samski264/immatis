@@ -1,5 +1,5 @@
 import ParticleScene from "./ParticleScene";
-import styles from "./StepBloc.module.css";
+import styles from "./css/StepBloc.module.css";
 
 // Composant Figma `step_bloc` (49:245) : carte d'étape colorée de 295 de large, scène animée
 // pleine largeur en haut, titre + texte en dessous ; la hauteur suit le contenu.
