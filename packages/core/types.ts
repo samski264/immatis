@@ -24,9 +24,15 @@ type TVA = 'TVA' | null
 type DrealStatus = 'AVDT' | 'RTI' | null
 type Malus = number | null
 
+type Chevaux = {
+    cv: number;
+    prix: number;
+} | null
+
 type Fiscale = {
     TVA: TVA;
     malus: Malus;
+    chevaux: Chevaux;
 } | null
 
 type Bilan = {
@@ -34,5 +40,5 @@ type Bilan = {
     fiscale : Fiscale;
 }
 
-export type { CarCertificate, DrealStatus, Bilan, Fiscale, Malus, TVA }
+export type { CarCertificate, DrealStatus, Bilan, Fiscale, Malus, TVA, Chevaux }
 

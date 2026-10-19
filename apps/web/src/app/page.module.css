@@ -1,7 +1,7 @@
 /* Maquette Figma 1728 x 2153 : toutes les cotes sont en unité --u (1/1728 de la largeur) */
 
 .main {
-  --u: calc(100vw / 1728);
+  --u: min(1px, 100vw / 1728);
   --radius: calc(17 * var(--u));
 
   position: relative;
@@ -9,6 +9,8 @@
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
+  max-width: 1728px;
+  margin-inline: auto;
   padding: 0 calc(172 * var(--u)) calc(214 * var(--u));
   background: #fff;
   color: #000;
@@ -127,12 +129,12 @@
   overflow-wrap: break-word;
 }
 
-/* Trois étapes (Frame 9 : 1432 de large, gap 81) */
+/* Trois étapes (Frame 9 : 1432 de large). Les cartes sont en px fixes, écart 81 px. */
 .steps {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: calc(81 * var(--u));
+  gap: 81px;
   width: calc(1432 * var(--u));
 }
 

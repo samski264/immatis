@@ -1,8 +1,8 @@
 import ParticleScene from "./ParticleScene";
 import styles from "./css/StepBloc.module.css";
 
-// Composant Figma `step_bloc` (49:245) : carte d'étape colorée de 295 de large, scène animée
-// pleine largeur en haut, titre + texte en dessous ; la hauteur suit le contenu.
+// Composant Figma `step_bloc` (49:245) : carte d'étape de taille fixe (295 × 439.52),
+// scène animée pleine largeur en haut, titre + texte en dessous.
 // La scène (`drop`, `scan`, `stamp`, voir lib/stepScenes) reprend le système de particules
 // tramées de la bande de paysages, en monochrome : rampe de la couleur du texte vers le fond.
 export default function StepBloc({ background, color = "#000", scene, title, children }) {
