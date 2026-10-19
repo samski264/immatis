@@ -1,0 +1,68 @@
+{
+    "source": {
+     "code": "CIBS",
+     "articles": [
+      "L421-75"
+     ],
+     "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000044603119",
+     "verified_on": "2026-10-19"
+    },
+    "unit": {
+     "masse": "kg",
+     "tarif": "EUR/kg"
+    },
+    "rule": "montant = somme, sur chaque fraction, de (kg dans la fraction × tarif marginal). La masse est arrondie à l'unité. Les kg sous le seuil sont à 0.",
+    "notes": [
+     "L421-72 : le montant est la somme des produits de chaque fraction par le tarif marginal associé",
+     "« De 1 500 et 1 699 » est la rédaction publiée de L421-75",
+     "Le barème retenu est celui de l'année de première immatriculation",
+     "Entrée en vigueur au 1er mars 2025, II de l'article 27 de la loi n° 2025-127 du 14 février 2025",
+     "Pas de barème avant 2022 : la taxe n'existait pas"
+    ],
+    "baremes": [
+     {
+      "id": "masse_2026",
+      "label": "à compter de 2026",
+      "valid_from": "2026-01-01",
+      "valid_to": null,
+      "type": "marginal",
+      "threshold_kg": 1500,
+      "bands": [
+       { "min": 0, "max": 1499, "tarif": 0 },
+       { "min": 1500, "max": 1699, "tarif": 10 },
+       { "min": 1700, "max": 1799, "tarif": 15 },
+       { "min": 1800, "max": 1899, "tarif": 20 },
+       { "min": 1900, "max": 1999, "tarif": 25 },
+       { "min": 2000, "max": null, "tarif": 30 }
+      ]
+     },
+     {
+      "id": "masse_2024_2025",
+      "label": "années 2024 et 2025",
+      "valid_from": "2024-01-01",
+      "valid_to": "2025-12-31",
+      "type": "marginal",
+      "threshold_kg": 1600,
+      "bands": [
+       { "min": 0, "max": 1599, "tarif": 0 },
+       { "min": 1600, "max": 1799, "tarif": 10 },
+       { "min": 1800, "max": 1899, "tarif": 15 },
+       { "min": 1900, "max": 1999, "tarif": 20 },
+       { "min": 2000, "max": 2099, "tarif": 25 },
+       { "min": 2100, "max": null, "tarif": 30 }
+      ]
+     },
+     {
+      "id": "masse_2022_2023",
+      "label": "années 2022 et 2023",
+      "valid_from": "2022-01-01",
+      "valid_to": "2023-12-31",
+      "type": "marginal",
+      "threshold_kg": 1800,
+      "bands": [
+       { "min": 0, "max": 1799, "tarif": 0 },
+       { "min": 1800, "max": null, "tarif": 10 }
+      ]
+     }
+    ]
+   }

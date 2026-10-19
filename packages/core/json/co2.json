@@ -16,7 +16,8 @@
     "notes": [
      "wltp_2024 : 167 g/km = 6 537 € (rupture de séquence, conforme au texte publié ; 6 637 ailleurs)",
      "NEDC 2014 : annoncé 'depuis 2014' par L421-63 mais aucun barème 2014 dans l'article",
-     "wltp_2020 s'applique aux immatriculations WLTP à partir du 01/03/2020 ; NEDC avant"
+     "première immatriculation >= 2020-03-01 : barème WLTP, valeur COC 49.4",
+     "première immatriculation < 2020-03-01 : barème NEDC de l'année de 1re mise en circulation, valeur COC 49.1, même si le véhicule est homologué WLTP"
     ],
     "baremes": [
      {
@@ -24,7 +25,7 @@
       "method": "WLTP",
       "label": "à compter de 2027",
       "valid_from": "2027-01-01",
-      "valid_to": null,
+      "valid_to": "2027-12-31",
       "type": "per_gram",
       "threshold_g_km": 103,
       "last_g_km": 189,
@@ -732,7 +733,7 @@
      {
       "id": "wltp_2020",
       "method": "WLTP",
-      "label": "année 2020",
+      "label": "1er mars 2020 au 31 décembre 2020",
       "valid_from": "2020-03-01",
       "valid_to": "2020-12-31",
       "type": "per_gram",
@@ -821,9 +822,9 @@
      {
       "id": "nedc_2020",
       "method": "NEDC",
-      "label": "à compter de 2020",
+      "label": "1er janvier 2020 au 29 février 2020",
       "valid_from": "2020-01-01",
-      "valid_to": null,
+      "valid_to": "2020-02-29",
       "type": "per_gram",
       "threshold_g_km": 110,
       "last_g_km": 184,
