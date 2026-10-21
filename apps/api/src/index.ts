@@ -3,8 +3,8 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { streamSSE } from 'hono/streaming'
 import { bodyLimit } from 'hono/body-limit'
-import type { CarCertificate } from '@immatis/core/types'
-import { getFiscal, hasReception } from '@immatis/core/rules'
+import type { CarCertificate, Bilan } from '@immatis/core/types'
+import { getFiscal, getReception } from '@immatis/core/rules'
 import { ocr } from './ocr.js'
 
 const app = new Hono()
@@ -12,21 +12,10 @@ app.use('/scans', cors({ origin: 'http://localhost:3000' }))
 
 type ScanMimeType = "image/jpeg" | "image/png" | "image/webp" | "application/pdf";
 
-type certificateScan = {
+type scans = {
   file: string | Blob;
   mimeType: ScanMimeType;
 };
-
-
-
-
-// let scans: certificateScan[] = [{ file: "./src/kettentkard.jpeg", mimeType: "image/jpeg" }, { file: "./src/kettentkard2.jpeg", mimeType: "image/jpeg" }, { file: "./src/kettentkard3.jpeg", mimeType: "image/jpeg" }]
-
-// let ocrResult = await ocr(scans)
-
-// console.log(getFiscal(ocrResult))
-// console.log(hasReception(ocrResult))
-
 
 let id = 0
 
@@ -38,7 +27,7 @@ app.post('/scans', bodyLimit({ maxSize: 3 * 10 * 1024 * 1024, onError: (c) => { 
     if (!files.length) return c.text('no file :(', 400)
 
     return streamSSE(c, async (stream) => {
-      const scans: certificateScan[] = files.map((f) => ({ file: f, mimeType: f.type as ScanMimeType }))
+      const scans: scans[] = files.map((f) => ({ file: f, mimeType: f.type as ScanMimeType }))
 
       // le corps est déjà lu par parseBody : l'envoi du navigateur est fini
       await stream.writeSSE({ event: 'upload', data: 'done', id: String(id++) })
@@ -46,8 +35,8 @@ app.post('/scans', bodyLimit({ maxSize: 3 * 10 * 1024 * 1024, onError: (c) => { 
       const certificate = await ocr(scans)
       await stream.writeSSE({ event: 'certificate', data: JSON.stringify(certificate), id: String(id++) })
 
-      const verdict = { dreal: hasReception(certificate), fiscal: getFiscal(certificate) }
-      await stream.writeSSE({ event: 'verdict', data: JSON.stringify(verdict), id: String(id++) })
+      const bilan: Bilan = { reception: getReception(certificate), fiscal: getFiscal(certificate)}
+      await stream.writeSSE({ event: 'bilan', data: JSON.stringify(bilan), id: String(id++) })
     }, async (err, stream) => {
       await stream.writeSSE({ event: 'error', data: err.message, id: String(id++) })
     })
