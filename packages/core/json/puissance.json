@@ -1,0 +1,381 @@
+{
+    "source": {
+     "code": "CIBS",
+     "articles": [
+      "L421-64"
+     ],
+     "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000044595989/LEGISCTA000044599063/2027-01-01/",
+     "verified_on": "2026-10-14"
+    },
+    "unit": {
+     "puissance": "CV",
+     "tarif": "EUR"
+    },
+    "rule": "tarif = 0 si puissance < threshold_cv ; tarif = tarifs[puissance] (ou bande) ; tarif = cap_eur si puissance > cap_above_cv",
+    "notes": [
+     "L421-64 annonce des barèmes depuis 2014, mais l'article ne publie aucun barème 2014",
+     "L421-60 : montant nul si la première immatriculation est antérieure au 1er janvier 2015",
+     "« 15 et plus » est encodé comme un plafond au-dessus du dernier CV chiffré (cap_above_cv = 14)",
+     "Entrée en vigueur au 1er mars 2025, II de l'article 27 de la loi n° 2025-127 du 14 février 2025"
+    ],
+    "baremes": [
+     {
+      "id": "cv_2027",
+      "method": "puissance_administrative",
+      "label": "à compter de 2027",
+      "valid_from": "2027-01-01",
+      "valid_to": null,
+      "type": "per_cv",
+      "threshold_cv": 3,
+      "last_cv": 14,
+      "cap_eur": 90000,
+      "cap_above_cv": 14,
+      "cap_wording": "15 et plus",
+      "tarifs": {
+       "3": 750,
+       "4": 2500,
+       "5": 5500,
+       "6": 8750,
+       "7": 12000,
+       "8": 17500,
+       "9": 24000,
+       "10": 32250,
+       "11": 39750,
+       "12": 48250,
+       "13": 57500,
+       "14": 67750
+      }
+     },
+     {
+      "id": "cv_2026",
+      "method": "puissance_administrative",
+      "label": "année 2026",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31",
+      "type": "per_cv",
+      "threshold_cv": 3,
+      "last_cv": 14,
+      "cap_eur": 80000,
+      "cap_above_cv": 14,
+      "cap_wording": "15 et plus",
+      "tarifs": {
+       "3": 500,
+       "4": 2000,
+       "5": 4750,
+       "6": 7500,
+       "7": 10250,
+       "8": 15250,
+       "9": 21250,
+       "10": 29000,
+       "11": 36000,
+       "12": 44000,
+       "13": 52750,
+       "14": 62500
+      }
+     },
+     {
+      "id": "cv_2025",
+      "method": "puissance_administrative",
+      "label": "1er mars 2025 au 31 décembre 2025",
+      "valid_from": "2025-03-01",
+      "valid_to": "2025-12-31",
+      "type": "per_cv",
+      "threshold_cv": 3,
+      "last_cv": 14,
+      "cap_eur": 70000,
+      "cap_above_cv": 14,
+      "cap_wording": "15 et plus",
+      "tarifs": {
+       "3": 250,
+       "4": 1500,
+       "5": 4000,
+       "6": 6250,
+       "7": 8500,
+       "8": 13000,
+       "9": 18500,
+       "10": 25750,
+       "11": 32250,
+       "12": 39750,
+       "13": 48000,
+       "14": 57250
+      }
+     },
+     {
+      "id": "cv_2024",
+      "method": "puissance_administrative",
+      "label": "1er janvier 2024 au 28 février 2025",
+      "valid_from": "2024-01-01",
+      "valid_to": "2025-02-28",
+      "type": "per_cv",
+      "threshold_cv": 4,
+      "last_cv": 14,
+      "cap_eur": 60000,
+      "cap_above_cv": 14,
+      "cap_wording": "15 et plus",
+      "tarifs": {
+       "4": 1000,
+       "5": 3250,
+       "6": 5000,
+       "7": 6750,
+       "8": 10750,
+       "9": 15750,
+       "10": 22500,
+       "11": 28500,
+       "12": 35500,
+       "13": 43250,
+       "14": 52000
+      }
+     },
+     {
+      "id": "cv_2023",
+      "method": "puissance_administrative",
+      "label": "année 2023",
+      "valid_from": "2023-01-01",
+      "valid_to": "2023-12-31",
+      "type": "per_cv",
+      "threshold_cv": 4,
+      "last_cv": 27,
+      "cap_eur": 50000,
+      "cap_above_cv": 27,
+      "cap_wording": "supérieure à 27",
+      "tarifs": {
+       "4": 500,
+       "5": 2250,
+       "6": 3500,
+       "7": 4750,
+       "8": 6500,
+       "9": 8000,
+       "10": 9500,
+       "11": 11500,
+       "12": 12750,
+       "13": 14500,
+       "14": 16000,
+       "15": 18750,
+       "16": 20500,
+       "17": 23000,
+       "18": 25500,
+       "19": 28000,
+       "20": 30500,
+       "21": 33000,
+       "22": 35500,
+       "23": 38000,
+       "24": 40000,
+       "25": 42500,
+       "26": 45000,
+       "27": 47500
+      }
+     },
+     {
+      "id": "cv_2022",
+      "method": "puissance_administrative",
+      "label": "année 2022",
+      "valid_from": "2022-01-01",
+      "valid_to": "2022-12-31",
+      "type": "per_cv",
+      "threshold_cv": 5,
+      "last_cv": 24,
+      "cap_eur": 40000,
+      "cap_above_cv": 24,
+      "cap_wording": "supérieure à 24",
+      "tarifs": {
+       "5": 1000,
+       "6": 3000,
+       "7": 4000,
+       "8": 6000,
+       "9": 7000,
+       "10": 9250,
+       "11": 10500,
+       "12": 12500,
+       "13": 13500,
+       "14": 15625,
+       "15": 16500,
+       "16": 19250,
+       "17": 21000,
+       "18": 23500,
+       "19": 26000,
+       "20": 28500,
+       "21": 31000,
+       "22": 33500,
+       "23": 36000,
+       "24": 38500
+      }
+     },
+     {
+      "id": "cv_2021",
+      "method": "puissance_administrative",
+      "label": "année 2021",
+      "valid_from": "2021-01-01",
+      "valid_to": "2021-12-31",
+      "type": "per_cv",
+      "threshold_cv": 5,
+      "last_cv": 20,
+      "cap_eur": 30000,
+      "cap_above_cv": 20,
+      "cap_wording": "supérieure à 20",
+      "tarifs": {
+       "5": 250,
+       "6": 2825,
+       "7": 3425,
+       "8": 5950,
+       "9": 6550,
+       "10": 9075,
+       "11": 9675,
+       "12": 12200,
+       "13": 12800,
+       "14": 15325,
+       "15": 15925,
+       "16": 18450,
+       "17": 19150,
+       "18": 22500,
+       "19": 25000,
+       "20": 27500
+      }
+     },
+     {
+      "id": "cv_2020",
+      "method": "puissance_administrative",
+      "label": "année 2020",
+      "valid_from": "2020-01-01",
+      "valid_to": "2020-12-31",
+      "type": "bands",
+      "threshold_cv": 6,
+      "cap_eur": 20000,
+      "cap_above_cv": 17,
+      "cap_wording": "supérieure à 17",
+      "bands": [
+       {
+        "min": 6,
+        "max": 7,
+        "tarif": 3125
+       },
+       {
+        "min": 8,
+        "max": 9,
+        "tarif": 6250
+       },
+       {
+        "min": 10,
+        "max": 11,
+        "tarif": 9375
+       },
+       {
+        "min": 12,
+        "max": 13,
+        "tarif": 12500
+       },
+       {
+        "min": 14,
+        "max": 15,
+        "tarif": 15625
+       },
+       {
+        "min": 16,
+        "max": 17,
+        "tarif": 18750
+       }
+      ]
+     },
+     {
+      "id": "cv_2018_2019",
+      "method": "puissance_administrative",
+      "label": "années 2019 et 2018",
+      "valid_from": "2018-01-01",
+      "valid_to": "2019-12-31",
+      "type": "bands",
+      "threshold_cv": 6,
+      "cap_eur": 10500,
+      "cap_above_cv": 16,
+      "cap_wording": "supérieure à 16",
+      "bands": [
+       {
+        "min": 6,
+        "max": 7,
+        "tarif": 3000
+       },
+       {
+        "min": 8,
+        "max": 9,
+        "tarif": 5000
+       },
+       {
+        "min": 10,
+        "max": 11,
+        "tarif": 8000
+       },
+       {
+        "min": 12,
+        "max": 16,
+        "tarif": 9000
+       }
+      ]
+     },
+     {
+      "id": "cv_2017",
+      "method": "puissance_administrative",
+      "label": "année 2017",
+      "valid_from": "2017-01-01",
+      "valid_to": "2017-12-31",
+      "type": "bands",
+      "threshold_cv": 6,
+      "cap_eur": 10000,
+      "cap_above_cv": 16,
+      "cap_wording": "supérieure à 16",
+      "bands": [
+       {
+        "min": 6,
+        "max": 7,
+        "tarif": 2000
+       },
+       {
+        "min": 8,
+        "max": 9,
+        "tarif": 3000
+       },
+       {
+        "min": 10,
+        "max": 11,
+        "tarif": 7000
+       },
+       {
+        "min": 12,
+        "max": 16,
+        "tarif": 8000
+       }
+      ]
+     },
+     {
+      "id": "cv_2015_2016",
+      "method": "puissance_administrative",
+      "label": "années 2015 et 2016",
+      "valid_from": "2015-01-01",
+      "valid_to": "2016-12-31",
+      "type": "bands",
+      "threshold_cv": 6,
+      "cap_eur": 8000,
+      "cap_above_cv": 16,
+      "cap_wording": "supérieure à 16",
+      "bands": [
+       {
+        "min": 6,
+        "max": 7,
+        "tarif": 1500
+       },
+       {
+        "min": 8,
+        "max": 9,
+        "tarif": 2000
+       },
+       {
+        "min": 10,
+        "max": 11,
+        "tarif": 3600
+       },
+       {
+        "min": 12,
+        "max": 16,
+        "tarif": 6000
+       }
+      ]
+     }
+    ]
+   }

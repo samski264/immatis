@@ -1,14 +1,15 @@
-/* Dimensions Figma (step_bloc 295 de large, hauteur au contenu) en unité --u (1/1728 de la largeur) */
+/* step_bloc (49:245), cotes fixes : 295 × 439.52 sur la homepage, ne suit pas --u */
 
 .bloc {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-  gap: calc(17 * var(--u));
-  width: calc(295 * var(--u));
-  padding: 0 0 calc(45 * var(--u));
-  border-radius: var(--radius);
+  justify-content: flex-start;
+  gap: 17px;
+  width: 295px;
+  height: 439.52px;
+  padding: 0 0 45px;
+  border-radius: 17px;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -16,16 +17,16 @@
 /* Illustration pleine largeur */
 .picture {
   width: 100%;
-  height: calc(229.5 * var(--u));
+  height: 229.522px;
   pointer-events: none;
 }
 
 .text {
   display: flex;
   flex-direction: column;
-  gap: calc(17 * var(--u));
+  gap: 17px;
   width: 100%;
-  padding: 0 calc(14 * var(--u));
+  padding: 0 14px;
   overflow-wrap: break-word;
 }
 
