@@ -10,23 +10,11 @@
   width: 100%;
   max-width: 1728px;
   margin-inline: auto;
-  background: #fff;
+  background: transparent;
   color: #202320;
-  overflow-x: clip;
 }
 
-.landscape {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: calc(616 * var(--u));
-  opacity: 0.28;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.main > :not(.landscape) {
+.main > * {
   position: relative;
   z-index: 1;
 }
@@ -187,7 +175,7 @@
   display: flex;
   align-items: stretch;
   gap: 16px;
-  height: 307px;
+  min-height: 307px;
 }
 
 .card {
@@ -196,7 +184,7 @@
   gap: 20px;
   flex: none;
   width: 334px;
-  height: 307px;
+  min-height: 307px;
   padding: 24px;
   border-radius: 17px;
   background: #f4f6f2;
@@ -235,6 +223,15 @@
   height: calc(6 * var(--u));
   border-radius: 999px;
   background: #273e00;
+}
+
+.statusWarn {
+  background: #f4ead2;
+  color: #7a5200;
+}
+
+.statusWarn .dot {
+  background: #7a5200;
 }
 
 .cardValue {

@@ -12,50 +12,11 @@
   max-width: 1728px;
   margin-inline: auto;
   padding: 0 calc(172 * var(--u)) calc(214 * var(--u));
-  background: #fff;
+  background: transparent;
   color: #000;
-  overflow-x: clip;
 }
 
-/* Bande de paysages, pleine largeur, derrière la zone de dépôt. Elle remonte sous le titre
-   et l'accroche (tuiles de 413 mesurées dans la capture 38:210, posée à y = 255 + 70) */
-.strip {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(325 * var(--u));
-  height: calc(413 * var(--u));
-  z-index: 0;
-}
-
-/* Voile à flou progressif (Rectangle 49:318, 0 -> 517) : flou nul à 97 % de sa hauteur,
-   maximal (12.9 px CSS) à partir de 35 %. CSS n'a pas de backdrop-filter en dégradé : on
-   empile 4 couches floutées masquées sur des bandes successives ; les flous se cumulent en
-   quadrature (b_k = 12.9/4 * sqrt(2k-1)) pour approcher une rampe linéaire.
-   Sans pointer-events pour que le pointeur continue d'agir sur les particules. */
-.veil {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: calc(517 * var(--u));
-  pointer-events: none;
-  z-index: 0;
-}
-
-.veil > * {
-  position: absolute;
-  inset: 0;
-  backdrop-filter: blur(calc(var(--b) * var(--u)));
-  mask-image: linear-gradient(to bottom, #000 var(--from), transparent var(--to));
-}
-
-.veil > :nth-child(1) { --b: 3.2; --from: 81.5%; --to: 96.9%; }
-.veil > :nth-child(2) { --b: 5.6; --from: 66.1%; --to: 81.5%; }
-.veil > :nth-child(3) { --b: 7.2; --from: 50.7%; --to: 66.1%; }
-.veil > :nth-child(4) { --b: 8.5; --from: 35.2%; --to: 50.7%; }
-
-.main > :not(.strip, .veil) {
+.main > * {
   position: relative;
   z-index: 1;
 }
