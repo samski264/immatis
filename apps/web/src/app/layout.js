@@ -1,3 +1,4 @@
+import RouteStage from "@/components/RouteStage";
 import { aquawax, parabole } from "./fonts";
 import "./globals.css";
 
@@ -10,7 +11,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="fr" className={`${aquawax.variable} ${parabole.variable}`}>
-      <body>{children}</body>
+      <body>
+        <RouteStage />
+        {children}
+      </body>
     </html>
   );
 }

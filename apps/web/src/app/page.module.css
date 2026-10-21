@@ -9,45 +9,12 @@
   max-width: 1728px;
   margin-inline: auto;
   padding: 0 var(--s-172);
-  background: var(--color-bg-page);
+  background: transparent;
   color: var(--color-text-primary);
   overflow-x: clip;
 }
 
-.strip {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(325 * var(--u));
-  height: calc(413 * var(--u));
-  z-index: 0;
-}
-
-/* Flou progressif : max = --blur-hero (25,8 px Figma). Quatre couches dont les flous
-   se cumulent en quadrature jusqu'à cette valeur. */
-.veil {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: calc(517 * var(--u));
-  pointer-events: none;
-  z-index: 0;
-}
-
-.veil > * {
-  position: absolute;
-  inset: 0;
-  backdrop-filter: blur(calc(var(--b) * var(--u)));
-  mask-image: linear-gradient(to bottom, #000 var(--from), transparent var(--to));
-}
-
-.veil > :nth-child(1) { --b: 3.2; --from: 81.5%; --to: 96.9%; }
-.veil > :nth-child(2) { --b: 5.6; --from: 66.1%; --to: 81.5%; }
-.veil > :nth-child(3) { --b: 7.2; --from: 50.7%; --to: 66.1%; }
-.veil > :nth-child(4) { --b: 8.5; --from: 35.2%; --to: 50.7%; }
-
-.main > :not(.strip, .veil) {
+.main > * {
   position: relative;
   z-index: 1;
 }

@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import LandscapeStrip from "@/components/LandscapeStrip";
+import { useLayoutEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { flyTo } from "@/lib/routeFlight";
 import { loadResult } from "@/lib/scanResult";
 import ExportButton from "./ExportButton";
 import { conformResult } from "./conform";
@@ -25,9 +26,17 @@ function CheckIcon() {
 }
 
 export default function ResultView() {
+  const router = useRouter();
   const [view, setView] = useState(undefined);
 
-  useEffect(() => {
+  const flyHome = (event) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+    event.preventDefault();
+    flyTo(router, "/");
+  };
+
+  // Avant le paint : pas de frame blanche entre le push et la lecture du sessionStorage.
+  useLayoutEffect(() => {
     try {
       const payload = loadResult();
       setView(payload ? conformResult(payload) : null);
@@ -38,24 +47,25 @@ export default function ResultView() {
 
   if (view === undefined) return null;
 
+  const cards = view?.cards ?? [];
+  const afterCards = 0.5 + cards.length * 0.11;
+
   return (
     <main className={styles.main}>
-      <LandscapeStrip className={styles.landscape} />
-
       <header className={styles.header}>
-        <nav className={styles.nav}>
-          <Link href="/" className={styles.logoLink} aria-label="immatis, accueil">
+        <nav className={`${styles.nav} ${styles.deposit}`} style={{ animationDelay: "0.04s" }}>
+          <Link href="/" className={styles.logoLink} aria-label="immatis, accueil" onClick={flyHome}>
             <Image src="/logo.svg" alt="" width={125} height={204} priority unoptimized />
           </Link>
           <div className={styles.actions}>
-            <Link href="/" className={styles.navLink}>
+            <Link href="/" className={styles.navLink} onClick={flyHome}>
               Nouvelle analyse
             </Link>
             {view ? <ExportButton /> : null}
           </div>
         </nav>
 
-        <div className={styles.intro}>
+        <div className={`${styles.intro} ${styles.deposit}`} style={{ animationDelay: "0.18s" }}>
           <h1>{view ? "Votre certificat a été analysé." : "Aucun certificat analysé."}</h1>
           <p>
             {view
@@ -68,7 +78,7 @@ export default function ResultView() {
       {view ? (
         <div className={styles.content}>
           <section className={styles.synthesis} aria-labelledby="verdict-title">
-            <div className={styles.verdict}>
+            <div className={`${styles.verdict} ${styles.deposit}`} style={{ animationDelay: "0.34s" }}>
               <div className={styles.badgeIcon}>
                 <CheckIcon />
               </div>
@@ -79,8 +89,12 @@ export default function ResultView() {
             </div>
 
             <div className={styles.cards}>
-              {view.cards.map((card) => (
-                <article key={card.label} className={styles.card}>
+              {view.cards.map((card, index) => (
+                <article
+                  key={card.label}
+                  className={`${styles.card} ${styles.deposit}`}
+                  style={{ animationDelay: `${0.5 + index * 0.11}s` }}
+                >
                   <header className={styles.cardHead}>
                     <p>{card.label}</p>
                     <span className={card.warn ? `${styles.status} ${styles.statusWarn}` : styles.status}>
@@ -106,7 +120,11 @@ export default function ResultView() {
               ))}
             </div>
 
-            <section className={styles.fiscal} aria-labelledby="fiscal-title">
+            <section
+              className={`${styles.fiscal} ${styles.deposit}`}
+              style={{ animationDelay: `${afterCards + 0.08}s` }}
+              aria-labelledby="fiscal-title"
+            >
               <header className={styles.fiscalHead}>
                 <div>
                   <h2 id="fiscal-title">Détail du calcul fiscal</h2>
@@ -146,7 +164,11 @@ export default function ResultView() {
             </section>
           </section>
 
-          <section className={styles.extracted} aria-labelledby="extracted-title">
+          <section
+            className={`${styles.extracted} ${styles.deposit}`}
+            style={{ animationDelay: `${afterCards + 0.24}s` }}
+            aria-labelledby="extracted-title"
+          >
             <header className={styles.extractedHead}>
               <h2 id="extracted-title">Ce que nous avons lu.</h2>
               <p>Les valeurs extraites restent à comparer au document original.</p>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { gpsTune } from "@/lib/gpsTune";
 import styles from "./css/LandscapeStrip.module.css";
 import {
   DEFAULT_GRADE,
@@ -58,6 +59,8 @@ const ROAD_MIN = 0.1; // écart min / max d'un virage par rapport au centre (fra
 const ROAD_MAX = 0.36;
 const ROAD_SAMPLES = 512; // échantillons de la route envoyés au shader (vec4[128])
 const ARROW_X = 0.35; // position horizontale de la flèche (fraction de la largeur)
+const ARROW_D =
+  "M0 -14 C1.2 -14 2.2 -13.2 2.8 -11.9 L12.2 8.2 C13.2 10.4 11.1 12.8 8.8 11.8 L1.2 8.4 C0.4 8.1 -0.4 8.1 -1.2 8.4 L-8.8 11.8 C-11.1 12.8 -13.2 10.4 -12.2 8.2 L-2.8 -11.9 C-2.2 -13.2 -1.2 -14 0 -14 Z";
 
 // Position affichée d'une particule : sa tuile défile et boucle sur la longueur totale.
 // Route : spline échantillonnée sur la boucle, lue avec interpolation linéaire.
@@ -148,6 +151,19 @@ uniform vec2 resolution;
 uniform float pointSize;
 uniform float growAmount;
 uniform float maxPointSize;
+uniform float uFlight; // plongée du plan pendant la lecture, vue de dessus à 0
+uniform float uGps; // 0 = plan, 1 = caméra derrière la flèche, route vers l'horizon
+uniform vec2 uArrow;
+uniform float uHeading;
+uniform float uBack;
+uniform float uHorizon;
+uniform float uAnchor;
+uniform float uFill;
+uniform float uRelief;
+uniform float uRise0;
+uniform float uRise1;
+uniform float uNear;
+uniform float uRef;
 ${SCROLL_GLSL}
 ${GRADE_GLSL}
 
@@ -156,9 +172,50 @@ out float vLuma;
 out float vThreshold;
 
 void main() {
-  vec2 clip = scrolled(home) / resolution * 2.0 - 1.0;
-  gl_Position = vec4(clip.x, -clip.y, 0.0, 1.0);
-  gl_PointSize = min(pointSize * (1.0 + grow * growAmount), maxPointSize);
+  vec2 p = scrolled(home);
+  vec2 ndc = vec2(p.x / resolution.x * 2.0 - 1.0, 1.0 - p.y / resolution.y * 2.0);
+
+  // À uFlight = 0 et uGps = 0 le mix rend exactement la projection d'origine.
+  float pitchAmt = uFlight * (1.0 - uGps);
+  float pitch = pitchAmt * 1.05;
+  float lift = grow * 0.2 * pitchAmt;
+  float y = ndc.y * cos(pitch) + lift;
+  float z = ndc.y * sin(pitch) + 2.15;
+  float w = clamp(2.15 / max(z, 0.62), 0.38, 2.6);
+  vec2 tilted = vec2(ndc.x * w, y * w + pitchAmt * 0.16);
+  vec2 plane = mix(ndc, tilted, pitchAmt);
+
+  // Vue GPS : l'axe de la route devient la profondeur, le travers devient la largeur.
+  // Le relief monte avec l'écart au tracé, qui lui reste au sol.
+  vec2 fwd = vec2(cos(uHeading), sin(uHeading));
+  vec2 right = vec2(-fwd.y, fwd.x);
+  vec2 rel = p - uArrow;
+  float ahead = dot(rel, fwd);
+  float lat = dot(rel, right);
+  float road = roadY(p.x);
+  float dist = abs(p.y - road);
+  float side = p.y < road ? -1.0 : 1.0;
+  float ridge = 0.5 + 0.5 * sin(p.x * 0.012 + side * 1.2);
+  float range = 0.55 + 0.45 * sin(p.x * 0.005 + 1.3);
+  // Les distances sont en hauteur de bande (uRef). Le dessin, lui, couvre toute la fenêtre.
+  float back = max(uBack, 0.05) * uRef;
+  float eye = max(uAnchor, 0.02) * uRef;
+  float focal = max(uFill, 0.02) * resolution.x;
+  float horizon = resolution.y * uHorizon;
+  float rise = smoothstep(uRef * uRise0, max(uRef * uRise1, uRef * uRise0 + 1.0), dist);
+  float mh = rise * (0.4 + 0.6 * ridge) * range * eye * uRelief;
+  float nearDist = uRef * uNear;
+  float depth = max(max(ahead + back, back - nearDist), 1.0);
+  vec2 gpsPx = vec2(resolution.x * 0.5 + lat * focal / depth, horizon + (eye - mh) * focal / depth);
+  vec2 gpsNdc = vec2(gpsPx.x / resolution.x * 2.0 - 1.0, 1.0 - gpsPx.y / resolution.y * 2.0);
+
+  gl_Position = vec4(mix(plane, gpsNdc, uGps), 0.0, 1.0);
+  float near = clamp(back / max(depth, 0.001), 0.75, 1.2);
+  gl_PointSize = min(pointSize * (1.0 + grow * growAmount) * mix(mix(1.0, w, pitchAmt), near, uGps), maxPointSize);
+  if (uGps > 0.55 && ahead < -nearDist) {
+    gl_Position = vec4(2.0, 2.0, 0.0, 1.0);
+    gl_PointSize = 0.0;
+  }
   vec3 a = adjust(color);
   float t = bayer(home);
   vColor = quantize(a, t);
@@ -166,11 +223,15 @@ void main() {
   vThreshold = t;
 }`;
 
-export default function LandscapeStrip({ className }) {
+export default function LandscapeStrip({ motion }) {
   const rootRef = useRef(null);
   const canvasRef = useRef(null);
   const roadRef = useRef(null);
   const arrowRef = useRef(null);
+  const svgRef = useRef(null);
+  // `motion` est un ref stable tenu par RouteStage : la boucle lit flight / rush sans re-render
+  const motionRef = useRef(motion);
+  motionRef.current = motion;
 
   useEffect(() => {
     const root = rootRef.current;
@@ -205,7 +266,8 @@ export default function LandscapeStrip({ className }) {
     ]);
     const drawU = uniforms(drawPrg, [
       "resolution", "pointSize", "growAmount", "maxPointSize", "scroll", "loopLength", "pitch",
-      "uAscii", "uAsciiInvert", "uGlyphs", "uGlyphCount",
+      "uAscii", "uAsciiInvert", "uGlyphs", "uGlyphCount", "uFlight", "uGps", "uArrow", "uHeading",
+      "uBack", "uHorizon", "uAnchor", "uFill", "uRelief", "uRise0", "uRise1", "uNear", "uRef", "roadPts",
       ...GRADE_UNIFORMS,
     ]);
 
@@ -221,18 +283,25 @@ export default function LandscapeStrip({ className }) {
 
     let assignment = [];
 
-    const build = (images) => {
+    const build = (images, fit, dense = false) => {
+      const measured = root.getBoundingClientRect();
+      const width = fit?.w || measured.width;
+      const height = fit?.h || measured.height;
+      if (width < 2 || height < 2) return;
+      const prev = state;
       destroyState();
-      const rect = root.getBoundingClientRect();
       const dpr = window.devicePixelRatio || 1;
-      canvas.width = Math.round(rect.width * dpr);
-      canvas.height = Math.round(rect.height * dpr);
+      // Changer canvas.width réinitialise l'état GL (blend, viewport) : on le restaure après.
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
       // Tuiles carrées de la hauteur de la bande, assez nombreuses pour couvrir la largeur + 1
-      const tile = rect.height;
+      const tile = height;
       const gap = tile * GAP_RATIO;
       const pitch = tile + gap;
-      const tiles = Math.ceil(rect.width / pitch) + 2;
+      const tiles = Math.ceil(width / pitch) + 2;
       const loopLength = tiles * pitch;
       if (assignment.length !== tiles) assignment = shuffledAssignment(tiles);
 
@@ -241,7 +310,9 @@ export default function LandscapeStrip({ className }) {
       // des points GL. `size` = taille du point / glyphe en px CSS (0 = auto = le pas).
       const { ascii, cell, size } = SETTINGS;
       const budget = Math.max(1 / dpr, Math.sqrt((tiles * tile * tile) / MAX_PARTICLES));
-      const wanted = cell > 0 ? cell : ascii ? ASCII_AUTO_CELL : budget;
+      const rest = cell > 0 ? cell : ascii ? ASCII_AUTO_CELL : budget;
+      // Plus serré seulement en vue GPS : la perspective écarte les points.
+      const wanted = dense ? rest * 0.55 : rest;
       const step = Math.min(Math.max(wanted, budget), maxPointSize / dpr);
       const n = Math.max(1, Math.round(tile / step));
       const samples = images.map((img) => sampleColors(img, n, n));
@@ -266,7 +337,10 @@ export default function LandscapeStrip({ className }) {
         }
       }
 
-      const road = makeRoad(tile, loopLength);
+      const road =
+        prev && prev.road && prev.loopLength === loopLength && Math.abs(prev.tile - tile) < 1
+          ? prev.road
+          : makeRoad(tile, loopLength);
 
       // Taille entière en pixels device (évite les moirés entre cellules) ; l'atlas suit.
       // Peut dépasser le pas (points qui se chevauchent).
@@ -283,10 +357,11 @@ export default function LandscapeStrip({ className }) {
         pitch,
         loopLength,
         road,
-        width: rect.width,
+        width,
         cell: s,
         pointSize,
-        resolution: [rect.width, rect.height],
+        resolution: [width, height],
+        dense,
         homeBuf: createVBO(gl, home),
         colorBuf: createVBO(gl, color),
         grow: [createVBO(gl, zero, gl.DYNAMIC_COPY), createVBO(gl, zero, gl.DYNAMIC_COPY)],
@@ -295,44 +370,149 @@ export default function LandscapeStrip({ className }) {
       scroll %= loopLength;
     };
 
-    // Route (coordonnées écran) : spline exacte côté JS, version échantillonnée côté shader
+    // Même spline qu'au repos. Le relief et la vue GPS ne changent pas le tracé.
     const roadY = (x) => {
       const u = (x + scroll) / state.loopLength;
       return state.road.at((u - Math.floor(u)) * state.road.n);
     };
 
-    // Position et cap de la flèche (angle en degrés, 0 = vers la droite)
     const arrowPose = () => {
       const x = state.width * ARROW_X;
       const slope = (roadY(x + 1) - roadY(x - 1)) / 2;
-      return { x, y: roadY(x), angle: (Math.atan(slope) * 180) / Math.PI };
+      return { x, y: roadY(x), heading: Math.atan(slope) };
     };
 
-    const updateRoad = () => {
-      const pts = [];
-      for (let x = -10; x <= state.width + 10; x += 4) {
-        pts.push(`${x.toFixed(1)},${roadY(x).toFixed(1)}`);
-      }
-      roadRef.current.setAttribute("d", `M${pts.join(" L")}`);
+    // Même projection que le shader : caméra derrière la flèche, route vers l'horizon.
+    const project = (x, y, gps, arrow) => {
+      if (gps <= 0.001) return { x, y };
+      const fx = Math.cos(arrow.heading);
+      const fy = Math.sin(arrow.heading);
+      const ahead = (x - arrow.x) * fx + (y - arrow.y) * fy;
+      const lat = (x - arrow.x) * -fy + (y - arrow.y) * fx;
+      const w = state.resolution[0];
+      const h = state.resolution[1];
+      const refH = 413 * Math.min(1, w / 1728);
+      const back = Math.max(gpsTune.back, 0.05) * refH;
+      const eye = Math.max(gpsTune.anchor, 0.02) * refH;
+      const focal = Math.max(gpsTune.fill, 0.02) * w;
+      const horizon = h * gpsTune.horizon;
+      const nearDist = gpsTune.near * refH;
+      const depth = Math.max(ahead + back, back - nearDist, 1);
+      const road = roadY(x);
+      const dist = Math.abs(y - road);
+      const side = y < road ? -1 : 1;
+      const ridge = 0.5 + 0.5 * Math.sin(x * 0.012 + side * 1.2);
+      const range = 0.55 + 0.45 * Math.sin(x * 0.005 + 1.3);
+      const span = Math.max(1, refH * gpsTune.riseEnd - refH * gpsTune.riseStart);
+      const u = Math.min(1, Math.max(0, (dist - refH * gpsTune.riseStart) / span));
+      const rise = u * u * (3 - 2 * u);
+      const mh = rise * (0.4 + 0.6 * ridge) * range * eye * gpsTune.relief;
+      const px = w * 0.5 + (lat * focal) / depth;
+      const py = horizon + ((eye - mh) * focal) / depth;
+      return { x: x + (px - x) * gps, y: y + (py - y) * gps };
+    };
 
-      const { x, y, angle } = arrowPose();
-      // la flèche SVG pointe vers le haut -> +90° pour l'aligner sur le cap
-      // taille fixe (path ~28px) — ne pas scaler avec la tuile
-      arrowRef.current.setAttribute(
-        "transform",
-        `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(angle + 90).toFixed(1)})`
-      );
+    let arrowOutline = null;
+    const outlineOf = (path) => {
+      if (arrowOutline) return arrowOutline;
+      const len = path.getTotalLength();
+      const count = 72;
+      arrowOutline = [];
+      for (let i = 0; i <= count; i++) {
+        const point = path.getPointAtLength((i / count) * len);
+        arrowOutline.push([point.x, point.y]);
+      }
+      return arrowOutline;
+    };
+
+    const updateRoad = (gps, arrow) => {
+      const pts = [];
+      const fx = Math.cos(arrow.heading);
+      const fy = Math.sin(arrow.heading);
+      for (let x = -10; x <= state.width + 10; x += 4) {
+        const y = roadY(x);
+        const ahead = (x - arrow.x) * fx + (y - arrow.y) * fy;
+        const nearDist = 413 * Math.min(1, state.resolution[0] / 1728) * gpsTune.near;
+        if (gps > 0.55 && ahead < -nearDist) continue;
+        const p = project(x, y, gps, arrow);
+        pts.push(`${p.x.toFixed(1)},${p.y.toFixed(1)}`);
+      }
+      if (pts.length > 1) roadRef.current.setAttribute("d", `M${pts.join(" L")}`);
+
+      const arrowPath = arrowRef.current.querySelector("path");
+      const flat = (arrow.heading * 180) / Math.PI + 90;
+      const outline = outlineOf(arrowPath);
+      if (gps <= 0.02) {
+        arrowPath.setAttribute("d", ARROW_D);
+        const p = project(arrow.x, arrow.y, gps, arrow);
+        arrowRef.current.setAttribute(
+          "transform",
+          `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)}) rotate(${flat.toFixed(1)})`
+        );
+        return;
+      }
+      // La même flèche, chaque point de sa courbe posé sur le sol.
+      const rot = arrow.heading + Math.PI / 2;
+      const cos = Math.cos(rot);
+      const sin = Math.sin(rot);
+      const shape = outline.map(([lx, ly]) => {
+        const x = lx * cos - ly * sin;
+        const y = lx * sin + ly * cos;
+        const p = project(arrow.x + x, arrow.y + y, gps, arrow);
+        return `${p.x.toFixed(1)},${p.y.toFixed(1)}`;
+      });
+      arrowPath.setAttribute("d", `M${shape.join(" L")} Z`);
+      arrowRef.current.setAttribute("transform", "");
     };
 
     let images = null;
     let last = performance.now();
     const frame = (now) => {
       raf = requestAnimationFrame(frame);
+      const live = motionRef.current?.current;
+      if (gpsTune.permanent && live) {
+        live.gps = gpsTune.gps;
+        live.rush = gpsTune.rush;
+        live.flight = 0;
+        live.detail = gpsTune.dense;
+        live.interactive = gpsTune.gps < 0.04;
+        live.held = true;
+      } else if (live?.held) {
+        live.gps = 0;
+        live.rush = 1;
+        live.flight = 0;
+        live.detail = false;
+        live.interactive = true;
+        live.held = false;
+      }
+      if (live?.target && images) {
+        const target = live.target;
+        live.target = null;
+        const dense = !!live.detail;
+        if (
+          !state ||
+          Math.abs(target.w - state.resolution[0]) > 1 ||
+          Math.abs(target.h - state.resolution[1]) > 1 ||
+          dense !== !!state.dense
+        ) {
+          build(images, target, dense);
+        }
+      } else if (state && images && !!live?.detail !== !!state.dense) {
+        build(images, { w: state.resolution[0], h: state.resolution[1] }, !!live.detail);
+      }
       if (!state) return;
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
+      const flight = live?.flight ?? 0;
+      const rush = live?.rush ?? 1;
+      const gps = live?.gps ?? 0;
       if (!mouse.inside) mouse.power *= 0.95;
-      scroll = (scroll + SPEED * dt) % state.loopLength;
+      if (svgRef.current) {
+        svgRef.current.style.transform = "";
+        svgRef.current.style.opacity =
+          gps > 0.02 ? String(Math.min(1, gps)) : String(Math.max(0, 1 - flight / 0.18));
+      }
+      scroll = (scroll + SPEED * rush * dt) % state.loopLength;
 
       const src = state.idx;
       const dst = 1 - src;
@@ -347,8 +527,9 @@ export default function LandscapeStrip({ className }) {
       gl.enable(gl.RASTERIZER_DISCARD);
       gl.beginTransformFeedback(gl.POINTS);
       const arrow = arrowPose();
+      const pointer = live?.interactive !== false && flight < 0.04 && gps < 0.04;
       gl.uniform2f(simU.mouse, mouse.x, mouse.y);
-      gl.uniform1f(simU.power, mouse.power);
+      gl.uniform1f(simU.power, pointer ? mouse.power : 0);
       gl.uniform2f(simU.arrow, arrow.x, arrow.y);
       gl.uniform1f(simU.dt, dt);
       gl.uniform1f(simU.scroll, scroll);
@@ -376,6 +557,20 @@ export default function LandscapeStrip({ className }) {
       gl.uniform1f(drawU.scroll, scroll);
       gl.uniform1f(drawU.loopLength, state.loopLength);
       gl.uniform1f(drawU.pitch, state.pitch);
+      gl.uniform1f(drawU.uFlight, flight);
+      gl.uniform1f(drawU.uGps, gps);
+      gl.uniform2f(drawU.uArrow, arrow.x, arrow.y);
+      gl.uniform1f(drawU.uHeading, arrow.heading);
+      gl.uniform1f(drawU.uBack, gpsTune.back);
+      gl.uniform1f(drawU.uHorizon, gpsTune.horizon);
+      gl.uniform1f(drawU.uAnchor, gpsTune.anchor);
+      gl.uniform1f(drawU.uFill, gpsTune.fill);
+      gl.uniform1f(drawU.uRelief, gpsTune.relief);
+      gl.uniform1f(drawU.uRise0, gpsTune.riseStart);
+      gl.uniform1f(drawU.uRise1, gpsTune.riseEnd);
+      gl.uniform1f(drawU.uNear, gpsTune.near);
+      gl.uniform1f(drawU.uRef, 413 * Math.min(1, state.resolution[0] / 1728));
+      gl.uniform4fv(drawU.roadPts, state.road.samples);
       setGradeUniforms(gl, drawU, SETTINGS, state.cell);
       const { ascii } = SETTINGS;
       gl.uniform1i(drawU.uAscii, ascii ? 1 : 0);
@@ -388,7 +583,7 @@ export default function LandscapeStrip({ className }) {
       }
       gl.drawArrays(gl.POINTS, 0, state.count);
 
-      updateRoad();
+      updateRoad(gps, arrow);
     };
 
     // Écoute au niveau de la fenêtre : la zone de dépôt, le voile flouté et les textes passent
@@ -407,7 +602,7 @@ export default function LandscapeStrip({ className }) {
       mouse.inside = false;
     };
 
-    const onResize = () => images && build(images);
+    const onResize = () => images && build(images, null, !!motionRef.current?.current?.detail);
 
     Promise.all(LANDSCAPES.map(loadImage)).then((imgs) => {
       if (disposed) return;
@@ -436,7 +631,7 @@ export default function LandscapeStrip({ className }) {
   return (
     <div
       ref={rootRef}
-      className={className}
+      className={styles.root}
       style={{
         "--road-color": SETTINGS.road,
         "--arrow-color": SETTINGS.arrow,
@@ -444,7 +639,7 @@ export default function LandscapeStrip({ className }) {
       }}
     >
       <canvas ref={canvasRef} className={styles.layer} />
-      <svg className={styles.layer} aria-hidden="true">
+      <svg ref={svgRef} className={styles.layer} aria-hidden="true">
         <path ref={roadRef} className={styles.road} />
         {/* Flèche de navigation façon Apple Plans : pointe vers le haut, orientée selon le cap */}
         <defs>

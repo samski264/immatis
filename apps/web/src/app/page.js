@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Scan from "@/components/Scan";
-import LandscapeStrip from "@/components/LandscapeStrip";
 import StepBloc from "@/components/StepBloc";
 import DepositButton from "@/components/DepositButton";
 import styles from "./page.module.css";
@@ -140,13 +139,6 @@ function InfoIcon() {
 export default function Home() {
   return (
     <main className={styles.main}>
-      <LandscapeStrip className={styles.strip} />
-      <div className={styles.veil} aria-hidden="true">
-        <div />
-        <div />
-        <div />
-        <div />
-      </div>
 
       <header className={styles.nav}>
         <Lockup className={styles.lockup} />

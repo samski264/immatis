@@ -8,23 +8,11 @@
   width: 100%;
   max-width: 1728px;
   margin-inline: auto;
-  background: var(--color-bg-page);
+  background: transparent;
   color: #202320;
-  overflow-x: clip;
 }
 
-.landscape {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: calc(616 * var(--u));
-  opacity: 0.28;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.main > :not(.landscape) {
+.main > * {
   position: relative;
   z-index: 1;
 }
@@ -510,8 +498,28 @@
 }
 
 @media print {
-  .landscape,
   .actions {
     display: none;
+  }
+}
+
+.deposit {
+  animation: deposit 0.72s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes deposit {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deposit {
+    animation: none;
   }
 }

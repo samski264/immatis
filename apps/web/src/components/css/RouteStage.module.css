@@ -1,0 +1,82 @@
+.stage {
+  --u: min(1px, 100vw / 1728);
+
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 1728px;
+  margin-inline: auto;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.home {
+  top: calc(325 * var(--u));
+  height: calc(413 * var(--u));
+  opacity: 1;
+}
+
+.full {
+  position: fixed;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  opacity: 1;
+}
+
+.result {
+  top: 0;
+  height: calc(616 * var(--u));
+  opacity: 0.28;
+}
+
+/* Voile à flou progressif, repris de la homepage (0 -> 517). Il reste dans le même
+   calque que le canvas pour que backdrop-filter voie les particules. */
+.veil {
+  --u: min(1px, 100vw / 1728);
+
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  width: 100%;
+  max-width: 1728px;
+  margin-inline: auto;
+  height: calc(517 * var(--u));
+  pointer-events: none;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.6s ease, visibility 0s;
+}
+
+.veilOff {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease, visibility 0s linear 0.6s;
+}
+
+.veil > * {
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(calc(var(--b) * var(--u)));
+  mask-image: linear-gradient(to bottom, #000 var(--from), transparent var(--to));
+}
+
+.veil > :nth-child(1) { --b: 3.2; --from: 81.5%; --to: 96.9%; }
+.veil > :nth-child(2) { --b: 5.6; --from: 66.1%; --to: 81.5%; }
+.veil > :nth-child(3) { --b: 7.2; --from: 50.7%; --to: 66.1%; }
+.veil > :nth-child(4) { --b: 8.5; --from: 35.2%; --to: 50.7%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .stage,
+  .veil,
+  .veilOff {
+    transition: none;
+  }
+}

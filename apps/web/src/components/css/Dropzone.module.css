@@ -29,6 +29,16 @@
   outline: none;
 }
 
+.reading,
+.reading:hover {
+  cursor: wait;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.reading .label {
+  width: calc(260 * var(--u));
+}
+
 .input {
   display: none;
 }

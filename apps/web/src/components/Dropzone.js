@@ -6,12 +6,13 @@ import styles from "./css/Dropzone.module.css";
 
 // Zone de dépôt de la carte grise (Figma 36:195) : clic pour choisir, ou glisser-déposer.
 // Jusqu'à 3 fichiers (les 3 volets du certificat). `onFiles` reçoit la liste retenue.
-export default function Dropzone({ className, onFiles, maxFiles = 3, inputId }) {
+export default function Dropzone({ className, onFiles, reading = false, maxFiles = 3, inputId }) {
   const inputRef = useRef(null);
   const [files, setFiles] = useState([]);
   const [over, setOver] = useState(false);
 
   const accept = (list) => {
+    if (reading) return;
     const next = Array.from(list)
       .filter((f) => f.type.startsWith("image/") || f.type === "application/pdf")
       .slice(0, maxFiles);
@@ -35,11 +36,14 @@ export default function Dropzone({ className, onFiles, maxFiles = 3, inputId }) 
 
   return (
     <div
-      className={`${styles.zone} ${over ? styles.over : ""} ${className ?? ""}`}
+      className={`${styles.zone} ${over ? styles.over : ""} ${reading ? styles.reading : ""} ${className ?? ""}`}
       role="button"
-      tabIndex={0}
-      aria-label="Choisissez un fichier ou déposez-le ici"
-      onClick={() => inputRef.current?.click()}
+      tabIndex={reading ? -1 : 0}
+      aria-busy={reading}
+      aria-label={reading ? "Lecture du certificat" : "Choisissez un fichier ou déposez-le ici"}
+      onClick={() => {
+        if (!reading) inputRef.current?.click();
+      }}
       onKeyDown={onKeyDown}
       onDragOver={(e) => {
         e.preventDefault();
@@ -67,7 +71,12 @@ export default function Dropzone({ className, onFiles, maxFiles = 3, inputId }) 
         unoptimized
       />
 
-      {files.length ? (
+      {reading ? (
+        <>
+          <p className={styles.label}>Lecture du certificat</p>
+          <p className={styles.hint}>Les champs sont extraits un par un.</p>
+        </>
+      ) : files.length ? (
         <>
           <p className={styles.label}>
             {files.length > 1 ? `${files.length} fichiers sélectionnés` : "1 fichier sélectionné"}
