@@ -30,6 +30,16 @@
   outline: none;
 }
 
+.reading,
+.reading:hover {
+  cursor: wait;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.reading .label {
+  width: calc(260 * var(--u));
+}
+
 .input {
   display: none;
 }
@@ -58,4 +68,36 @@
   width: calc(297 * var(--u));
   font-weight: var(--wght-text);
   font-size: 12px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.test {
+  margin-top: calc(16 * var(--u));
+  border: 0;
+  background: transparent;
+  color: rgba(0, 0, 0, 0.55);
+  font-family: var(--font-parabole);
+  font-weight: var(--wght-text);
+  font-size: 13px;
+  line-height: 1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.test:hover,
+.test:focus-visible {
+  color: #000;
+  outline: none;
+}
+
+.test:disabled {
+  color: rgba(0, 0, 0, 0.35);
+  cursor: wait;
+  text-decoration: none;
 }

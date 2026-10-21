@@ -3,8 +3,19 @@
   z-index: 1;
 }
 
+.quiet {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .arrive {
-  animation: arrive 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: arrive 0.58s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.leave {
+  animation: leave 0.28s ease forwards;
+  pointer-events: none;
 }
 
 @keyframes arrive {
@@ -18,8 +29,16 @@
   }
 }
 
+@keyframes leave {
+  to {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .arrive {
+  .arrive,
+  .leave {
     animation: none;
   }
 }
