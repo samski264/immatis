@@ -1,0 +1,191 @@
+{
+    "source": {
+     "code": "CIBS",
+     "articles": [
+      "L421-59",
+      "L421-60",
+      "L421-61",
+      "L421-65",
+      "L421-66",
+      "L421-67",
+      "L421-68",
+      "L421-69",
+      "L421-70",
+      "L421-70-1"
+     ],
+     "verified_on": "2026-10-14"
+    },
+    "ordre": [
+     "exoneration_ou_montant_nul",
+     "abattement_e85_sur_assiette",
+     "abattement_le_plus_eleve_huit_places_ou_famille_sur_assiette",
+     "lecture_du_bareme",
+     "decote_sur_le_montant"
+    ],
+    "selection_bareme": {
+     "article": "L421-59",
+     "date": "premiere_immatriculation_L421-5",
+     "cas": [
+      {
+       "id": "wltp",
+       "si": "premiere_immatriculation_a_partir_du_2020-03-01",
+       "valeur_coc": "49.4",
+       "fichier": "co2.json",
+       "method": "WLTP",
+       "article": "L421-62"
+      },
+      {
+       "id": "nedc",
+       "si": "premiere_immatriculation_avant_le_2020-03-01",
+       "valeur_coc": "49.1",
+       "meme_si": "homologue_WLTP",
+       "fichier": "co2.json",
+       "method": "NEDC",
+       "article": "L421-63"
+      },
+      {
+       "id": "puissance",
+       "si": "sans_reception_europeenne",
+       "fichier": "puissance.json",
+       "method": "puissance_administrative",
+       "article": "L421-64"
+      }
+     ]
+    },
+    "montant_nul": {
+     "article": "L421-60",
+     "si_premiere_immatriculation_avant": "2015-01-01"
+    },
+    "decote": {
+     "article": "L421-60",
+     "fichier": "malus.json",
+     "appliquee": "apres_les_regles_particulieres"
+    },
+    "plafond_prix_acquisition": {
+     "article": "L421-61",
+     "statut": "abroge",
+     "par": "LOI n°2023-1322 du 29 décembre 2023 - art. 97"
+    },
+    "exonerations": [
+     {
+      "id": "fauteuil_roulant",
+      "article": "L421-65",
+      "si": "vehicule_accessible_en_fauteuil_roulant"
+     },
+     {
+      "id": "electrique_hydrogene",
+      "article": "L421-67",
+      "si": "source_energie_exclusivement",
+      "energies": [
+       "electricite",
+       "hydrogene",
+       "electricite_et_hydrogene"
+      ]
+     },
+     {
+      "id": "invalidite",
+      "article": "L421-69",
+      "limite": "un_vehicule_par_beneficiaire",
+      "detention": "L421-25",
+      "personnes": [
+       "carte_mobilite_inclusion_mention_invalidite",
+       "carte_invalidite_militaire",
+       "charge_effective_et_permanente_d_un_enfant_titulaire_dans_le_meme_foyer"
+      ]
+     },
+     {
+      "id": "hors_route",
+      "article": "L421-70-1",
+      "si": "vehicule_hors_route_exclusivement_affecte",
+      "affectations": [
+       "services_et_unites_L721-2_CSI_protection_personnes_animaux_biens_environnement",
+       "associations_agreees_L725-1_CSI",
+       "missions_operationnelles_prevention_surveillance_lutte_incendies"
+      ]
+     }
+    ],
+    "abattements": [
+     {
+      "id": "e85",
+      "article": "L421-68",
+      "ordre": "avant_les_autres_abattements",
+      "si": "source_energie_comprend_superethanol_E85",
+      "co2": {
+       "part_des_emissions": 0.4,
+       "non_applicable_si_emissions_strictement_superieures_a_g_km": 250
+      },
+      "cv": {
+       "chevaux": 2,
+       "non_applicable_si_puissance_strictement_superieure_a_cv": 12
+      }
+     },
+     {
+      "id": "huit_places_personne_morale",
+      "article": "L421-66",
+      "conditions": [
+       "au_moins_huit_places_assises",
+       "detenu_par_une_personne_morale"
+      ],
+      "assiette": "grammes_ou_chevaux_avant_bareme",
+      "nota": "Rédaction issue du I de l'article 58 de la loi n° 2026-103 du 19 février 2026, en vigueur le 1er mars 2026.",
+      "tranches": [
+       {
+        "premiere_immatriculation_avant": "2021-01-01",
+        "g_km": 0,
+        "cv": 0
+       },
+       {
+        "from": "2021-01-01",
+        "to": "2025-02-28",
+        "g_km": 80,
+        "cv": 4
+       },
+       {
+        "from": "2025-03-01",
+        "to": "2025-12-31",
+        "g_km": 85,
+        "cv": 4
+       },
+       {
+        "from": "2026-01-01",
+        "to": "2026-12-31",
+        "g_km": 90,
+        "cv": 4
+       },
+       {
+        "from": "2027-01-01",
+        "to": "2027-12-31",
+        "g_km": 95,
+        "cv": 5
+       }
+      ],
+      "concurrence": {
+       "article": "L421-70",
+       "retenir": "le_plus_eleve"
+      }
+     },
+     {
+      "id": "famille",
+      "article": "L421-70",
+      "conditions": [
+       "charge_effective_et_permanente_d_au_moins_trois_enfants",
+       "enfants_L512-3_CSS_1_ou_2_ou_placement_L421-2_CASF"
+      ],
+      "par_enfant": {
+       "g_km": 20,
+       "cv": 1
+      },
+      "limite": {
+       "vehicules": 1,
+       "places_minimales": 5,
+       "par": "foyer",
+       "periode_ans": 2,
+       "exception": "situations_determinees_par_decret_ou_le_vehicule_est_devenu_inutilisable"
+      },
+      "concurrence": {
+       "article": "L421-66",
+       "retenir": "le_plus_eleve"
+      }
+     }
+    ]
+   }

@@ -1,0 +1,14 @@
+{
+  "source": {
+    "puissance": "CIBS L421-16",
+    "prix": "moyenne non pondérée des 18 tarifs régionaux 2026",
+    "url": "https://www.service-public.gouv.fr/particuliers/actualites/A18021",
+    "verified_on": "2026-10-19"
+  },
+  "formule": {
+    "a": 1.8,
+    "b": 3.87,
+    "c": 1.34
+  },
+  "prix_moyen": 53.5
+}
