@@ -10,14 +10,22 @@
   margin-inline: auto;
   pointer-events: none;
   overflow: visible;
-  transition:
-    top 1.2s cubic-bezier(0.62, 0.04, 0.28, 1),
-    height 1.2s cubic-bezier(0.62, 0.04, 0.28, 1);
 }
 
 .home {
   top: calc(325 * var(--u));
   height: calc(413 * var(--u));
+  opacity: 1;
+}
+
+.full {
+  position: fixed;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
   opacity: 1;
 }
 
@@ -44,13 +52,13 @@
   pointer-events: none;
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.45s ease, visibility 0s;
+  transition: opacity 0.6s ease, visibility 0s;
 }
 
 .veilOff {
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.35s ease, visibility 0s linear 0.35s;
+  transition: opacity 0.6s ease, visibility 0s linear 0.6s;
 }
 
 .veil > * {

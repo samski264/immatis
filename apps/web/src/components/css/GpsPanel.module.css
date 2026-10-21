@@ -1,0 +1,60 @@
+.panel {
+  position: fixed;
+  z-index: 40;
+  top: 12px;
+  right: 12px;
+  width: 248px;
+  max-height: calc(100vh - 24px);
+  overflow: auto;
+  padding: 12px 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+  color: #202320;
+  font-family: var(--font-parabole), sans-serif;
+  font-size: 12px;
+  pointer-events: auto;
+}
+
+.panel h2 {
+  margin: 0 0 8px;
+  font-family: var(--font-aquawax), sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 8px;
+  margin-bottom: 8px;
+}
+
+.row input[type="range"] {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin: 0;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 10px;
+}
+
+.copy {
+  width: 100%;
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: #202320;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.note {
+  margin: 8px 0 0;
+  color: #697068;
+}
