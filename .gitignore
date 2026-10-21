@@ -4,6 +4,7 @@ dist
 
 # sources graphiques
 _others/
+design/immatis-assets/
 
 # scans de test (données personnelles)
 apps/api/src/*.jpeg

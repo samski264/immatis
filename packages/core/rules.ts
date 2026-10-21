@@ -6,7 +6,9 @@ import cheval from './json/cheval.json' with {type: "json"}
 
 
 
-export function hasReception(certificate: CarCertificate): DrealStatus {
+//Reception
+
+export function getReception(certificate: CarCertificate): DrealStatus {
     if (certificate.K != null) {   //do the car have a reception ?
         return null
     }
@@ -15,7 +17,6 @@ export function hasReception(certificate: CarCertificate): DrealStatus {
 
 function isAnAVDT(certificate: CarCertificate): DrealStatus {
     const { K, J, "V.7": v7, "V.9": v9, ...rest } = certificate    //destructuration for requiered and minimal RTI/AVDT fields 
-
     for (const valeur of Object.values(rest)) {
         if (valeur == null) return 'RTI'
     }
@@ -24,6 +25,7 @@ function isAnAVDT(certificate: CarCertificate): DrealStatus {
 
 
 
+//Fiscality
 
 export function getFiscal(certificate: CarCertificate): Fiscale {
     const from = certificate.B
@@ -52,12 +54,11 @@ function malus(certificate: CarCertificate, from: Date, diffMonths: number): Mal
 }
 
 function abbatement(certificate: CarCertificate, diffMonths: number): Malus {
-    
+
     function searchAbbatement(x: any) {
         if (x.max >= diffMonths && diffMonths >= x.min) return true
         else return false
     }
-
     return malusTable.tranches.find(searchAbbatement)?.decote || null
 }
 

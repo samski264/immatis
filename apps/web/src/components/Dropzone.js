@@ -6,7 +6,7 @@ import styles from "./css/Dropzone.module.css";
 
 // Zone de dépôt de la carte grise (Figma 36:195) : clic pour choisir, ou glisser-déposer.
 // Jusqu'à 3 fichiers (les 3 volets du certificat). `onFiles` reçoit la liste retenue.
-export default function Dropzone({ className, onFiles, maxFiles = 3 }) {
+export default function Dropzone({ className, onFiles, maxFiles = 3, inputId }) {
   const inputRef = useRef(null);
   const [files, setFiles] = useState([]);
   const [over, setOver] = useState(false);
@@ -50,6 +50,7 @@ export default function Dropzone({ className, onFiles, maxFiles = 3 }) {
     >
       <input
         ref={inputRef}
+        id={inputId}
         className={styles.input}
         type="file"
         accept="image/*,application/pdf"
