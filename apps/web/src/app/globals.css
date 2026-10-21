@@ -1,10 +1,77 @@
-/* Les polices (--font-aquawax, --font-parabole) sont déclarées via next/font dans app/fonts.js */
+/* Tokens du design system Pencil (Immatis — Design tokens).
+   Les cotes spatiales sont des unités de maquette : --s-* = N × --u.
+   Graisses Parabole : l'axe variable va de 64 à 116, 90 et 116 tiennent lieu de 400 et 700.
+   Les flous CSS valent la moitié du flou Figma (35,2 px → 17,6 px).
+   Le survol de la zone d'envoi et l'ombre du tracé ne sont pas des variables du fichier. */
 
 :root {
-  /* Parabole est une police variable à axe de graisse 64..116 : ces deux valeurs remplacent
-     les habituels 400 / 700 pour le texte courant et le texte gras */
+  --u: min(1px, 100vw / 1728);
+
+  --color-bg-page: #ffffff;
+  --color-surface-overlay: #ffffff03;
+  --color-surface-glass: #ffffff4d;
+  --color-surface-glass-hover: #ffffff73;
+  --color-surface-card-neutral: #e7e7e7;
+  --color-surface-card-lime: #c8f57a;
+  --color-surface-card-sky: #d9f3ff;
+  --color-text-primary: #000000;
+  --color-text-card-neutral: #505050;
+  --color-text-card-result: #40484b;
+  --color-text-upload: #000000a8;
+  --color-icon-upload: #0000008f;
+  --color-shadow-road: rgb(0 0 0 / 28%);
+
+  --weight-display: 500;
+  --weight-heading: 200;
   --wght-text: 90;
   --wght-bold: 116;
+
+  --size-display: 63px;
+  --size-heading: 35px;
+  --size-intro: 22px;
+  --size-label: 18px;
+  --size-body: 14px;
+  --size-caption: 12px;
+
+  --tracking-tight: -0.03em;
+  --tracking-normal: 0;
+
+  --space-3: 3;
+  --space-7: 7;
+  --space-10: 10;
+  --space-14: 14;
+  --space-17: 17;
+  --space-20: 20;
+  --space-23: 23;
+  --space-39: 39;
+  --space-45: 45;
+  --space-68: 68;
+  --space-81: 81;
+  --space-172: 172;
+
+  --s-3: calc(var(--space-3) * var(--u));
+  --s-7: calc(var(--space-7) * var(--u));
+  --s-10: calc(var(--space-10) * var(--u));
+  --s-14: calc(var(--space-14) * var(--u));
+  --s-17: calc(var(--space-17) * var(--u));
+  --s-20: calc(var(--space-20) * var(--u));
+  --s-23: calc(var(--space-23) * var(--u));
+  --s-39: calc(var(--space-39) * var(--u));
+  --s-45: calc(var(--space-45) * var(--u));
+  --s-68: calc(var(--space-68) * var(--u));
+  --s-81: calc(var(--space-81) * var(--u));
+  --s-172: calc(var(--space-172) * var(--u));
+
+  --radius-card: 17;
+  --radius: calc(var(--radius-card) * var(--u));
+  --border-upload: 9;
+
+  --blur-hero: 12.9;
+  --blur-glass: 17.6;
+  --blur-text: 2;
+
+  --effect-inner-glass: inset 0 0 calc(18 * var(--u)) calc(16 * var(--u)) rgb(255 255 255 / 25%);
+  --effect-drop-upload: 0 0 calc(99.8 * var(--u)) calc(65 * var(--u)) rgb(255 255 255 / 25%);
 }
 
 html {
@@ -21,10 +88,12 @@ body {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  color: #000;
-  background: #fff;
+  color: var(--color-text-primary);
+  background: var(--color-bg-page);
   font-family: var(--font-parabole);
   font-weight: var(--wght-text);
+  font-size: var(--size-body);
+  letter-spacing: var(--tracking-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

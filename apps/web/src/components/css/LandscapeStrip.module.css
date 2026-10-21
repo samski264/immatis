@@ -9,7 +9,7 @@
 
 .road {
   fill: none;
-  stroke: var(--road-color, #fff);
+  stroke: var(--road-color, var(--color-bg-page));
   stroke-width: 8;
   opacity: 0.94;
   stroke-linecap: round;
@@ -17,8 +17,8 @@
 }
 
 .arrow path {
-  stroke: #fff;
+  stroke: var(--color-bg-page);
   stroke-width: 2.2;
   stroke-linejoin: round;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.28));
+  filter: drop-shadow(0 2px 4px var(--color-shadow-road));
 }

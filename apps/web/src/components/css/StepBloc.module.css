@@ -1,20 +1,35 @@
-/* step_bloc (49:245), cotes fixes : 295 × 439.52 sur la homepage, ne suit pas --u */
+/* Carte d'étape, cotes fixes (295 × 439.52) : le multiple est 1px, pas --u.
+   Couleurs : color/surface/card-* et color/text/card-*. */
 
 .bloc {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: 17px;
+  gap: calc(var(--space-17) * 1px);
   width: 295px;
   height: 439.52px;
-  padding: 0 0 45px;
-  border-radius: 17px;
+  padding: 0 0 calc(var(--space-45) * 1px);
+  border-radius: calc(var(--radius-card) * 1px);
   overflow: hidden;
   flex-shrink: 0;
 }
 
-/* Illustration pleine largeur */
+.neutral {
+  background: var(--color-surface-card-neutral);
+  color: var(--color-text-card-neutral);
+}
+
+.lime {
+  background: var(--color-surface-card-lime);
+  color: var(--color-text-primary);
+}
+
+.sky {
+  background: var(--color-surface-card-sky);
+  color: var(--color-text-card-result);
+}
+
 .picture {
   width: 100%;
   height: 229.522px;
@@ -24,9 +39,9 @@
 .text {
   display: flex;
   flex-direction: column;
-  gap: 17px;
+  gap: calc(var(--space-17) * 1px);
   width: 100%;
-  padding: 0 14px;
+  padding: 0 calc(var(--space-14) * 1px);
   overflow-wrap: break-word;
 }
 
@@ -37,13 +52,14 @@
 
 .title {
   font-family: var(--font-aquawax);
-  font-weight: 200;
-  font-size: 35px;
-  letter-spacing: -1.05px;
+  font-weight: var(--weight-heading);
+  font-size: var(--size-heading);
+  letter-spacing: var(--tracking-tight);
 }
 
 .body {
   font-family: var(--font-parabole);
   font-weight: var(--wght-text);
-  font-size: 14px;
+  font-size: var(--size-body);
+  letter-spacing: var(--tracking-normal);
 }

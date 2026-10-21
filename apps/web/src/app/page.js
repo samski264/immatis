@@ -188,13 +188,13 @@ export default function Home() {
       </section>
 
       <section className={styles.steps}>
-        <StepBloc background="#e7e7e7" color="#505050" scene="drop" title="1 Déposez la photo">
+        <StepBloc tone="neutral" scene="drop" title="1 Déposez la photo">
           La carte grise que le vendeur vous a envoyée suffit. Rien à saisir.
         </StepBloc>
-        <StepBloc background="#c8f57a" scene="scan" title="2 Immatis lit le document">
+        <StepBloc tone="lime" scene="scan" title="2 Immatis lit le document">
           Les champs harmonisés sont extraits un par un, puis passés dans les règles françaises.
         </StepBloc>
-        <StepBloc background="#d9f3ff" scene="stamp" title="3 Vous obtenez le verdict">
+        <StepBloc tone="sky" scene="stamp" title="3 Vous obtenez le verdict">
           AVDT ou RTI, radiation, TVA, coût de la carte grise. Pour chaque résultat : le champ lu
           et la règle appliquée.
         </StepBloc>
@@ -236,12 +236,12 @@ export default function Home() {
             <article id={card.id} key={card.id} className={styles.card}>
               <header className={styles.cardHead}>
                 <p>{card.label}</p>
-                <span className={card.tone === "estimate" ? styles.badgeEstimate : styles.badge}>
+                <span className={card.tone === "estimate" ? `${styles.badge} ${styles.estimate}` : styles.badge}>
                   <span className={styles.dot} aria-hidden="true" />
                   {card.status}
                 </span>
               </header>
-              <div className={card.tone === "estimate" ? styles.cardValueEstimate : styles.cardValue}>
+              <div className={card.tone === "estimate" ? `${styles.cardValue} ${styles.estimate}` : styles.cardValue}>
                 <p className={styles.figure}>{card.value}</p>
                 <p>{card.consequence}</p>
               </div>
