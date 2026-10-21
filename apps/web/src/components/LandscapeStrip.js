@@ -148,6 +148,7 @@ uniform vec2 resolution;
 uniform float pointSize;
 uniform float growAmount;
 uniform float maxPointSize;
+uniform float uFlight; // 0 = vue de dessus, 1 = caméra plongée sur le plan
 ${SCROLL_GLSL}
 ${GRADE_GLSL}
 
@@ -156,9 +157,19 @@ out float vLuma;
 out float vThreshold;
 
 void main() {
-  vec2 clip = scrolled(home) / resolution * 2.0 - 1.0;
-  gl_Position = vec4(clip.x, -clip.y, 0.0, 1.0);
-  gl_PointSize = min(pointSize * (1.0 + grow * growAmount), maxPointSize);
+  vec2 p = scrolled(home);
+  vec2 ndc = vec2(p.x / resolution.x * 2.0 - 1.0, 1.0 - p.y / resolution.y * 2.0);
+
+  // Le plan des tuiles bascule autour de X : le haut s'éloigne, le bas se rapproche.
+  // À uFlight = 0 le mix rend exactement la projection orthographique d'origine.
+  float pitch = uFlight * 1.15;
+  float lift = grow * 0.14 * uFlight;
+  float y = ndc.y * cos(pitch) + lift;
+  float z = ndc.y * sin(pitch) + 2.35;
+  float w = clamp(2.35 / max(z, 0.72), 0.4, 2.35);
+  vec2 persp = vec2(ndc.x * w, y * w + uFlight * 0.06);
+  gl_Position = vec4(mix(ndc, persp, uFlight), 0.0, 1.0);
+  gl_PointSize = min(pointSize * (1.0 + grow * growAmount) * mix(1.0, w, uFlight), maxPointSize);
   vec3 a = adjust(color);
   float t = bayer(home);
   vColor = quantize(a, t);
@@ -166,11 +177,15 @@ void main() {
   vThreshold = t;
 }`;
 
-export default function LandscapeStrip({ className }) {
+export default function LandscapeStrip({ motion }) {
   const rootRef = useRef(null);
   const canvasRef = useRef(null);
   const roadRef = useRef(null);
   const arrowRef = useRef(null);
+  const svgRef = useRef(null);
+  // `motion` est un ref stable tenu par RouteStage : la boucle lit flight / rush sans re-render
+  const motionRef = useRef(motion);
+  motionRef.current = motion;
 
   useEffect(() => {
     const root = rootRef.current;
@@ -205,7 +220,7 @@ export default function LandscapeStrip({ className }) {
     ]);
     const drawU = uniforms(drawPrg, [
       "resolution", "pointSize", "growAmount", "maxPointSize", "scroll", "loopLength", "pitch",
-      "uAscii", "uAsciiInvert", "uGlyphs", "uGlyphCount",
+      "uAscii", "uAsciiInvert", "uGlyphs", "uGlyphCount", "uFlight",
       ...GRADE_UNIFORMS,
     ]);
 
@@ -221,18 +236,24 @@ export default function LandscapeStrip({ className }) {
 
     let assignment = [];
 
-    const build = (images) => {
+    const build = (images, fit) => {
+      const measured = root.getBoundingClientRect();
+      const width = fit?.w || measured.width;
+      const height = fit?.h || measured.height;
+      if (width < 2 || height < 2) return;
       destroyState();
-      const rect = root.getBoundingClientRect();
       const dpr = window.devicePixelRatio || 1;
-      canvas.width = Math.round(rect.width * dpr);
-      canvas.height = Math.round(rect.height * dpr);
+      // Changer canvas.width réinitialise l'état GL (blend, viewport) : on le restaure après.
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
       // Tuiles carrées de la hauteur de la bande, assez nombreuses pour couvrir la largeur + 1
-      const tile = rect.height;
+      const tile = height;
       const gap = tile * GAP_RATIO;
       const pitch = tile + gap;
-      const tiles = Math.ceil(rect.width / pitch) + 2;
+      const tiles = Math.ceil(width / pitch) + 2;
       const loopLength = tiles * pitch;
       if (assignment.length !== tiles) assignment = shuffledAssignment(tiles);
 
@@ -283,10 +304,10 @@ export default function LandscapeStrip({ className }) {
         pitch,
         loopLength,
         road,
-        width: rect.width,
+        width,
         cell: s,
         pointSize,
-        resolution: [rect.width, rect.height],
+        resolution: [width, height],
         homeBuf: createVBO(gl, home),
         colorBuf: createVBO(gl, color),
         grow: [createVBO(gl, zero, gl.DYNAMIC_COPY), createVBO(gl, zero, gl.DYNAMIC_COPY)],
@@ -328,11 +349,26 @@ export default function LandscapeStrip({ className }) {
     let last = performance.now();
     const frame = (now) => {
       raf = requestAnimationFrame(frame);
+      const live = motionRef.current?.current;
+      if (live?.target && images) {
+        const target = live.target;
+        live.target = null;
+        if (
+          !state ||
+          Math.abs(target.w - state.resolution[0]) > 1 ||
+          Math.abs(target.h - state.resolution[1]) > 1
+        ) {
+          build(images, target);
+        }
+      }
       if (!state) return;
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
+      const flight = live?.flight ?? 0;
+      const rush = live?.rush ?? 1;
       if (!mouse.inside) mouse.power *= 0.95;
-      scroll = (scroll + SPEED * dt) % state.loopLength;
+      if (svgRef.current) svgRef.current.style.opacity = String(Math.max(0, 1 - flight / 0.18));
+      scroll = (scroll + SPEED * rush * dt) % state.loopLength;
 
       const src = state.idx;
       const dst = 1 - src;
@@ -347,8 +383,9 @@ export default function LandscapeStrip({ className }) {
       gl.enable(gl.RASTERIZER_DISCARD);
       gl.beginTransformFeedback(gl.POINTS);
       const arrow = arrowPose();
+      const pointer = live?.interactive !== false && flight < 0.04;
       gl.uniform2f(simU.mouse, mouse.x, mouse.y);
-      gl.uniform1f(simU.power, mouse.power);
+      gl.uniform1f(simU.power, pointer ? mouse.power : 0);
       gl.uniform2f(simU.arrow, arrow.x, arrow.y);
       gl.uniform1f(simU.dt, dt);
       gl.uniform1f(simU.scroll, scroll);
@@ -376,6 +413,7 @@ export default function LandscapeStrip({ className }) {
       gl.uniform1f(drawU.scroll, scroll);
       gl.uniform1f(drawU.loopLength, state.loopLength);
       gl.uniform1f(drawU.pitch, state.pitch);
+      gl.uniform1f(drawU.uFlight, flight);
       setGradeUniforms(gl, drawU, SETTINGS, state.cell);
       const { ascii } = SETTINGS;
       gl.uniform1i(drawU.uAscii, ascii ? 1 : 0);
@@ -436,7 +474,7 @@ export default function LandscapeStrip({ className }) {
   return (
     <div
       ref={rootRef}
-      className={className}
+      className={styles.root}
       style={{
         "--road-color": SETTINGS.road,
         "--arrow-color": SETTINGS.arrow,
@@ -444,7 +482,7 @@ export default function LandscapeStrip({ className }) {
       }}
     >
       <canvas ref={canvasRef} className={styles.layer} />
-      <svg className={styles.layer} aria-hidden="true">
+      <svg ref={svgRef} className={styles.layer} aria-hidden="true">
         <path ref={roadRef} className={styles.road} />
         {/* Flèche de navigation façon Apple Plans : pointe vers le haut, orientée selon le cap */}
         <defs>

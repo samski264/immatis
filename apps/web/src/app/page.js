@@ -1,19 +1,11 @@
 import Image from "next/image";
 import Scan from "@/components/Scan";
-import LandscapeStrip from "@/components/LandscapeStrip";
 import StepBloc from "@/components/StepBloc";
 import styles from "./page.module.css";
 
 export default function Home() {
   return (
     <main className={styles.main}>
-      <LandscapeStrip className={styles.strip} />
-      <div className={styles.veil} aria-hidden="true">
-        <div />
-        <div />
-        <div />
-        <div />
-      </div>
 
       <Image
         className={styles.logo}
