@@ -453,7 +453,7 @@ export default function LandscapeStrip({ motion }) {
       const lat = (x - arrow.x) * -fy + (y - arrow.y) * fx;
       const w = state.resolution[0];
       const h = state.resolution[1];
-      const refH = 413 * Math.min(1, w / 1728);
+      const refH = 200 * Math.min(1, w / 390);
       const back = Math.max(gpsTune.back, 0.05) * refH;
       const eye = Math.max(gpsTune.anchor, 0.02) * refH;
       const focal = Math.max(gpsTune.fill, 0.02) * w;
@@ -528,7 +528,7 @@ export default function LandscapeStrip({ motion }) {
       for (let x = -10; x <= state.width + 10; x += 4) {
         const y = roadY(x);
         const ahead = (x - arrow.x) * fx + (y - arrow.y) * fy;
-        const nearDist = 413 * Math.min(1, state.resolution[0] / 1728) * gpsTune.near;
+        const nearDist = 200 * Math.min(1, state.resolution[0] / 390) * gpsTune.near;
         if (gps > 0.55 && ahead < -nearDist) continue;
         const p = project(x, y, gps, arrow);
         pts.push(`${p.x.toFixed(1)},${p.y.toFixed(1)}`);
@@ -798,7 +798,7 @@ export default function LandscapeStrip({ motion }) {
       gl.uniform1f(drawU.uRise0, gpsTune.riseStart);
       gl.uniform1f(drawU.uRise1, gpsTune.riseEnd);
       gl.uniform1f(drawU.uNear, gpsTune.near);
-      gl.uniform1f(drawU.uRef, 413 * Math.min(1, state.resolution[0] / 1728));
+      gl.uniform1f(drawU.uRef, 200 * Math.min(1, state.resolution[0] / 390));
       gl.uniform2f(drawU.uMouse, mouse.x, mouse.y);
       gl.uniform1f(drawU.uHover, mouse.power);
       gl.uniform1f(drawU.uTime, now / 1000);

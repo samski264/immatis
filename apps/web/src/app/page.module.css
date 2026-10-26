@@ -1,12 +1,11 @@
-/* Maquette 1728. Les cotes du design system passent par --s-* ; le reste reste en px. */
+/* Maquette mobile 390. Les cotes du design system passent par --s-* ; le reste reste en px. */
 
 .main {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  max-width: 1728px;
+  align-items: stretch;
+  width: min(100%, 390px);
   margin-inline: auto;
   padding: 0 var(--s-172);
   background: transparent;
@@ -21,31 +20,34 @@
 
 .nav {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: calc(40 * var(--u));
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-14);
   width: 100%;
-  height: calc(183 * var(--u));
+  height: auto;
+  padding-block: var(--s-20);
   flex-shrink: 0;
 }
 
 .lockup {
-  width: calc(146.276 * var(--u));
-  height: calc(30 * var(--u));
+  width: calc(120 * var(--u));
+  height: auto;
   flex-shrink: 0;
 }
 
 .navRight {
   display: flex;
-  align-items: center;
-  gap: calc(40 * var(--u));
-  flex-shrink: 0;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s-14);
+  width: 100%;
 }
 
 .navLinks {
   display: flex;
-  align-items: center;
-  gap: calc(32 * var(--u));
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-10);
 }
 
 .navLink,
@@ -104,12 +106,14 @@
 
 .countries {
   display: flex;
-  align-items: center;
-  gap: calc(8 * var(--u));
-  padding: var(--s-10) calc(16 * var(--u));
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-3);
+  width: 100%;
+  padding: var(--s-10) var(--s-17);
   border: 1px solid rgb(0 0 0 / 12%);
-  border-radius: 999px;
-  white-space: nowrap;
+  border-radius: 16px;
+  white-space: normal;
 }
 
 .countries span:first-child {
@@ -129,8 +133,9 @@
 }
 
 .hero {
-  width: calc(1078 * var(--u));
-  height: calc(239 * var(--u));
+  width: 100%;
+  height: auto;
+  padding-block: var(--s-10);
 }
 
 .title {
@@ -142,7 +147,7 @@
 }
 
 .lead {
-  width: calc(859 * var(--u));
+  width: 100%;
   font-weight: var(--wght-text);
   font-size: var(--size-intro);
 }
@@ -152,12 +157,13 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: calc(398 * var(--u));
+  height: auto;
+  padding-block: var(--s-20);
 }
 
 .bloc {
-  width: calc(719 * var(--u));
-  height: calc(338 * var(--u));
+  width: 100%;
+  height: auto;
   flex-shrink: 0;
 }
 
@@ -175,15 +181,17 @@
 
 .steps {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: calc(var(--space-81) * 1px);
-  width: calc(1432 * var(--u));
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s-17);
+  width: 100%;
 }
 
 .duo {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s-17);
   width: 100%;
   scroll-margin-top: calc(24 * var(--u));
 }
@@ -202,7 +210,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--s-14);
-  width: calc(360 * var(--u));
+  width: 100%;
   flex-shrink: 0;
 }
 
@@ -223,36 +231,34 @@
 
 .answersHead {
   display: flex;
-  align-items: flex-end;
-  gap: var(--s-81);
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s-14);
 }
 
 .answersHead .sectionTitle {
-  width: auto;
-  flex: 1;
-  min-width: 0;
+  width: 100%;
 }
 
 .answersHead .intro {
-  width: calc(480 * var(--u));
-  flex-shrink: 0;
+  width: 100%;
 }
 
 .cards {
   display: flex;
+  flex-direction: column;
   align-items: stretch;
   gap: var(--s-17);
-  min-height: calc(344 * var(--u));
 }
 
 .card {
   display: flex;
   flex-direction: column;
   gap: calc(var(--space-20) * 1px);
-  flex: 1;
+  flex: none;
+  width: 100%;
   min-width: 0;
-  min-height: calc(344 * var(--u));
-  padding: 24px;
+  padding: 20px;
   border-radius: var(--radius);
   background: #f4f6f2;
   scroll-margin-top: calc(24 * var(--u));
@@ -309,7 +315,7 @@
 .figure {
   font-family: var(--font-aquawax);
   font-weight: var(--weight-heading);
-  font-size: 44px;
+  font-size: 32px;
   line-height: 1;
   letter-spacing: var(--tracking-tight);
   color: #273e00;
@@ -351,8 +357,9 @@
 
 .split {
   display: flex;
-  align-items: flex-start;
-  gap: var(--s-81);
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s-20);
   width: 100%;
   padding: var(--s-68) var(--s-39);
   scroll-margin-top: calc(24 * var(--u));
@@ -376,24 +383,21 @@
 .docRow,
 .faqRow {
   display: flex;
-  align-items: center;
-  gap: var(--s-39);
-  padding: var(--s-23) 0;
-}
-
-.faqRow {
+  flex-direction: column;
   align-items: flex-start;
+  gap: var(--s-7);
+  padding: var(--s-17) 0;
 }
 
 .rowLabel {
-  width: calc(140 * var(--u));
+  width: 100%;
   flex-shrink: 0;
   font-weight: var(--wght-text);
   font-size: var(--size-label);
 }
 
 .faqRow .rowLabel {
-  width: calc(320 * var(--u));
+  width: 100%;
 }
 
 .rowBody {
@@ -409,8 +413,7 @@
 }
 
 .rowMeta {
-  width: calc(270 * var(--u));
-  flex-shrink: 0;
+  width: 100%;
 }
 
 .note {
@@ -434,10 +437,10 @@
 
 .banner {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--s-81);
-  padding: var(--s-68);
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s-20);
+  padding: var(--s-39);
   border-radius: var(--radius);
   background: var(--color-surface-card-lime);
 }
@@ -453,7 +456,7 @@
 .bannerTitle {
   font-family: var(--font-aquawax);
   font-weight: var(--weight-heading);
-  font-size: 44px;
+  font-size: 32px;
   line-height: normal;
   letter-spacing: var(--tracking-tight);
 }
@@ -464,16 +467,16 @@
 }
 
 .deposit {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--s-10);
-  flex-shrink: 0;
-  padding: var(--s-17) calc(28 * var(--u));
+  width: 100%;
+  padding: var(--s-17) var(--s-20);
   border-radius: 999px;
   background: var(--color-text-primary);
   color: var(--color-bg-page);
   font-weight: var(--wght-bold);
-  white-space: nowrap;
 }
 
 .depositIcon {
@@ -491,7 +494,8 @@
 
 .columns {
   display: flex;
-  gap: var(--s-81);
+  flex-direction: column;
+  gap: var(--s-39);
 }
 
 .brand {
@@ -503,8 +507,7 @@
 }
 
 .brand p {
-  width: calc(360 * var(--u));
-  max-width: 100%;
+  width: 100%;
 }
 
 .brand .independence {
@@ -515,15 +518,14 @@
   display: flex;
   flex-direction: column;
   gap: var(--s-14);
-  width: calc(180 * var(--u));
-  flex-shrink: 0;
+  width: 100%;
 }
 
 .bottom {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: calc(24 * var(--u));
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-10);
   font-weight: var(--wght-text);
   font-size: var(--size-caption);
 }

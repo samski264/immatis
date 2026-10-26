@@ -1,11 +1,12 @@
-/* Tokens du design system Pencil (Immatis — Design tokens).
-   Les cotes spatiales sont des unités de maquette : --s-* = N × --u.
+/* Tokens du design system Pencil (Immatis — Design tokens), échelle mobile.
+   Maquette 390. Les cotes spatiales sont des unités de maquette : --s-* = N × --u.
+   --u vaut 1px dès 390px de large, et rétrécit en dessous.
    Graisses Parabole : l'axe variable va de 64 à 116, 90 et 116 tiennent lieu de 400 et 700.
    Les flous CSS valent la moitié du flou Figma (35,2 px → 17,6 px).
    Le survol de la zone d'envoi et l'ombre du tracé ne sont pas des variables du fichier. */
 
 :root {
-  --u: min(1px, 100vw / 1728);
+  --u: min(1px, 100vw / 390);
 
   --color-bg-page: #ffffff;
   --color-surface-overlay: #ffffff03;
@@ -26,28 +27,28 @@
   --wght-text: 90;
   --wght-bold: 116;
 
-  --size-display: 63px;
-  --size-heading: 35px;
-  --size-intro: 22px;
-  --size-label: 18px;
-  --size-body: 14px;
+  --size-display: 36px;
+  --size-heading: 28px;
+  --size-intro: 18px;
+  --size-label: 16px;
+  --size-body: 15px;
   --size-caption: 12px;
 
   --tracking-tight: -0.03em;
   --tracking-normal: 0;
 
-  --space-3: 3;
-  --space-7: 7;
-  --space-10: 10;
-  --space-14: 14;
-  --space-17: 17;
-  --space-20: 20;
-  --space-23: 23;
-  --space-39: 39;
-  --space-45: 45;
-  --space-68: 68;
-  --space-81: 81;
-  --space-172: 172;
+  --space-3: 4;
+  --space-7: 8;
+  --space-10: 12;
+  --space-14: 12;
+  --space-17: 16;
+  --space-20: 16;
+  --space-23: 16;
+  --space-39: 20;
+  --space-45: 28;
+  --space-68: 32;
+  --space-81: 24;
+  --space-172: 20;
 
   --s-3: calc(var(--space-3) * var(--u));
   --s-7: calc(var(--space-7) * var(--u));

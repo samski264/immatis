@@ -146,9 +146,13 @@ export default function ResultView() {
                   {view.rows.map((row) => (
                     <tr key={row.poste}>
                       <th scope="row">{row.poste}</th>
-                      <td className={styles.mono}>{row.field}</td>
-                      <td>{row.rule}</td>
-                      <td className={row.tone ? styles[row.tone] : undefined}>{row.amount}</td>
+                      <td className={styles.mono} data-label="Champ lu">
+                        {row.field}
+                      </td>
+                      <td data-label="Règle appliquée">{row.rule}</td>
+                      <td className={row.tone ? styles[row.tone] : undefined} data-label="Montant">
+                        {row.amount}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

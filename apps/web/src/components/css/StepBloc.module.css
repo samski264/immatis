@@ -1,4 +1,4 @@
-/* Carte d'étape, cotes fixes (295 × 439.52) : le multiple est 1px, pas --u.
+/* Carte d'étape, pleine largeur de la colonne mobile.
    Couleurs : color/surface/card-* et color/text/card-*. */
 
 .bloc {
@@ -7,8 +7,8 @@
   align-items: center;
   justify-content: flex-start;
   gap: calc(var(--space-17) * 1px);
-  width: 295px;
-  height: 439.52px;
+  width: 100%;
+  height: auto;
   padding: 0 0 calc(var(--space-45) * 1px);
   border-radius: calc(var(--radius-card) * 1px);
   overflow: hidden;
@@ -33,7 +33,7 @@
 .picture {
   display: block;
   width: 100%;
-  height: 229.522px;
+  height: calc(180 * var(--u));
   pointer-events: auto;
 }
 

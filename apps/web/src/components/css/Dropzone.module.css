@@ -7,8 +7,9 @@
   align-items: center;
   justify-content: center;
   gap: var(--s-7);
-  width: calc(786 * var(--u));
-  height: calc(249 * var(--u));
+  width: 100%;
+  min-height: calc(200 * var(--u));
+  height: auto;
   padding: var(--s-3) var(--s-39);
   border: calc(var(--border-upload) * var(--u)) solid var(--color-bg-page);
   border-radius: var(--radius);
@@ -36,7 +37,7 @@
 }
 
 .reading .label {
-  width: calc(260 * var(--u));
+  width: 100%;
 }
 
 .input {
@@ -44,8 +45,8 @@
 }
 
 .icon {
-  width: calc(63 * var(--u));
-  height: calc(62.76 * var(--u));
+  width: calc(40 * var(--u));
+  height: calc(40 * var(--u));
   transform: scaleX(-1);
 }
 
@@ -58,14 +59,14 @@
 }
 
 .label {
-  width: calc(176 * var(--u));
+  width: 100%;
   font-weight: var(--wght-bold);
   font-size: var(--size-label);
   color: var(--color-text-upload);
 }
 
 .hint {
-  width: calc(297 * var(--u));
+  width: 100%;
   font-weight: var(--wght-text);
   font-size: var(--size-caption);
 }
