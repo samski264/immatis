@@ -157,7 +157,7 @@ export default function ParticleScene({
       destroyState();
       const rect = root.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = 1;
       canvas.width = Math.round(rect.width * dpr);
       canvas.height = Math.round(rect.height * dpr);
 
@@ -218,12 +218,15 @@ export default function ParticleScene({
 
     const start = performance.now();
     let last = start;
+    let lastDraw = 0;
     const frame = (now) => {
       raf = requestAnimationFrame(frame);
       if (!state || !visible) {
         last = now;
         return;
       }
+      if (now - lastDraw < 32) return;
+      lastDraw = now;
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
       if (!mouse.inside) mouse.power *= 0.95;

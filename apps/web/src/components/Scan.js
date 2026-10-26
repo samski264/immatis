@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { EventSourceParserStream } from "eventsource-parser/stream";
-import { READ_MS, beginReading, endReading, flyTo } from "@/lib/routeFlight";
+import { abortProcessing, completeProcessing, startProcessing } from "@/lib/routeFlight";
 import { saveResult } from "@/lib/scanResult";
 import Dropzone from "./Dropzone";
 
@@ -22,17 +22,15 @@ export default function Scan({ inputId }) {
   const sent = useRef(false);
   const busy = useRef(false);
 
-  const finish = (payload, startedAt) => {
+  const finish = (payload) => {
     saveResult(payload);
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const wait = reduce ? 0 : Math.max(0, READ_MS - (performance.now() - startedAt));
-    window.setTimeout(() => flyTo(router, "/result"), wait);
+    completeProcessing(router);
   };
 
   const abortReading = (error) => {
     busy.current = false;
     setReading(false);
-    endReading();
+    abortProcessing();
     if (error) setEvents({ error });
   };
 
@@ -45,9 +43,8 @@ export default function Scan({ inputId }) {
   const send = async (files) => {
     if (busy.current) return;
     busy.current = true;
-    const startedAt = performance.now();
     setReading(true);
-    beginReading();
+    startProcessing();
     const form = new FormData();
     files.forEach((f) => form.append("file", f));
     received.current = {};
@@ -87,14 +84,11 @@ export default function Scan({ inputId }) {
               if (!next.certificate || !next.bilan) return;
               if (typeof next.certificate !== "object" || typeof next.bilan !== "object") return;
               sent.current = true;
-              finish(
-                {
-                  scannedAt: new Date().toISOString(),
-                  certificate: next.certificate,
-                  bilan: next.bilan,
-                },
-                startedAt
-              );
+              finish({
+                scannedAt: new Date().toISOString(),
+                certificate: next.certificate,
+                bilan: next.bilan,
+              });
             },
           })
         );

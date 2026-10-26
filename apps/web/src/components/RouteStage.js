@@ -3,14 +3,14 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import LandscapeStrip from "./LandscapeStrip";
-import { FLIGHT_MS, onDepart } from "@/lib/routeFlight";
+import { clearCruise, onDepart, onReset, registerCruise } from "@/lib/routeFlight";
 import { gpsTune, onTune } from "@/lib/gpsTune";
 import styles from "./css/RouteStage.module.css";
 
 // Une seule scène WebGL pour / et /result. La remonter dans le layout évite le flash :
 // router.push ne démonte plus le canvas (pas de second chargement des tuiles), et /result
 // n'a pas de loading.js — le segment statique préfetché s'échange dans le même commit.
-// Le vol commence dans flyTo(), avant le push, pour que le texte parte avec la bande.
+// Le vol vers le résultat démarre avec le scan et reste en croisière jusqu'à la réponse.
 // Pendant le vol, LandscapeStrip lit `motion` (pitch + accélération du défilement).
 
 const HOME = { key: "home", top: 325, height: 413, opacity: 1 };
@@ -32,6 +32,12 @@ const measure = (frame) => {
 // Lent au décollage, vif au milieu, posé à l'arrivée.
 const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
 
+// Même vol que la branche : 15 s, caméra sur les 3 premières, pose sur la dernière seconde et demie.
+// Si le scan dure plus longtemps, la croisière attend la réponse avant de se poser.
+const FLIGHT_MS = 15000;
+const DOCK_AT = 0.9;
+const DOCK_MS = 1500;
+
 export default function RouteStage() {
   const pathname = usePathname();
   const stageRef = useRef(null);
@@ -49,11 +55,12 @@ export default function RouteStage() {
   });
   const goRef = useRef(null);
 
-  goRef.current = (to) => {
+  goRef.current = (to, snap = false) => {
     const el = stageRef.current;
     if (!el) return;
-    if (flightRef.current?.to.key === to.key) return;
+    if (!snap && flightRef.current?.to.key === to.key) return;
     if (!flightRef.current && poseRef.current.key === to.key) return;
+    clearCruise();
     if (flightRef.current) cancelAnimationFrame(flightRef.current.raf);
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -61,10 +68,11 @@ export default function RouteStage() {
 
     const place = to.key === "result" ? styles.result : styles.home;
 
-    if (reduce) {
+    if (reduce || snap) {
       flightRef.current = null;
       poseRef.current = to;
       setPose(to);
+      setExpanded(false);
       motion.current.flight = 0;
       motion.current.rush = 1;
       motion.current.gps = 0;
@@ -101,8 +109,9 @@ export default function RouteStage() {
     setPose(to);
 
     const toResult = to.key === "result";
-    const duration = toResult ? FLIGHT_MS : 1000;
-    motion.current.detail = toResult;
+    const duration = 1000;
+    // `detail` resserre le pas et multiplie les particules. Le vol agrandit en CSS.
+    motion.current.detail = false;
     if (toResult) setExpanded(true);
     else setExpanded(false);
 
@@ -142,12 +151,49 @@ export default function RouteStage() {
     };
 
     const t0 = performance.now();
-    const tick = (now) => {
-      const t = Math.min(1, (now - t0) / duration);
-      if (apply(t)) return;
-      flightRef.current.raf = requestAnimationFrame(tick);
+    const flight = {
+      to,
+      raf: 0,
+      phase: "fly",
+      landCallback: null,
+      dockFrom: 0,
+      finish(done) {
+        this.landCallback = done;
+        if (this.phase === "hold") {
+          this.phase = "dock";
+          this.dockFrom = performance.now();
+          this.raf = requestAnimationFrame(tick);
+        }
+      },
     };
-    flightRef.current = { to, raf: requestAnimationFrame(tick) };
+    const tick = (now) => {
+      if (!toResult) {
+        const t = Math.min(1, (now - t0) / duration);
+        if (apply(t)) return;
+        flight.raf = requestAnimationFrame(tick);
+        return;
+      }
+      if (flight.phase === "fly") {
+        const t = Math.min(DOCK_AT, (now - t0) / FLIGHT_MS);
+        apply(t);
+        if (t >= DOCK_AT) flight.phase = flight.landCallback ? "dock" : "hold";
+        if (flight.phase === "dock") flight.dockFrom = now;
+        if (flight.phase === "hold") return;
+      }
+      if (flight.phase === "dock") {
+        const p = Math.min(1, (now - flight.dockFrom) / DOCK_MS);
+        if (apply(DOCK_AT + p * 0.1)) {
+          const done = flight.landCallback;
+          flight.landCallback = null;
+          done?.();
+          return;
+        }
+      }
+      flight.raf = requestAnimationFrame(tick);
+    };
+    flightRef.current = flight;
+    flight.raf = requestAnimationFrame(tick);
+    if (toResult) registerCruise((done) => flight.finish(done));
   };
 
   useLayoutEffect(() => {
@@ -155,6 +201,8 @@ export default function RouteStage() {
   }, [pathname]);
 
   useLayoutEffect(() => onDepart((path) => goRef.current(frameFor(path))), []);
+
+  useLayoutEffect(() => onReset(() => goRef.current(HOME, true)), []);
 
   useEffect(() => onTune(() => setTuneRev((n) => n + 1)), []);
 
@@ -168,8 +216,18 @@ export default function RouteStage() {
       motion.current.target = measure(atResult ? RESULT : HOME);
       return;
     }
+    // La fenêtre en pixels réels, avec le pas serré, atteint le plafond de 3,6 M
+    // de particules et reconstruit la grille sur le thread principal. On garde
+    // l'aire de la bande d'accueil et le format de la fenêtre : le canvas est
+    // ensuite étiré en CSS.
+    const home = measure(HOME);
+    const cap = home.w * home.h;
     const fit = () => {
-      motion.current.target = { w: window.innerWidth, h: window.innerHeight };
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const area = w * h;
+      const scale = area > cap ? Math.sqrt(cap / area) : 1;
+      motion.current.target = { w: Math.max(2, w * scale), h: Math.max(2, h * scale) };
     };
     fit();
     window.addEventListener("resize", fit);
@@ -192,12 +250,7 @@ export default function RouteStage() {
       >
         <LandscapeStrip motion={motion} />
       </div>
-      <div className={full || atResult ? `${styles.veil} ${styles.veilOff}` : styles.veil} aria-hidden="true">
-        <div />
-        <div />
-        <div />
-        <div />
-      </div>
+      <div className={full || atResult ? `${styles.veil} ${styles.veilOff}` : styles.veil} aria-hidden="true" />
     </>
   );
 }

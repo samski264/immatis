@@ -3,7 +3,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { flushSync } from "react-dom";
-import { onDepart, onReading } from "@/lib/routeFlight";
+import { onDepart, onReading, onReset } from "@/lib/routeFlight";
 import styles from "./template.module.css";
 
 // Le fondu d'arrivée ne joue pas au premier affichage (ni au double montage de Strict Mode).
@@ -28,9 +28,14 @@ export default function Template({ children }) {
       flushSync(() => setLeave(true));
     });
     const offReading = onReading(setReading);
+    const offReset = onReset(() => {
+      setLeave(false);
+      setReading(false);
+    });
     return () => {
       offDepart();
       offReading();
+      offReset();
     };
   }, []);
 

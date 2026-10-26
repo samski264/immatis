@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { gpsTune } from "@/lib/gpsTune";
+import { stepTune } from "@/lib/stepTune";
 import styles from "./css/LandscapeStrip.module.css";
 import {
   DEFAULT_GRADE,
@@ -64,19 +65,23 @@ const ARROW_D =
 
 // Position affichée d'une particule : sa tuile défile et boucle sur la longueur totale.
 // Route : spline échantillonnée sur la boucle, lue avec interpolation linéaire.
+// La route est une texture (texelFetch). Un tableau uniform indexé par un entier
+// variable est compilé en boucle sur les 128 vec4, une fois par particule et par image.
 const SCROLL_GLSL = `
 uniform float scroll;
 uniform float loopLength;
 uniform float pitch;
-uniform vec4 roadPts[${ROAD_SAMPLES / 4}];
+uniform sampler2D roadTex;
 vec2 scrolled(vec2 h) {
   return vec2(mod(h.x - scroll, loopLength) - pitch, h.y);
 }
 float roadY(float x) {
   float u = fract((x + scroll) / loopLength) * ${ROAD_SAMPLES}.0;
-  int i = int(u);
-  int j = (i + 1) % ${ROAD_SAMPLES};
-  return mix(roadPts[i >> 2][i & 3], roadPts[j >> 2][j & 3], u - float(i));
+  float i = floor(min(u, ${ROAD_SAMPLES - 1}.0));
+  float j = i < ${ROAD_SAMPLES - 1}.0 ? i + 1.0 : 0.0;
+  float a = texelFetch(roadTex, ivec2(int(i), 0), 0).r;
+  float b = texelFetch(roadTex, ivec2(int(j), 0), 0).r;
+  return mix(a, b, u - i);
 }`;
 
 // Catmull-Rom uniforme entre p1 et p2
@@ -146,6 +151,7 @@ const DRAW_VS = `#version 300 es
 layout(location = 0) in vec2 home;
 layout(location = 1) in float grow;
 layout(location = 3) in vec3 color;
+layout(location = 4) in vec2 aOffset;
 
 uniform vec2 resolution;
 uniform float pointSize;
@@ -164,6 +170,16 @@ uniform float uRise0;
 uniform float uRise1;
 uniform float uNear;
 uniform float uRef;
+uniform vec2 uMouse;
+uniform float uHover;
+uniform float uTime;
+uniform float uReach;
+uniform float uCore;
+uniform float uRippleFreq;
+uniform float uRippleSpeed;
+uniform float uRippleAmp;
+uniform float uSwirl;
+uniform float uGrow;
 ${SCROLL_GLSL}
 ${GRADE_GLSL}
 
@@ -172,7 +188,7 @@ out float vLuma;
 out float vThreshold;
 
 void main() {
-  vec2 p = scrolled(home);
+  vec2 p = scrolled(home) + aOffset;
   vec2 ndc = vec2(p.x / resolution.x * 2.0 - 1.0, 1.0 - p.y / resolution.y * 2.0);
 
   // À uFlight = 0 et uGps = 0 le mix rend exactement la projection d'origine.
@@ -185,36 +201,43 @@ void main() {
   vec2 tilted = vec2(ndc.x * w, y * w + pitchAmt * 0.16);
   vec2 plane = mix(ndc, tilted, pitchAmt);
 
-  // Vue GPS : l'axe de la route devient la profondeur, le travers devient la largeur.
-  // Le relief monte avec l'écart au tracé, qui lui reste au sol.
-  vec2 fwd = vec2(cos(uHeading), sin(uHeading));
-  vec2 right = vec2(-fwd.y, fwd.x);
-  vec2 rel = p - uArrow;
-  float ahead = dot(rel, fwd);
-  float lat = dot(rel, right);
-  float road = roadY(p.x);
-  float dist = abs(p.y - road);
-  float side = p.y < road ? -1.0 : 1.0;
-  float ridge = 0.5 + 0.5 * sin(p.x * 0.012 + side * 1.2);
-  float range = 0.55 + 0.45 * sin(p.x * 0.005 + 1.3);
-  // Les distances sont en hauteur de bande (uRef). Le dessin, lui, couvre toute la fenêtre.
-  float back = max(uBack, 0.05) * uRef;
-  float eye = max(uAnchor, 0.02) * uRef;
-  float focal = max(uFill, 0.02) * resolution.x;
-  float horizon = resolution.y * uHorizon;
-  float rise = smoothstep(uRef * uRise0, max(uRef * uRise1, uRef * uRise0 + 1.0), dist);
-  float mh = rise * (0.4 + 0.6 * ridge) * range * eye * uRelief;
-  float nearDist = uRef * uNear;
-  float depth = max(max(ahead + back, back - nearDist), 1.0);
-  vec2 gpsPx = vec2(resolution.x * 0.5 + lat * focal / depth, horizon + (eye - mh) * focal / depth);
-  vec2 gpsNdc = vec2(gpsPx.x / resolution.x * 2.0 - 1.0, 1.0 - gpsPx.y / resolution.y * 2.0);
-
-  gl_Position = vec4(mix(plane, gpsNdc, uGps), 0.0, 1.0);
-  float near = clamp(back / max(depth, 0.001), 0.75, 1.2);
-  gl_PointSize = min(pointSize * (1.0 + grow * growAmount) * mix(mix(1.0, w, pitchAmt), near, uGps), maxPointSize);
-  if (uGps > 0.55 && ahead < -nearDist) {
-    gl_Position = vec4(2.0, 2.0, 0.0, 1.0);
-    gl_PointSize = 0.0;
+  // Au repos uGps vaut 0 pour toutes les particules : on saute la projection.
+  vec2 placed = plane;
+  if (uGps > 0.001) {
+    // Vue GPS : l'axe de la route devient la profondeur, le travers devient la largeur.
+    // Le relief monte avec l'écart au tracé, qui lui reste au sol.
+    vec2 fwd = vec2(cos(uHeading), sin(uHeading));
+    vec2 right = vec2(-fwd.y, fwd.x);
+    vec2 rel = p - uArrow;
+    float ahead = dot(rel, fwd);
+    float lat = dot(rel, right);
+    float road = roadY(p.x);
+    float dist = abs(p.y - road);
+    float side = p.y < road ? -1.0 : 1.0;
+    float ridge = 0.5 + 0.5 * sin(p.x * 0.012 + side * 1.2);
+    float range = 0.55 + 0.45 * sin(p.x * 0.005 + 1.3);
+    // Les distances sont en hauteur de bande (uRef). Le dessin, lui, couvre toute la fenêtre.
+    float back = max(uBack, 0.05) * uRef;
+    float eye = max(uAnchor, 0.02) * uRef;
+    float focal = max(uFill, 0.02) * resolution.x;
+    float horizon = resolution.y * uHorizon;
+    float rise = smoothstep(uRef * uRise0, max(uRef * uRise1, uRef * uRise0 + 1.0), dist);
+    float mh = rise * (0.4 + 0.6 * ridge) * range * eye * uRelief;
+    float nearDist = uRef * uNear;
+    float depth = max(max(ahead + back, back - nearDist), 1.0);
+    vec2 gpsPx = vec2(resolution.x * 0.5 + lat * focal / depth, horizon + (eye - mh) * focal / depth);
+    vec2 gpsNdc = vec2(gpsPx.x / resolution.x * 2.0 - 1.0, 1.0 - gpsPx.y / resolution.y * 2.0);
+    placed = mix(plane, gpsNdc, uGps);
+    gl_Position = vec4(placed, 0.0, 1.0);
+    float near = clamp(back / max(depth, 0.001), 0.75, 1.2);
+    gl_PointSize = min(pointSize * (1.0 + grow * growAmount) * mix(mix(1.0, w, pitchAmt), near, uGps), maxPointSize);
+    if (uGps > 0.55 && ahead < -nearDist) {
+      gl_Position = vec4(2.0, 2.0, 0.0, 1.0);
+      gl_PointSize = 0.0;
+    }
+  } else {
+    gl_Position = vec4(plane, 0.0, 1.0);
+    gl_PointSize = min(pointSize * (1.0 + grow * growAmount) * mix(1.0, w, pitchAmt), maxPointSize);
   }
   vec3 a = adjust(color);
   float t = bayer(home);
@@ -262,14 +285,27 @@ export default function LandscapeStrip({ motion }) {
     const uniforms = (prg, names) =>
       Object.fromEntries(names.map((n) => [n, gl.getUniformLocation(prg, n)]));
     const simU = uniforms(simPrg, [
-      "mouse", "power", "arrow", "dt", "scroll", "loopLength", "pitch", "roadPts",
+      "mouse", "power", "arrow", "dt", "scroll", "loopLength", "pitch", "roadTex",
     ]);
     const drawU = uniforms(drawPrg, [
       "resolution", "pointSize", "growAmount", "maxPointSize", "scroll", "loopLength", "pitch",
       "uAscii", "uAsciiInvert", "uGlyphs", "uGlyphCount", "uFlight", "uGps", "uArrow", "uHeading",
-      "uBack", "uHorizon", "uAnchor", "uFill", "uRelief", "uRise0", "uRise1", "uNear", "uRef", "roadPts",
+      "uBack", "uHorizon", "uAnchor", "uFill", "uRelief", "uRise0", "uRise1", "uNear", "uRef", "roadTex",
+      "uMouse", "uHover", "uTime", "uReach", "uCore", "uRippleFreq", "uRippleSpeed", "uRippleAmp", "uSwirl", "uGrow",
       ...GRADE_UNIFORMS,
     ]);
+
+    const roadTex = gl.createTexture();
+    gl.activeTexture(gl.TEXTURE2);
+    gl.bindTexture(gl.TEXTURE_2D, roadTex);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.useProgram(simPrg);
+    gl.uniform1i(simU.roadTex, 2);
+    gl.useProgram(drawPrg);
+    gl.uniform1i(drawU.roadTex, 2);
 
     // Alpha prémultiplié (glyphes ASCII) ; sans effet sur les points opaques
     gl.enable(gl.BLEND);
@@ -277,7 +313,7 @@ export default function LandscapeStrip({ motion }) {
 
     const destroyState = () => {
       if (!state) return;
-      [state.homeBuf, state.colorBuf, ...state.grow].forEach((b) => gl.deleteBuffer(b));
+      [state.homeBuf, state.colorBuf, state.offsetBuf, ...state.grow].forEach((b) => gl.deleteBuffer(b));
       state = null;
     };
 
@@ -290,7 +326,9 @@ export default function LandscapeStrip({ motion }) {
       if (width < 2 || height < 2) return;
       const prev = state;
       destroyState();
-      const dpr = window.devicePixelRatio || 1;
+      // Écran rétina : le buffer en dpr 2 quadruple les pixels peints à chaque image.
+      // Le canvas CSS reste à la taille de la bande, le navigateur l'agrandit.
+      const dpr = 1;
       // Changer canvas.width réinitialise l'état GL (blend, viewport) : on le restaure après.
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
@@ -342,6 +380,20 @@ export default function LandscapeStrip({ motion }) {
           ? prev.road
           : makeRoad(tile, loopLength);
 
+      gl.activeTexture(gl.TEXTURE2);
+      gl.bindTexture(gl.TEXTURE_2D, roadTex);
+      gl.texImage2D(
+        gl.TEXTURE_2D,
+        0,
+        gl.R32F,
+        ROAD_SAMPLES,
+        1,
+        0,
+        gl.RED,
+        gl.FLOAT,
+        road.samples
+      );
+
       // Taille entière en pixels device (évite les moirés entre cellules) ; l'atlas suit.
       // Peut dépasser le pas (points qui se chevauchent).
       const pointSize = Math.min(
@@ -349,6 +401,8 @@ export default function LandscapeStrip({ motion }) {
         Math.max(1, Math.ceil((size > 0 ? size : step) * dpr))
       );
       if (ascii) ensureGlyphs(pointSize * ATLAS_SCALE);
+      gl.activeTexture(gl.TEXTURE2);
+      gl.bindTexture(gl.TEXTURE_2D, roadTex);
 
       const zero = new Float32Array(count);
       state = {
@@ -365,9 +419,17 @@ export default function LandscapeStrip({ motion }) {
         homeBuf: createVBO(gl, home),
         colorBuf: createVBO(gl, color),
         grow: [createVBO(gl, zero, gl.DYNAMIC_COPY), createVBO(gl, zero, gl.DYNAMIC_COPY)],
+        offset: new Float32Array(count * 2),
+        offsetBuf: createVBO(gl, new Float32Array(count * 2), gl.DYNAMIC_DRAW),
+        homes: home,
+        n,
+        tiles,
+        s,
         idx: 0,
       };
       scroll %= loopLength;
+      contacts.clear();
+      paintRestRoad();
     };
 
     // Même spline qu'au repos. Le relief et la vue GPS ne changent pas le tracé.
@@ -425,7 +487,41 @@ export default function LandscapeStrip({ motion }) {
       return arrowOutline;
     };
 
+    // Au repos le tracé ne change pas : on le pose une fois et on le translate.
+    let restRoad = "";
+    let resting = false;
+    const paintRestRoad = () => {
+      if (!state || !roadRef.current) return;
+      const pts = [];
+      const span = state.loopLength + state.width;
+      for (let x = 0; x <= span; x += 8) {
+        const u = x / state.loopLength;
+        const y = state.road.at((u - Math.floor(u)) * state.road.n);
+        pts.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+      }
+      restRoad = `M${pts.join(" L")}`;
+      roadRef.current.setAttribute("d", restRoad);
+      resting = true;
+    };
+
     const updateRoad = (gps, arrow) => {
+      if (gps <= 0.02) {
+        const shift = scroll % state.loopLength;
+        roadRef.current.setAttribute("transform", `translate(${(-shift).toFixed(1)} 0)`);
+        if (!resting) {
+          roadRef.current.setAttribute("d", restRoad);
+          arrowRef.current.querySelector("path").setAttribute("d", ARROW_D);
+          resting = true;
+        }
+        const flat = (arrow.heading * 180) / Math.PI + 90;
+        arrowRef.current.setAttribute(
+          "transform",
+          `translate(${arrow.x.toFixed(1)} ${arrow.y.toFixed(1)}) rotate(${flat.toFixed(1)})`
+        );
+        return;
+      }
+      resting = false;
+      roadRef.current.setAttribute("transform", "");
       const pts = [];
       const fx = Math.cos(arrow.heading);
       const fy = Math.sin(arrow.heading);
@@ -467,6 +563,136 @@ export default function LandscapeStrip({ motion }) {
 
     let images = null;
     let last = performance.now();
+    const contacts = new Map();
+
+    function stirLandscape(dt) {
+      if (!state?.homes) return;
+      const radius = Math.max(12, stepTune.core * 3);
+      const cells = Math.max(2, Math.ceil((radius * 2.2) / state.s));
+      const worldX = mouse.x + state.pitch + scroll;
+      let xInLoop = worldX % state.loopLength;
+      if (xInLoop < 0) xInLoop += state.loopLength;
+      const tileIndex = Math.min(state.tiles - 1, Math.max(0, Math.floor(xInLoop / state.pitch)));
+      const ix = Math.round((xInLoop - tileIndex * state.pitch) / state.s - 0.5);
+      const iy = Math.round(mouse.y / state.s - 0.5);
+      const around = [];
+      for (let ty = iy - cells; ty <= iy + cells; ty++) {
+        if (ty < 0 || ty >= state.n) continue;
+        for (let tx = ix - cells; tx <= ix + cells; tx++) {
+          let tt = tileIndex;
+          let xx = tx;
+          while (xx < 0) {
+            tt -= 1;
+            xx += state.n;
+          }
+          while (xx >= state.n) {
+            tt += 1;
+            xx -= state.n;
+          }
+          tt = (tt % state.tiles + state.tiles) % state.tiles;
+          const index = (tt * state.n + ty) * state.n + xx;
+          if (index >= 0 && index < state.count) around.push(index);
+        }
+      }
+      const screenX = (index) => {
+        let x = (state.homes[index * 2] - scroll) % state.loopLength;
+        if (x < 0) x += state.loopLength;
+        return x - state.pitch + state.offset[index * 2];
+      };
+      const screenY = (index) => state.homes[index * 2 + 1] + state.offset[index * 2 + 1];
+      let touched = false;
+      for (const index of around) {
+        const dx = screenX(index) - mouse.x;
+        const dy = screenY(index) - mouse.y;
+        if (dx * dx + dy * dy > radius * radius) continue;
+        let item = contacts.get(index);
+        if (!item) {
+          item = { vx: 0, vy: 0, cool: 0 };
+          contacts.set(index, item);
+        }
+        item.cool -= dt;
+        if (item.cool > 0) continue;
+        const angle = Math.random() * Math.PI * 2;
+        const mag = stepTune.rippleAmp * (7 + Math.random() * 9);
+        const dist = Math.hypot(dx, dy) || 1;
+        const side = (Math.random() - 0.5) * stepTune.swirl * 4;
+        item.vx += Math.cos(angle) * mag + (dx / dist) * mag * 0.2 + (-dy / dist) * side;
+        item.vy += Math.sin(angle) * mag + (dy / dist) * mag * 0.2 + (dx / dist) * side;
+        item.cool = 0.16;
+        touched = true;
+      }
+      if (touched) {
+        const outer = radius * 2.1;
+        for (const index of around) {
+          if (contacts.has(index)) continue;
+          const dx = screenX(index) - mouse.x;
+          const dy = screenY(index) - mouse.y;
+          if (dx * dx + dy * dy > outer * outer) continue;
+          const angle = Math.random() * Math.PI * 2;
+          const mag = stepTune.rippleAmp * (2 + Math.random() * 5);
+          contacts.set(index, { vx: Math.cos(angle) * mag, vy: Math.sin(angle) * mag, cool: 0 });
+        }
+      }
+      if (!contacts.size) return;
+      const omega = 1.55;
+      const zeta = 0.58;
+      const damp = Math.exp(-dt * (1.15 + (1 - stepTune.decay) * 3));
+      const list = [...contacts.keys()];
+      for (const index of list) {
+        const item = contacts.get(index);
+        const ox = state.offset[index * 2];
+        const oy = state.offset[index * 2 + 1];
+        item.vx = (item.vx + (-ox * omega * omega - item.vx * 2 * zeta * omega) * dt) * damp;
+        item.vy = (item.vy + (-oy * omega * omega - item.vy * 2 * zeta * omega) * dt) * damp;
+        state.offset[index * 2] = ox + item.vx * dt;
+        state.offset[index * 2 + 1] = oy + item.vy * dt;
+      }
+      const collideR = 2 + stepTune.grow * 3;
+      const collideSq = collideR * collideR;
+      const limit = Math.min(list.length, 700);
+      for (let a = 0; a < limit; a++) {
+        const i = list[a];
+        const ix = screenX(i);
+        const iy = screenY(i);
+        for (let b = a + 1; b < limit; b++) {
+          const j = list[b];
+          const dx = screenX(j) - ix;
+          const dy = screenY(j) - iy;
+          const distSq = dx * dx + dy * dy;
+          if (distSq >= collideSq || distSq < 1e-4) continue;
+          const dist = Math.sqrt(distSq);
+          const nx = dx / dist;
+          const ny = dy / dist;
+          const push = (collideR - dist) * 0.5;
+          state.offset[i * 2] -= nx * push;
+          state.offset[i * 2 + 1] -= ny * push;
+          state.offset[j * 2] += nx * push;
+          state.offset[j * 2 + 1] += ny * push;
+          const vi = contacts.get(i);
+          const vj = contacts.get(j);
+          const rel = (vi.vx - vj.vx) * nx + (vi.vy - vj.vy) * ny;
+          if (rel > 0) {
+            vi.vx -= rel * nx * 0.6;
+            vi.vy -= rel * ny * 0.6;
+            vj.vx += rel * nx * 0.6;
+            vj.vy += rel * ny * 0.6;
+          }
+        }
+      }
+      for (const index of list) {
+        const ox = state.offset[index * 2];
+        const oy = state.offset[index * 2 + 1];
+        const item = contacts.get(index);
+        if (ox * ox + oy * oy < 0.08 && item.vx * item.vx + item.vy * item.vy < 6) {
+          state.offset[index * 2] = 0;
+          state.offset[index * 2 + 1] = 0;
+          contacts.delete(index);
+        }
+      }
+      gl.bindBuffer(gl.ARRAY_BUFFER, state.offsetBuf);
+      gl.bufferSubData(gl.ARRAY_BUFFER, 0, state.offset);
+    }
+
     const frame = (now) => {
       raf = requestAnimationFrame(frame);
       const live = motionRef.current?.current;
@@ -501,6 +727,8 @@ export default function LandscapeStrip({ motion }) {
         build(images, { w: state.resolution[0], h: state.resolution[1] }, !!live.detail);
       }
       if (!state) return;
+      const gpsNow = live?.gps ?? 0;
+      if (gpsNow < 0.02 && mouse.power < 0.05 && contacts.size === 0 && now - last < 32) return;
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
       const flight = live?.flight ?? 0;
@@ -519,6 +747,8 @@ export default function LandscapeStrip({ motion }) {
       state.idx = dst;
 
       // GPGPU : simulation via transform feedback
+      gl.activeTexture(gl.TEXTURE2);
+      gl.bindTexture(gl.TEXTURE_2D, roadTex);
       gl.useProgram(simPrg);
       bindAttrib(gl, 0, state.homeBuf, 2);
       bindAttrib(gl, 1, state.grow[src], 1);
@@ -535,7 +765,6 @@ export default function LandscapeStrip({ motion }) {
       gl.uniform1f(simU.scroll, scroll);
       gl.uniform1f(simU.loopLength, state.loopLength);
       gl.uniform1f(simU.pitch, state.pitch);
-      gl.uniform4fv(simU.roadPts, state.road.samples);
       gl.drawArrays(gl.POINTS, 0, state.count);
       gl.endTransformFeedback();
       gl.disable(gl.RASTERIZER_DISCARD);
@@ -570,7 +799,16 @@ export default function LandscapeStrip({ motion }) {
       gl.uniform1f(drawU.uRise1, gpsTune.riseEnd);
       gl.uniform1f(drawU.uNear, gpsTune.near);
       gl.uniform1f(drawU.uRef, 413 * Math.min(1, state.resolution[0] / 1728));
-      gl.uniform4fv(drawU.roadPts, state.road.samples);
+      gl.uniform2f(drawU.uMouse, mouse.x, mouse.y);
+      gl.uniform1f(drawU.uHover, mouse.power);
+      gl.uniform1f(drawU.uTime, now / 1000);
+      gl.uniform1f(drawU.uReach, stepTune.reach);
+      gl.uniform1f(drawU.uCore, stepTune.core);
+      gl.uniform1f(drawU.uRippleFreq, stepTune.rippleFreq);
+      gl.uniform1f(drawU.uRippleSpeed, stepTune.rippleSpeed);
+      gl.uniform1f(drawU.uRippleAmp, stepTune.rippleAmp);
+      gl.uniform1f(drawU.uSwirl, stepTune.swirl);
+      gl.uniform1f(drawU.uGrow, stepTune.grow);
       setGradeUniforms(gl, drawU, SETTINGS, state.cell);
       const { ascii } = SETTINGS;
       gl.uniform1i(drawU.uAscii, ascii ? 1 : 0);
@@ -581,8 +819,12 @@ export default function LandscapeStrip({ motion }) {
         gl.uniform1i(drawU.uGlyphs, 0);
         gl.uniform1f(drawU.uGlyphCount, glyphs.count);
       }
+      gl.bindBuffer(gl.ARRAY_BUFFER, state.offsetBuf);
+      gl.enableVertexAttribArray(4);
+      gl.vertexAttribPointer(4, 2, gl.FLOAT, false, 0, 0);
       gl.drawArrays(gl.POINTS, 0, state.count);
 
+      if (mouse.power > 0.02 || contacts.size) stirLandscape(dt);
       updateRoad(gps, arrow);
     };
 
@@ -592,10 +834,12 @@ export default function LandscapeStrip({ motion }) {
       const rect = root.getBoundingClientRect();
       mouse.x = e.clientX - rect.left;
       mouse.y = e.clientY - rect.top;
-      // marge = rayon du champ du pointeur dans SIM_VS, pour un halo continu aux bords
-      const m = 90;
+      const reachPx = (stepTune.reach * rect.width) / 100;
       mouse.inside =
-        mouse.x >= -m && mouse.y >= -m && mouse.x <= rect.width + m && mouse.y <= rect.height + m;
+        mouse.x >= -reachPx &&
+        mouse.y >= -reachPx &&
+        mouse.x <= rect.width + reachPx &&
+        mouse.y <= rect.height + reachPx;
       if (mouse.inside) mouse.power = 1;
     };
     const onLeave = () => {
@@ -622,6 +866,7 @@ export default function LandscapeStrip({ motion }) {
       window.removeEventListener("resize", onResize);
       destroyState();
       if (glyphs) gl.deleteTexture(glyphs.tex);
+      gl.deleteTexture(roadTex);
       gl.deleteTransformFeedback(tf);
       gl.deleteProgram(simPrg);
       gl.deleteProgram(drawPrg);
