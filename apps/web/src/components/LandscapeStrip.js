@@ -34,6 +34,13 @@ const SETTINGS = {
 
 const ASCII_AUTO_CELL = 10; // pas par défaut en mode ASCII quand `cell` est auto
 
+// Même courbe que la bande CSS : 200px à 390 de large, 413px à 1728, linéaire entre les deux.
+const bandRef = () => {
+  const vw = window.innerWidth;
+  const h = 200 + ((vw - 390) * 213) / 1338;
+  return Math.min(413, Math.max(200, h));
+};
+
 // Éclaircit une couleur hex (mélange avec du blanc) pour le haut du dégradé de la flèche
 function lighten(hex, amount) {
     const n = parseInt(hex.slice(1), 16);
@@ -453,7 +460,7 @@ export default function LandscapeStrip({ motion }) {
       const lat = (x - arrow.x) * -fy + (y - arrow.y) * fx;
       const w = state.resolution[0];
       const h = state.resolution[1];
-      const refH = 200 * Math.min(1, w / 390);
+      const refH = bandRef(w);
       const back = Math.max(gpsTune.back, 0.05) * refH;
       const eye = Math.max(gpsTune.anchor, 0.02) * refH;
       const focal = Math.max(gpsTune.fill, 0.02) * w;
@@ -528,7 +535,7 @@ export default function LandscapeStrip({ motion }) {
       for (let x = -10; x <= state.width + 10; x += 4) {
         const y = roadY(x);
         const ahead = (x - arrow.x) * fx + (y - arrow.y) * fy;
-        const nearDist = 200 * Math.min(1, state.resolution[0] / 390) * gpsTune.near;
+        const nearDist = bandRef(state.resolution[0]) * gpsTune.near;
         if (gps > 0.55 && ahead < -nearDist) continue;
         const p = project(x, y, gps, arrow);
         pts.push(`${p.x.toFixed(1)},${p.y.toFixed(1)}`);
@@ -798,7 +805,7 @@ export default function LandscapeStrip({ motion }) {
       gl.uniform1f(drawU.uRise0, gpsTune.riseStart);
       gl.uniform1f(drawU.uRise1, gpsTune.riseEnd);
       gl.uniform1f(drawU.uNear, gpsTune.near);
-      gl.uniform1f(drawU.uRef, 200 * Math.min(1, state.resolution[0] / 390));
+      gl.uniform1f(drawU.uRef, bandRef(state.resolution[0]));
       gl.uniform2f(drawU.uMouse, mouse.x, mouse.y);
       gl.uniform1f(drawU.uHover, mouse.power);
       gl.uniform1f(drawU.uTime, now / 1000);

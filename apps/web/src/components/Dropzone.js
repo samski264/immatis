@@ -4,6 +4,15 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import styles from "./css/Dropzone.module.css";
 
+// Référentiels appliqués par la lecture, en pied de zone (Pencil j8jlg0).
+const NORMS = [
+  ["1999/37/CE", "directive UE"],
+  ["ISO 3779", "structure du VIN"],
+  ["ISO 3780", "code constructeur"],
+  ["ISO/IEC 25010", "qualité logicielle"],
+  ["RGAA 4.1.2", "accessibilité"],
+];
+
 // Zone de dépôt de la carte grise (Figma 36:195) : clic pour choisir, ou glisser-déposer.
 // Jusqu'à 3 fichiers (les 3 volets du certificat). `onFiles` reçoit la liste retenue.
 export default function Dropzone({ className, onFiles, reading = false, maxFiles = 3, inputId }) {
@@ -92,6 +101,15 @@ export default function Dropzone({ className, onFiles, reading = false, maxFiles
           </p>
         </>
       )}
+
+      <ul className={styles.norms}>
+        {NORMS.map(([norm, scope]) => (
+          <li key={norm} className={styles.norm}>
+            <span className={styles.normName}>{norm}</span>
+            <span className={styles.normScope}>{scope}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

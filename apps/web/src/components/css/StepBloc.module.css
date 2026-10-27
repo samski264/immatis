@@ -1,4 +1,4 @@
-/* Carte d'étape, pleine largeur de la colonne mobile.
+/* Carte d'étape, cotes fixes (295 × 439.52) : le multiple est 1px, pas --u.
    Couleurs : color/surface/card-* et color/text/card-*. */
 
 .bloc {
@@ -6,11 +6,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: calc(var(--space-17) * 1px);
+  gap: var(--s-17);
   width: 100%;
   height: auto;
-  padding: 0 0 calc(var(--space-45) * 1px);
-  border-radius: calc(var(--radius-card) * 1px);
+  padding: 0 0 var(--s-45);
+  border-radius: var(--radius);
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -33,16 +33,16 @@
 .picture {
   display: block;
   width: 100%;
-  height: calc(180 * var(--u));
+  height: clamp(180px, calc(180px + (100vw - 390px) * 50 / 1338), 230px);
   pointer-events: auto;
 }
 
 .text {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--space-17) * 1px);
+  gap: var(--s-17);
   width: 100%;
-  padding: 0 calc(var(--space-14) * 1px);
+  padding: 0 var(--s-14);
   overflow-wrap: break-word;
 }
 

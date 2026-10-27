@@ -1,11 +1,12 @@
-/* Maquette /result, 390 de large. Les cotes spatiales sont en --u (1/390 de la largeur),
+/* Maquette /result, 1728 de large. Les cotes spatiales sont en --u (1/1728 de la largeur),
    les tailles de texte restent en px, comme sur la page d'accueil. */
 
 .main {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: min(100%, 390px);
+  width: 100%;
+  max-width: 1728px;
   margin-inline: auto;
   background: transparent;
   color: #202320;
@@ -19,6 +20,7 @@
 .header {
   display: flex;
   flex-direction: column;
+  min-height: 0;
   padding: 0 var(--s-172);
 }
 
@@ -26,31 +28,33 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--s-10);
+  flex-wrap: wrap;
+  gap: var(--s-14);
   height: auto;
-  padding-block: var(--s-14);
+  padding-block: clamp(16px, 2vw, 40px);
 }
 
 .logoLink {
   display: block;
-  width: calc(88 * var(--u));
-  height: calc(62 * var(--u));
+  width: clamp(88px, 8vw, 125px);
+  aspect-ratio: 125 / 88;
+  height: auto;
   overflow: hidden;
   flex-shrink: 0;
 }
 
 .logoLink img {
-  width: calc(88 * var(--u));
-  height: calc(144 * var(--u));
-  margin-top: calc(-42 * var(--u));
+  width: 100%;
+  height: auto;
+  margin-top: -48%;
 }
 
 .actions {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: flex-end;
-  gap: var(--s-7);
+  gap: var(--s-10);
 }
 
 .navLink,
@@ -85,21 +89,22 @@
 .intro {
   display: flex;
   flex-direction: column;
-  gap: var(--s-10);
+  gap: var(--s-14);
   width: 100%;
-  padding-bottom: var(--s-20);
+  max-width: 68rem;
 }
 
 .intro h1 {
   font-family: var(--font-aquawax);
   font-weight: var(--weight-heading);
-  font-size: 32px;
+  font-size: clamp(32px, 3vw, 44px);
   letter-spacing: var(--tracking-tight);
   line-height: 1.05;
 }
 
 .intro p {
   width: 100%;
+  max-width: 68ch;
   font-size: var(--size-label);
   font-weight: var(--wght-text);
   letter-spacing: var(--tracking-normal);
@@ -109,8 +114,8 @@
 .content {
   display: flex;
   flex-direction: column;
-  gap: var(--s-45);
-  padding: 0 var(--s-172) var(--s-68);
+  gap: clamp(32px, 4vw, 56px);
+  padding: 0 var(--s-172) clamp(48px, 6vw, 96px);
 }
 
 .synthesis {
@@ -122,8 +127,9 @@
 .verdict {
   display: flex;
   align-items: flex-start;
-  gap: var(--s-14);
-  padding: var(--s-20);
+  flex-wrap: wrap;
+  gap: var(--s-20);
+  padding: clamp(16px, 2vw, 28px);
   border-radius: var(--radius);
   background: #f1f1f10f;
   backdrop-filter: blur(16.5px);
@@ -178,18 +184,20 @@
 }
 
 .cards {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   align-items: stretch;
-  gap: var(--s-14);
+  gap: clamp(12px, 1.2vw, 16px);
 }
 
 .card {
   display: flex;
   flex-direction: column;
   gap: calc(var(--space-20) * 1px);
-  width: 100%;
-  padding: 20px;
+  width: auto;
+  min-width: 0;
+  min-height: 0;
+  padding: clamp(16px, 1.6vw, 24px);
   border-radius: calc(var(--radius-card) * 1px);
   background: #f4f6f2;
 }
@@ -249,7 +257,7 @@
 .figure {
   font-family: var(--font-aquawax);
   font-weight: var(--weight-heading);
-  font-size: 32px;
+  font-size: clamp(32px, 2.8vw, 44px);
   letter-spacing: var(--tracking-tight);
   line-height: 1;
   color: #273e00;
@@ -294,6 +302,7 @@
 }
 
 .fiscal {
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
   gap: var(--s-20);
@@ -305,9 +314,10 @@
 
 .fiscalHead {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--s-10);
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--s-14);
 }
 
 .fiscalHead h2 {
@@ -342,42 +352,33 @@
 .table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
-.table thead {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
+.table th:nth-child(1) {
+  width: 22%;
 }
 
-.table tbody tr {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--s-7);
-  padding: var(--s-17) 0;
+.table th:nth-child(2) {
+  width: 24%;
+}
+
+.table th:nth-child(4) {
+  width: 16%;
 }
 
 .table th,
 .table td {
-  display: block;
-  width: 100%;
-  padding: 0;
+  padding: var(--s-14) calc(24 * var(--u)) var(--s-14) 0;
+  vertical-align: middle;
   text-align: left;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
-.table td::before {
-  content: attr(data-label);
-  display: block;
-  margin-bottom: 2px;
-  color: #8a9089;
-  font-family: var(--font-parabole);
-  font-size: 11px;
-  font-weight: var(--wght-text);
-  letter-spacing: var(--tracking-normal);
+.table th:last-child,
+.table td:last-child {
+  padding-right: 0;
+  text-align: right;
 }
 
 .table thead th {
@@ -405,11 +406,9 @@
 }
 
 .table tbody td:nth-child(4) {
-  font-family: var(--font-aquawax);
-  font-size: 28px;
-  font-weight: var(--weight-heading);
-  letter-spacing: var(--tracking-tight);
-  color: #273e00;
+  font-size: 15px;
+  font-weight: var(--wght-text);
+  letter-spacing: var(--tracking-normal);
 }
 
 .table tbody td.muted {
@@ -425,9 +424,9 @@
 
 .total {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
-  gap: var(--s-14);
+  gap: calc(24 * var(--u));
   padding: var(--s-20) 0;
   border-top: 1px solid #202320;
 }
@@ -445,7 +444,7 @@
 .totalAmount {
   font-family: var(--font-aquawax);
   font-weight: var(--weight-heading);
-  font-size: 32px;
+  font-size: clamp(32px, 2.6vw, 40px);
   letter-spacing: var(--tracking-tight);
   line-height: 1;
   color: #273e00;
@@ -465,16 +464,16 @@
 
 .columns {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: var(--s-20);
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: clamp(16px, 2vw, 24px);
 }
 
 .column {
   display: flex;
   flex-direction: column;
-  gap: calc(24 * var(--u));
-  flex: 1;
+  gap: clamp(16px, 2vw, 24px);
+  flex: 1 1 18rem;
   min-width: 0;
 }
 
@@ -491,15 +490,17 @@
 
 .infoCard dl > div {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--s-3);
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s-10) var(--s-17);
   padding: var(--s-14) 0;
   border-bottom: 1px solid #dde2dc;
 }
 
 .infoCard dt {
   width: auto;
+  flex: 1 1 8rem;
+  min-width: 0;
   color: #697068;
   font-size: 13px;
 }
@@ -534,5 +535,66 @@
 @media (prefers-reduced-motion: reduce) {
   .deposit {
     animation: none;
+  }
+}
+
+/* Le tableau passe en liste quand son bloc n'a plus la place des quatre colonnes. */
+@container (max-width: 640px) {
+  .table {
+    table-layout: auto;
+  }
+
+  .table th:nth-child(1),
+  .table th:nth-child(2),
+  .table th:nth-child(4) {
+    width: auto;
+  }
+
+  .table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .table tbody tr {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s-7);
+    padding: var(--s-17) 0;
+  }
+
+  .table th,
+  .table td {
+    display: block;
+    width: 100%;
+    padding: 0;
+    text-align: left;
+  }
+
+  .table th:last-child,
+  .table td:last-child {
+    text-align: left;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 2px;
+    color: #8a9089;
+    font-family: var(--font-parabole);
+    font-size: 11px;
+    font-weight: var(--wght-text);
+    letter-spacing: var(--tracking-normal);
+  }
+
+  .table tbody td:nth-child(4) {
+    font-family: var(--font-aquawax);
+    font-size: clamp(24px, 6vw, 28px);
+    font-weight: var(--weight-heading);
+    letter-spacing: var(--tracking-tight);
+    color: #273e00;
   }
 }

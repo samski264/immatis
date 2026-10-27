@@ -13,8 +13,8 @@ import styles from "./css/RouteStage.module.css";
 // Le vol vers le résultat démarre avec le scan et reste en croisière jusqu'à la réponse.
 // Pendant le vol, LandscapeStrip lit `motion` (pitch + accélération du défilement).
 
-const HOME = { key: "home", top: 248, height: 200, opacity: 1 };
-const RESULT = { key: "result", top: 0, height: 180, opacity: 0.28 };
+const HOME = { key: "home", top: 325, height: 413, opacity: 1 };
+const RESULT = { key: "result", top: 0, height: 616, opacity: 0.28 };
 
 const frameFor = (path) => (path === "/result" ? RESULT : HOME);
 
