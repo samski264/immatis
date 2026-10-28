@@ -1,4 +1,12 @@
-/* Zone d'envoi : color/surface/glass, border/upload, radius/card, effect/upload-glass */
+/* Dropzone (Pencil BKxyX) et bouton d'exemple, dans la colonne de dépôt. */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: min(100%, 786px);
+}
 
 .zone {
   position: relative;
@@ -6,11 +14,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--s-7);
-  width: min(100%, 786px);
-  min-height: clamp(200px, calc(200px + (100vw - 390px) * 49 / 1338), 249px);
-  height: auto;
-  padding: var(--s-3) var(--s-39);
+  gap: var(--s-17);
+  width: 100%;
+  padding: var(--s-23) var(--s-39);
   border: calc(var(--border-upload) * var(--u)) solid var(--color-bg-page);
   border-radius: var(--radius);
   background: var(--color-surface-glass);
@@ -18,16 +24,19 @@
   backdrop-filter: blur(calc(var(--blur-glass) * var(--u)));
   color: var(--color-text-primary);
   text-align: center;
-  overflow: hidden;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background 150ms ease;
 }
 
 .zone:hover,
 .zone:focus-visible,
 .over {
   background: var(--color-surface-glass-hover);
-  outline: none;
+}
+
+.zone:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
 }
 
 .reading,
@@ -36,86 +45,232 @@
   background: rgba(255, 255, 255, 0.5);
 }
 
-.reading .label {
-  width: auto;
-  max-width: 100%;
-}
-
 .input {
   display: none;
 }
 
+.pastille {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: var(--color-bg-page);
+  color: var(--color-text-primary);
+  flex-shrink: 0;
+  transition: opacity 200ms ease;
+}
+
 .icon {
-  width: clamp(40px, calc(40px + (100vw - 390px) * 23 / 1338), 63px);
-  height: clamp(40px, calc(40px + (100vw - 390px) * 23 / 1338), 63px);
-  transform: scaleX(-1);
+  width: 22px;
+  height: 22px;
+  overflow: visible;
 }
 
-.label,
-.hint {
-  font-family: var(--font-parabole);
-  line-height: normal;
-  letter-spacing: var(--tracking-normal);
-  overflow-wrap: break-word;
+/* La flèche monte, s'efface, puis se redessine à sa place. */
+.arrow {
+  transform-box: fill-box;
+  transform-origin: center bottom;
 }
 
-.label {
-  width: auto;
+.zone:hover .arrow,
+.zone:focus-visible .arrow {
+  animation: arrowLift 1.7s infinite;
+}
+
+.reading .arrow,
+.reading:hover .arrow,
+.reading:focus-visible .arrow,
+.over .arrow {
+  animation: none;
+}
+
+@keyframes arrowLift {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  28% {
+    opacity: 1;
+    transform: translateY(-8px);
+    animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+  }
+  48% {
+    opacity: 0;
+    transform: translateY(-14px);
+    animation-timing-function: linear;
+  }
+  56% {
+    opacity: 0;
+    transform: translateY(-6px);
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  78% {
+    opacity: 1;
+    transform: translateY(0);
+    animation-timing-function: linear;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.copy,
+.formats,
+.norms {
+  transition: opacity 200ms ease;
+}
+
+.over .copy,
+.over .formats,
+.over .norms,
+.over .pastille {
+  opacity: 0;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-7);
   max-width: 100%;
-  font-weight: var(--wght-bold);
-  font-size: var(--size-label);
-  color: var(--color-text-upload);
 }
 
-.hint {
-  width: auto;
-  max-width: 36ch;
+.title,
+.subtitle,
+.formats,
+.example {
+  font-family: var(--font-parabole);
+  letter-spacing: var(--tracking-normal);
+  line-height: normal;
+}
+
+.title {
+  font-family: var(--font-aquawax);
+  font-weight: var(--weight-heading);
+  font-size: var(--size-heading);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text-primary);
+}
+
+.subtitle {
+  max-width: 42ch;
+  font-weight: var(--wght-text);
+  font-size: var(--size-body);
+  color: var(--color-grey-700);
+  overflow-wrap: anywhere;
+}
+
+.formats {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--color-bg-page);
   font-weight: var(--wght-text);
   font-size: var(--size-caption);
+  color: var(--color-text-primary);
 }
 
-/* Référentiels : size/caption, display pour la norme, grey/700 pour l'objet.
-   Les éléments s'étirent pour que le filet tombe au milieu de l'écart ; celui d'un début de ligne
-   sort de la liste et reste masqué quand la rangée passe à la ligne. */
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--color-text-primary);
+  flex-shrink: 0;
+}
+
 .norms {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--s-10) var(--s-20);
-  width: 100%;
-  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-14);
   list-style: none;
 }
 
-.norm {
-  position: relative;
+.normWrap {
   display: flex;
-  flex: 1 1 auto;
+  align-items: center;
+  gap: var(--s-14);
+}
+
+.norm {
+  display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--s-3);
-  font-size: var(--size-caption);
+  gap: 1px;
   line-height: normal;
   white-space: nowrap;
 }
 
-.norm::before {
-  content: "";
-  position: absolute;
-  inset-block: var(--s-3);
-  left: calc(var(--s-20) / -2);
+.separator {
   width: 1px;
+  height: 12px;
   background: var(--color-grey-500);
   opacity: 0.35;
+  flex-shrink: 0;
 }
 
 .normName {
   font-family: var(--font-aquawax);
   font-weight: var(--weight-display);
+  font-size: 7px;
   letter-spacing: var(--tracking-tight);
   color: var(--color-text-primary);
 }
 
 .normScope {
+  font-family: var(--font-parabole);
   font-weight: var(--wght-text);
+  font-size: 7px;
   color: var(--color-grey-700);
+}
+
+.example {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border: 1px solid var(--color-text-primary);
+  border-radius: 999px;
+  background: var(--color-surface-glass);
+  backdrop-filter: blur(12px);
+  color: var(--color-text-primary);
+  font-weight: var(--wght-text);
+  font-size: var(--size-body);
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.example:hover:not(:disabled) {
+  background: var(--color-surface-glass-hover);
+}
+
+.example:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.example:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow,
+  .zone:hover .arrow,
+  .zone:focus-visible .arrow {
+    animation: none;
+  }
+}
+
+.play {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
 }

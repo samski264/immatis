@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Scan from "@/components/Scan";
+import Navbar from "@/components/Navbar";
 import StepBloc from "@/components/StepBloc";
 import DepositButton from "@/components/DepositButton";
 import styles from "./page.module.css";
@@ -96,7 +97,7 @@ function Lockup({ className }) {
       className={className}
       src="/logo-lockup.svg"
       alt="immatis"
-      width={146}
+      width={188}
       height={30}
       priority
       unoptimized
@@ -140,23 +141,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
 
-      <header className={styles.nav}>
-        <Lockup className={styles.lockup} />
-        <div className={styles.navRight}>
-          <nav className={styles.navLinks} aria-label="Page">
-            <a className={styles.navLink} href="#comment-ca-marche">
-              Comment ça marche
-            </a>
-            <a className={styles.navLink} href="#avant-achat">
-              Pourquoi avant l&apos;achat
-            </a>
-          </nav>
-          <a className={styles.countries} href="#documents">
-            <span>Pays couverts</span>
-            <span>Allemagne · Belgique · Pays-Bas</span>
-          </a>
-        </div>
-      </header>
+      <Navbar />
 
       <header className={styles.hero}>
         <h1 className={styles.title}>L&apos;ANTS en moins de dix secondes.</h1>
@@ -167,7 +152,10 @@ export default function Home() {
       </header>
 
       <section id="depot" className={styles.upload}>
-        <Scan inputId={INPUT_ID} />
+        <Scan
+          inputId={INPUT_ID}
+          formats="Carte grise allemande, belge ou néerlandaise · jusqu'à 3 volets · PDF, JPG ou PNG"
+        />
       </section>
 
       <section id="comment-ca-marche" className={styles.bloc}>
@@ -187,8 +175,8 @@ export default function Home() {
           Les champs harmonisés sont extraits un par un, puis passés dans les règles françaises.
         </StepBloc>
         <StepBloc tone="sky" scene="stamp" title="3 Vous obtenez le verdict">
-          AVDT ou RTI, radiation, TVA, coût de la carte grise. Pour chaque résultat : le champ lu
-          et la règle appliquée.
+          AVDT ou RTI, TVA, chevaux fiscaux, malus. Pour chaque résultat : le champ lu et la règle
+          appliquée.
         </StepBloc>
       </section>
 

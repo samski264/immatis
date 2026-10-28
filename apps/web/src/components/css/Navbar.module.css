@@ -1,0 +1,60 @@
+/* Nav bar (Pencil zoHLm) : 96 px, logo à gauche, liens à droite, écart 32. */
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--s-14) 40px;
+  width: 100%;
+  min-height: 96px;
+  padding-inline: var(--s-39);
+  flex-shrink: 0;
+}
+
+.logo {
+  display: block;
+  width: clamp(155px, calc(155px + (100vw - 390px) * 33 / 1338), 188px);
+  flex-shrink: 0;
+  border-radius: 4px;
+  transition: opacity 150ms ease;
+}
+
+.logo:hover {
+  opacity: 0.7;
+}
+
+.logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--s-10) 32px;
+}
+
+.link {
+  border-radius: 2px;
+  font-family: var(--font-parabole);
+  font-weight: var(--wght-text);
+  font-size: var(--size-body);
+  letter-spacing: var(--tracking-normal);
+  line-height: normal;
+  color: var(--color-text-primary);
+  transition: color 150ms ease;
+}
+
+.link:hover {
+  color: var(--color-link-hover);
+}
+
+.link:focus-visible,
+.logo:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}

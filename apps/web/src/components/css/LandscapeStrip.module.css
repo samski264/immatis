@@ -27,3 +27,8 @@
   stroke-linejoin: round;
   filter: drop-shadow(0 2px 4px var(--color-shadow-road));
 }
+
+/* En GPS la flèche est déjà dans le plan du sol : pas d'ombre écran. */
+.gps .arrow path {
+  filter: none;
+}

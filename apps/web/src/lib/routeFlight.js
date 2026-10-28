@@ -40,6 +40,21 @@ export function endReading() {
   readingListeners.forEach((listener) => listener(false));
 }
 
+let scanStatus = null;
+const statusListeners = new Set();
+
+export function onScanStatus(listener) {
+  listener(scanStatus);
+  statusListeners.add(listener);
+  return () => statusListeners.delete(listener);
+}
+
+export function setScanStatus(status) {
+  if (scanStatus === status) return;
+  scanStatus = status;
+  statusListeners.forEach((listener) => listener(status));
+}
+
 export function clearCruise() {
   cruiseFinish = null;
 }
@@ -71,6 +86,7 @@ export function completeProcessing(router) {
 export function abortProcessing() {
   endReading();
   cruiseFinish = null;
+  setScanStatus(null);
   resetListeners.forEach((listener) => listener());
 }
 

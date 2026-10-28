@@ -55,7 +55,7 @@ export default function ResultView() {
       <header className={styles.header}>
         <nav className={`${styles.nav} ${styles.deposit}`} style={{ animationDelay: "0.04s" }}>
           <Link href="/" className={styles.logoLink} aria-label="immatis, accueil" onClick={flyHome}>
-            <Image src="/logo.svg" alt="" width={125} height={204} priority unoptimized />
+            <Image src="/logo-lockup.svg" alt="" width={188} height={30} priority unoptimized />
           </Link>
           <div className={styles.actions}>
             <Link href="/" className={styles.navLink} onClick={flyHome}>

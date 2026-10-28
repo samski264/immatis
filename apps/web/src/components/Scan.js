@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { EventSourceParserStream } from "eventsource-parser/stream";
-import { abortProcessing, completeProcessing, startProcessing } from "@/lib/routeFlight";
+import { abortProcessing, completeProcessing, setScanStatus, startProcessing } from "@/lib/routeFlight";
 import { saveResult } from "@/lib/scanResult";
 import Dropzone from "./Dropzone";
 
@@ -14,13 +14,43 @@ function readEvent(event, data) {
   return JSON.parse(data);
 }
 
-export default function Scan({ inputId }) {
+// L'upload SSE arrive dès que le fichier est reçu, bien avant la fin de l'OCR.
+const UPLOAD_BEAT_MS = 1200;
+
+export default function Scan({ inputId, formats }) {
   const router = useRouter();
   const [events, setEvents] = useState(null);
   const [reading, setReading] = useState(false);
+  const [phase, setPhase] = useState(null);
   const received = useRef({});
   const sent = useRef(false);
   const busy = useRef(false);
+  const phaseTimer = useRef(0);
+  const phaseRef = useRef(null);
+
+  const publishPhase = (next) => {
+    phaseRef.current = next;
+    setPhase(next);
+    setScanStatus(next);
+  };
+
+  const stopPhase = () => {
+    window.clearTimeout(phaseTimer.current);
+    publishPhase(null);
+  };
+
+  // Upload OK reste lisible, puis l'analyse occupe le reste du vol.
+  const showUpload = () => {
+    if (phaseRef.current === "upload" || phaseRef.current === "analyse") return;
+    publishPhase("upload");
+    window.clearTimeout(phaseTimer.current);
+    phaseTimer.current = window.setTimeout(() => {
+      if (phaseRef.current !== "upload") return;
+      publishPhase("analyse");
+    }, UPLOAD_BEAT_MS);
+  };
+
+  useEffect(() => () => window.clearTimeout(phaseTimer.current), []);
 
   const finish = (payload) => {
     saveResult(payload);
@@ -30,6 +60,7 @@ export default function Scan({ inputId }) {
   const abortReading = (error) => {
     busy.current = false;
     setReading(false);
+    stopPhase();
     abortProcessing();
     if (error) setEvents({ error });
   };
@@ -44,6 +75,7 @@ export default function Scan({ inputId }) {
     if (busy.current) return;
     busy.current = true;
     setReading(true);
+    stopPhase();
     startProcessing();
     const form = new FormData();
     files.forEach((f) => form.append("file", f));
@@ -77,6 +109,7 @@ export default function Scan({ inputId }) {
               const next = { ...received.current, [event]: value };
               received.current = next;
               setEvents(next);
+              if (event === "upload") showUpload();
               if (event === "error") {
                 abortReading(typeof value === "string" ? value : "Lecture interrompue.");
                 return;
@@ -98,9 +131,37 @@ export default function Scan({ inputId }) {
     }
   };
 
+  const tryExample = async () => {
+    if (busy.current) return;
+    busy.current = true;
+    setReading(true);
+    stopPhase();
+    startProcessing();
+    let res;
+    try {
+      res = await fetch("/example");
+    } catch (err) {
+      return abortReading(err.message);
+    }
+    if (!res.ok) return abortReading(await res.text());
+    showUpload();
+    try {
+      finish(await res.json());
+    } catch (err) {
+      abortReading(err.message);
+    }
+  };
+
   return (
     <>
-      <Dropzone inputId={inputId} onFiles={send} reading={reading} />
+      <Dropzone
+        inputId={inputId}
+        formats={formats}
+        onFiles={send}
+        onExample={tryExample}
+        reading={reading}
+        phase={phase}
+      />
       {events?.error ? <pre>{events.error}</pre> : null}
     </>
   );

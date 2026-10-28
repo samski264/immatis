@@ -15,12 +15,23 @@ import styles from "./css/RouteStage.module.css";
 
 const HOME = { key: "home", top: 325, height: 413, opacity: 1 };
 const RESULT = { key: "result", top: 0, height: 616, opacity: 0.28 };
+const QUIET = { key: "quiet", top: 0, height: 0, opacity: 0 };
 
-const frameFor = (path) => (path === "/result" ? RESULT : HOME);
+const frameFor = (path) => {
+  if (path === "/") return HOME;
+  if (path === "/result") return RESULT;
+  return QUIET;
+};
+
+const placeClass = (frame) => {
+  if (frame.key === "result") return styles.result;
+  if (frame.key === "quiet") return styles.quiet;
+  return styles.home;
+};
 
 const measure = (frame) => {
   const probe = document.createElement("div");
-  probe.className = `${styles.stage} ${frame.key === "result" ? styles.result : styles.home}`;
+  probe.className = `${styles.stage} ${placeClass(frame)}`;
   probe.style.transition = "none";
   probe.style.visibility = "hidden";
   document.body.appendChild(probe);
@@ -50,7 +61,7 @@ export default function RouteStage() {
     rush: 1,
     gps: 0,
     detail: false,
-    interactive: pathname !== "/result",
+    interactive: pathname === "/",
     target: null,
   });
   const goRef = useRef(null);
@@ -64,9 +75,9 @@ export default function RouteStage() {
     if (flightRef.current) cancelAnimationFrame(flightRef.current.raf);
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    motion.current.interactive = to.key !== "result";
+    motion.current.interactive = to.key === "home";
 
-    const place = to.key === "result" ? styles.result : styles.home;
+    const place = placeClass(to);
 
     if (reduce || snap) {
       flightRef.current = null;
@@ -82,7 +93,7 @@ export default function RouteStage() {
       el.style.transition = "";
       el.style.opacity = "";
       el.className = `${styles.stage} ${place}`;
-      motion.current.target = measure(to);
+      motion.current.target = measure(to.key === "quiet" ? HOME : to);
       return;
     }
 
@@ -91,7 +102,7 @@ export default function RouteStage() {
     const fromH = fromRect.height;
     const raw = el.style.opacity || getComputedStyle(el).opacity;
     const fromOpacity = Number.isFinite(parseFloat(raw)) ? parseFloat(raw) : to.opacity;
-    const dest = measure(to);
+    const dest = measure(to.key === "quiet" ? HOME : to);
     // Grille reconstruite pendant que la bande est estompée : au décollage vers
     // l'accueil, à l'approche du résultat.
     let armed = false;
@@ -207,6 +218,7 @@ export default function RouteStage() {
   useEffect(() => onTune(() => setTuneRev((n) => n + 1)), []);
 
   const atResult = pose.key === "result";
+  const quiet = pose.key === "quiet";
   const [expanded, setExpanded] = useState(false);
   const hold = gpsTune.permanent;
   const full = hold || expanded;
@@ -245,12 +257,12 @@ export default function RouteStage() {
     <>
       <div
         ref={stageRef}
-        className={full ? `${styles.stage} ${styles.full}` : atResult ? `${styles.stage} ${styles.result}` : `${styles.stage} ${styles.home}`}
+        className={full ? `${styles.stage} ${styles.full}` : `${styles.stage} ${placeClass(pose)}`}
         aria-hidden="true"
       >
         <LandscapeStrip motion={motion} />
       </div>
-      <div className={full || atResult ? `${styles.veil} ${styles.veilOff}` : styles.veil} aria-hidden="true" />
+      <div className={full || atResult || quiet ? `${styles.veil} ${styles.veilOff}` : styles.veil} aria-hidden="true" />
     </>
   );
 }

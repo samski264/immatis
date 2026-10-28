@@ -33,6 +33,13 @@
   opacity: 0.28;
 }
 
+.quiet {
+  top: 0;
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+
 /* Un seul flou. Quatre backdrop-filter empilés relisent le canvas WebGL,
    qui change à chaque image, et saturent le compositeur. */
 .veil {

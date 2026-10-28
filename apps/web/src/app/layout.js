@@ -1,4 +1,5 @@
 import RouteStage from "@/components/RouteStage";
+import ScanStatus from "@/components/ScanStatus";
 import { aquawax, parabole } from "./fonts";
 import "./globals.css";
 
@@ -13,6 +14,7 @@ export default function RootLayout({ children }) {
     <html lang="fr" className={`${aquawax.variable} ${parabole.variable}`}>
       <body>
         <RouteStage />
+        <ScanStatus />
         {children}
       </body>
     </html>

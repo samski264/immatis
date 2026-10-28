@@ -70,3 +70,9 @@ npm run dev:web
 ```
 
 `apps/api` lit un `.env` contenant la clé d'API du fournisseur d'extraction.
+
+## Mise en production
+
+Le site est le projet Vercel `immatis` (`apps/web`). L'API tourne sur le serveur, avec le PM2 de l'utilisateur `samy` (`immatis-api`, port 3010). Le PM2 de root, qui sert `standard_api` sur le port 9001, n'est pas utilisé.
+
+`NEXT_PUBLIC_API_URL` sur Vercel pointe vers l'API. Sur le serveur, `apps/api/.env` contient `GEMINI_API_KEY` et `WEB_ORIGIN`.

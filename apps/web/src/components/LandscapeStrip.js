@@ -273,7 +273,25 @@ export default function LandscapeStrip({ motion }) {
     let raf = 0;
     let state = null;
     let scroll = 0;
+    const cursor = { x: -1e4, y: -1e4 };
     const mouse = { x: -1e4, y: -1e4, power: 0, inside: false };
+    // `cursor` est en pixels écran. `mouse` est dans le repère de la simulation,
+    // qui ne couvre pas la boîte CSS quand le canvas est étiré.
+    const syncPointer = () => {
+      const rect = root.getBoundingClientRect();
+      const localX = cursor.x - rect.left;
+      const localY = cursor.y - rect.top;
+      const reachPx = (stepTune.reach * rect.width) / 100;
+      mouse.inside =
+        localX >= -reachPx &&
+        localY >= -reachPx &&
+        localX <= rect.width + reachPx &&
+        localY <= rect.height + reachPx;
+      const sx = state && rect.width > 0 ? state.resolution[0] / rect.width : 1;
+      const sy = state && rect.height > 0 ? state.resolution[1] / rect.height : 1;
+      mouse.x = localX * sx;
+      mouse.y = localY * sy;
+    };
 
     const simPrg = createProgram(gl, SIM_VS, DISCARD_FS, ["vGrow"]);
     const drawPrg = createProgram(gl, DRAW_VS, GRADED_FS);
@@ -437,6 +455,13 @@ export default function LandscapeStrip({ motion }) {
       scroll %= loopLength;
       contacts.clear();
       paintRestRoad();
+      // Le buffer est parfois plus petit que la boîte CSS (vol plein écran) : le
+      // canvas est étiré. Le même viewBox étire la flèche et le tracé avec lui,
+      // sinon le pointeur reste dans le coin au lieu du centre de la vue.
+      if (svgRef.current) {
+        svgRef.current.setAttribute("viewBox", `0 0 ${width} ${height}`);
+        svgRef.current.setAttribute("preserveAspectRatio", "none");
+      }
     };
 
     // Même spline qu'au repos. Le relief et la vue GPS ne changent pas le tracé.
@@ -452,7 +477,7 @@ export default function LandscapeStrip({ motion }) {
     };
 
     // Même projection que le shader : caméra derrière la flèche, route vers l'horizon.
-    const project = (x, y, gps, arrow) => {
+    const project = (x, y, gps, arrow, flat = false) => {
       if (gps <= 0.001) return { x, y };
       const fx = Math.cos(arrow.heading);
       const fy = Math.sin(arrow.heading);
@@ -467,32 +492,36 @@ export default function LandscapeStrip({ motion }) {
       const horizon = h * gpsTune.horizon;
       const nearDist = gpsTune.near * refH;
       const depth = Math.max(ahead + back, back - nearDist, 1);
-      const road = roadY(x);
-      const dist = Math.abs(y - road);
-      const side = y < road ? -1 : 1;
-      const ridge = 0.5 + 0.5 * Math.sin(x * 0.012 + side * 1.2);
-      const range = 0.55 + 0.45 * Math.sin(x * 0.005 + 1.3);
-      const span = Math.max(1, refH * gpsTune.riseEnd - refH * gpsTune.riseStart);
-      const u = Math.min(1, Math.max(0, (dist - refH * gpsTune.riseStart) / span));
-      const rise = u * u * (3 - 2 * u);
-      const mh = rise * (0.4 + 0.6 * ridge) * range * eye * gpsTune.relief;
+      let mh = 0;
+      if (!flat) {
+        const road = roadY(x);
+        const dist = Math.abs(y - road);
+        const side = y < road ? -1 : 1;
+        const ridge = 0.5 + 0.5 * Math.sin(x * 0.012 + side * 1.2);
+        const range = 0.55 + 0.45 * Math.sin(x * 0.005 + 1.3);
+        const span = Math.max(1, refH * gpsTune.riseEnd - refH * gpsTune.riseStart);
+        const u = Math.min(1, Math.max(0, (dist - refH * gpsTune.riseStart) / span));
+        const rise = u * u * (3 - 2 * u);
+        mh = rise * (0.4 + 0.6 * ridge) * range * eye * gpsTune.relief;
+      }
       const px = w * 0.5 + (lat * focal) / depth;
       const py = horizon + ((eye - mh) * focal) / depth;
       return { x: x + (px - x) * gps, y: y + (py - y) * gps };
     };
 
-    let arrowOutline = null;
-    const outlineOf = (path) => {
-      if (arrowOutline) return arrowOutline;
+    // Contour du glyphe, dans son plan local. Jamais relu sur le tracé projeté.
+    const arrowOutline = (() => {
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", ARROW_D);
       const len = path.getTotalLength();
       const count = 72;
-      arrowOutline = [];
+      const pts = [];
       for (let i = 0; i <= count; i++) {
         const point = path.getPointAtLength((i / count) * len);
-        arrowOutline.push([point.x, point.y]);
+        pts.push([point.x, point.y]);
       }
-      return arrowOutline;
-    };
+      return pts;
+    })();
 
     // Au repos le tracé ne change pas : on le pose une fois et on le translate.
     let restRoad = "";
@@ -529,39 +558,42 @@ export default function LandscapeStrip({ motion }) {
       }
       resting = false;
       roadRef.current.setAttribute("transform", "");
-      const pts = [];
       const fx = Math.cos(arrow.heading);
       const fy = Math.sin(arrow.heading);
+      const backPx = Math.max(gpsTune.back, 0.05) * bandRef();
+      const nearDist = bandRef() * gpsTune.near;
+      // Devant la caméra, la profondeur est bornée à 1 px : le point part
+      // hors du sol. On ne le relie pas, sinon le trait quitte le plan GPS.
+      const parts = [];
+      let run = [];
+      const flush = () => {
+        if (run.length > 1) parts.push(`M${run.join(" L")}`);
+        run = [];
+      };
       for (let x = -10; x <= state.width + 10; x += 4) {
         const y = roadY(x);
         const ahead = (x - arrow.x) * fx + (y - arrow.y) * fy;
-        const nearDist = bandRef(state.resolution[0]) * gpsTune.near;
-        if (gps > 0.55 && ahead < -nearDist) continue;
+        if (ahead + backPx <= 2 || (gps > 0.55 && ahead < -nearDist)) {
+          flush();
+          continue;
+        }
         const p = project(x, y, gps, arrow);
-        pts.push(`${p.x.toFixed(1)},${p.y.toFixed(1)}`);
+        run.push(`${p.x.toFixed(1)},${p.y.toFixed(1)}`);
       }
-      if (pts.length > 1) roadRef.current.setAttribute("d", `M${pts.join(" L")}`);
+      flush();
+      if (parts.length) roadRef.current.setAttribute("d", parts.join(" "));
 
       const arrowPath = arrowRef.current.querySelector("path");
-      const flat = (arrow.heading * 180) / Math.PI + 90;
-      const outline = outlineOf(arrowPath);
-      if (gps <= 0.02) {
-        arrowPath.setAttribute("d", ARROW_D);
-        const p = project(arrow.x, arrow.y, gps, arrow);
-        arrowRef.current.setAttribute(
-          "transform",
-          `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)}) rotate(${flat.toFixed(1)})`
-        );
-        return;
-      }
-      // La même flèche, chaque point de sa courbe posé sur le sol.
+      const outline = arrowOutline;
+      // La flèche reste dans le plan de la route : latéral et avance au sol,
+      // sans le relief des bas-côtés. Même caméra que les particules.
       const rot = arrow.heading + Math.PI / 2;
       const cos = Math.cos(rot);
       const sin = Math.sin(rot);
       const shape = outline.map(([lx, ly]) => {
         const x = lx * cos - ly * sin;
         const y = lx * sin + ly * cos;
-        const p = project(arrow.x + x, arrow.y + y, gps, arrow);
+        const p = project(arrow.x + x, arrow.y + y, gps, arrow, true);
         return `${p.x.toFixed(1)},${p.y.toFixed(1)}`;
       });
       arrowPath.setAttribute("d", `M${shape.join(" L")} Z`);
@@ -734,6 +766,7 @@ export default function LandscapeStrip({ motion }) {
         build(images, { w: state.resolution[0], h: state.resolution[1] }, !!live.detail);
       }
       if (!state) return;
+      syncPointer();
       const gpsNow = live?.gps ?? 0;
       if (gpsNow < 0.02 && mouse.power < 0.05 && contacts.size === 0 && now - last < 32) return;
       const dt = Math.min((now - last) / 1000, 0.05);
@@ -746,6 +779,7 @@ export default function LandscapeStrip({ motion }) {
         svgRef.current.style.transform = "";
         svgRef.current.style.opacity =
           gps > 0.02 ? String(Math.min(1, gps)) : String(Math.max(0, 1 - flight / 0.18));
+        svgRef.current.classList.toggle(styles.gps, gps > 0.2);
       }
       scroll = (scroll + SPEED * rush * dt) % state.loopLength;
 
@@ -838,18 +872,14 @@ export default function LandscapeStrip({ motion }) {
     // Écoute au niveau de la fenêtre : la zone de dépôt, le voile flouté et les textes passent
     // au-dessus de la bande et intercepteraient sinon les événements du pointeur.
     const onMove = (e) => {
-      const rect = root.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
-      const reachPx = (stepTune.reach * rect.width) / 100;
-      mouse.inside =
-        mouse.x >= -reachPx &&
-        mouse.y >= -reachPx &&
-        mouse.x <= rect.width + reachPx &&
-        mouse.y <= rect.height + reachPx;
+      cursor.x = e.clientX;
+      cursor.y = e.clientY;
+      syncPointer();
       if (mouse.inside) mouse.power = 1;
     };
     const onLeave = () => {
+      cursor.x = -1e4;
+      cursor.y = -1e4;
       mouse.inside = false;
     };
 

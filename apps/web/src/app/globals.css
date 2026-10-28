@@ -22,6 +22,14 @@
   --color-icon-upload: #0000008f;
   --color-grey-700: #4a504a;
   --color-grey-500: #697068;
+  --color-grey-200: #dde2dc;
+  --color-grey-100: #f4f6f2;
+  --color-text-heading-neutral: #3a3a3a;
+  --color-text-heading-lime: #273e00;
+  --color-link-hover: #757575;
+  --color-focus-ring: var(--color-text-primary);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 3px;
   --color-shadow-road: rgb(0 0 0 / 28%);
 
   --weight-display: 500;

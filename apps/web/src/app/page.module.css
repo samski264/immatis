@@ -20,43 +20,13 @@
   z-index: 1;
 }
 
-.nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: var(--s-17) var(--s-39);
-  width: 100%;
-  height: auto;
-  min-height: clamp(0px, calc(100vw * 183 / 1728), 183px);
-  padding-block: var(--s-45);
-  flex-shrink: 0;
-}
-
 .lockup {
-  width: clamp(120px, calc(120px + (100vw - 390px) * 26 / 1338), 146px);
+  width: clamp(155px, calc(155px + (100vw - 390px) * 33 / 1338), 188px);
   height: auto;
   flex-shrink: 0;
 }
 
-.navRight {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--s-17) var(--s-39);
-  min-width: min(100%, 12rem);
-}
-
-.navLinks {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--s-23);
-}
-
-.navLink,
 .footerLink,
-.countries,
 .lead,
 .text,
 .intro,
@@ -77,9 +47,7 @@
   line-height: normal;
 }
 
-.navLink,
 .footerLink,
-.countries,
 .text,
 .intro,
 .cardValue p:last-child,
@@ -93,34 +61,32 @@
   font-size: var(--size-body);
 }
 
-.navLink,
 .footerLink,
-.countries,
 .rowLabel {
   color: var(--color-text-primary);
 }
 
-.navLink:focus-visible,
+.footerLink {
+  border-radius: 2px;
+  transition: color 150ms ease;
+}
+
+.footerLink:hover {
+  color: var(--color-link-hover);
+}
+
+.deposit {
+  transition: box-shadow 150ms ease;
+}
+
+.deposit:hover {
+  box-shadow: 0 0 44px #fff;
+}
+
 .footerLink:focus-visible,
-.countries:focus-visible,
 .deposit:focus-visible {
-  outline: 2px solid var(--color-text-primary);
-  outline-offset: 3px;
-}
-
-.countries {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--s-7);
-  max-width: 100%;
-  padding: var(--s-10) var(--s-17);
-  border: 1px solid rgb(0 0 0 / 12%);
-  border-radius: 999px;
-}
-
-.countries span:first-child {
-  color: var(--color-text-card-neutral);
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
 }
 
 .hero,
@@ -156,8 +122,10 @@
 
 .upload {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 16px;
   width: 100%;
   height: auto;
   min-height: clamp(200px, calc(200px + (100vw - 390px) * 198 / 1338), 398px);
