@@ -47,25 +47,45 @@ const measure = (frame) => {
   return { ...box, h: height, height };
 };
 
+// Même débord que .full : sous la barre du haut et celle du bas.
+const FULL_TOP = "calc(100dvh - 100lvh)";
+const FULL_HEIGHT = "calc(200lvh - 100dvh)";
+
 const pinFull = (el) => {
   el.style.position = "fixed";
-  el.style.top = "0px";
   el.style.left = "0px";
   el.style.right = "0px";
+  el.style.bottom = "auto";
   el.style.width = "100%";
   el.style.maxWidth = "none";
-  el.style.height = "100dvh";
   el.style.margin = "0px";
   el.style.opacity = "1";
+  el.style.top = "0px";
+  el.style.height = "100vh";
+  el.style.top = FULL_TOP;
+  el.style.height = FULL_HEIGHT;
 };
 
 const unpinFull = (el) => {
   el.style.position = "";
   el.style.left = "";
   el.style.right = "";
+  el.style.bottom = "";
   el.style.width = "";
   el.style.maxWidth = "";
   el.style.margin = "";
+};
+
+const fullHeight = () => {
+  const probe = document.createElement("div");
+  probe.style.cssText =
+    "position:fixed;left:0;width:0;visibility:hidden;pointer-events:none;top:0;height:100vh;";
+  document.body.appendChild(probe);
+  probe.style.top = FULL_TOP;
+  probe.style.height = FULL_HEIGHT;
+  const h = probe.getBoundingClientRect().height;
+  probe.remove();
+  return h;
 };
 
 // Lent au décollage, vif au milieu, posé à l'arrivée.
@@ -276,14 +296,14 @@ export default function RouteStage() {
     }
     // La fenêtre en pixels réels, avec le pas serré, atteint le plafond de 3,6 M
     // de particules et reconstruit la grille sur le thread principal. On garde
-    // l'aire de la bande d'accueil et le format de la fenêtre : le canvas est
-    // ensuite étiré en CSS.
+    // l'aire de la bande d'accueil et le format du cadre (barres comprises) :
+    // le canvas est ensuite étiré en CSS.
     const home = measure(HOME);
     const cap = home.w * home.h;
     const fit = () => {
       const view = window.visualViewport;
       const w = view?.width ?? window.innerWidth;
-      const h = view?.height ?? window.innerHeight;
+      const h = fullHeight();
       const area = w * h;
       const scale = area > cap ? Math.sqrt(cap / area) : 1;
       motion.current.target = { w: Math.max(2, w * scale), h: Math.max(2, h * scale) };
