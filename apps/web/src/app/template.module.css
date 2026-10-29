@@ -9,8 +9,10 @@
   pointer-events: none;
 }
 
+/* Pas de fill forwards : il garderait un transform identité, et le flou
+   sous la zone de dépôt ne revient pas. */
 .arrive {
-  animation: arrive 0.58s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: arrive 0.58s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
 .leave {

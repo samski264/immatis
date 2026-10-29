@@ -3857,7 +3857,7 @@
                     {
                       "type": "frame",
                       "id": "PPP80",
-                      "name": "RÉPONSES",
+                      "name": "GUIDE DE L'IMPORT",
                       "width": 180,
                       "layout": "vertical",
                       "gap": 14,
@@ -3867,7 +3867,7 @@
                           "id": "xzE1E",
                           "name": "Titre",
                           "fill": "$color/grey/500",
-                          "content": "RÉPONSES",
+                          "content": "GUIDE DE L'IMPORT",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/bold",
@@ -9133,9 +9133,9 @@
                 {
                   "type": "text",
                   "id": "qL4j7",
-                  "name": "Réponses",
+                  "name": "Guide de l'import",
                   "fill": "$color/text/primary",
-                  "content": "Réponses",
+                  "content": "Guide de l'import",
                   "fontFamily": "$font/family/body",
                   "fontSize": "$font/size/body",
                   "fontWeight": "$font/weight/body"
@@ -9174,7 +9174,7 @@
       "id": "pchlC",
       "x": 3713.5,
       "y": -3455.5,
-      "name": "/reponses",
+      "name": "/guide-import",
       "clip": true,
       "width": 1728,
       "fill": "$color/bg/page",
@@ -9218,7 +9218,7 @@
                   "id": "OhRsv",
                   "name": "Eyebrow",
                   "fill": "$color/grey/500",
-                  "content": "RÉPONSES",
+                  "content": "GUIDE DE L'IMPORT",
                   "fontFamily": "$font/family/body",
                   "fontSize": "$font/size/body",
                   "fontWeight": "$font/weight/bold",
@@ -10454,9 +10454,9 @@
                         {
                           "type": "text",
                           "id": "Ez7e2",
-                          "name": "Réponses",
+                          "name": "Guide de l'import",
                           "fill": "$color/text/primary",
-                          "content": "Réponses",
+                          "content": "Guide de l'import",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/body"
@@ -10466,7 +10466,7 @@
                     {
                       "type": "frame",
                       "id": "c27VI",
-                      "name": "RÉPONSES",
+                      "name": "GUIDE DE L'IMPORT",
                       "width": 180,
                       "layout": "vertical",
                       "gap": 14,
@@ -10476,7 +10476,7 @@
                           "id": "B6RD1",
                           "name": "Titre",
                           "fill": "$color/grey/500",
-                          "content": "RÉPONSES",
+                          "content": "GUIDE DE L'IMPORT",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/bold",
@@ -10636,7 +10636,7 @@
       "id": "UKVPM",
       "x": 5641.5,
       "y": -3455.5,
-      "name": "/reponses/rti-avdt",
+      "name": "/guide-import/rti-avdt",
       "clip": true,
       "width": 1728,
       "fill": "$color/bg/page",
@@ -10677,9 +10677,9 @@
                 {
                   "type": "text",
                   "id": "X8fGnC",
-                  "name": "Réponses",
+                  "name": "Guide de l'import",
                   "fill": "$color/grey/500",
-                  "content": "Réponses",
+                  "content": "Guide de l'import",
                   "fontFamily": "$font/family/body",
                   "fontSize": "$font/size/body",
                   "fontWeight": "$font/weight/body"
@@ -11613,9 +11613,9 @@
                         {
                           "type": "text",
                           "id": "pfDID",
-                          "name": "Réponses",
+                          "name": "Guide de l'import",
                           "fill": "$color/text/primary",
-                          "content": "Réponses",
+                          "content": "Guide de l'import",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/body"
@@ -11625,7 +11625,7 @@
                     {
                       "type": "frame",
                       "id": "KytLh",
-                      "name": "RÉPONSES",
+                      "name": "GUIDE DE L'IMPORT",
                       "width": 180,
                       "layout": "vertical",
                       "gap": 14,
@@ -11635,7 +11635,7 @@
                           "id": "jW5Nf",
                           "name": "Titre",
                           "fill": "$color/grey/500",
-                          "content": "RÉPONSES",
+                          "content": "GUIDE DE L'IMPORT",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/bold",
@@ -11795,7 +11795,7 @@
       "id": "Ad0D4",
       "x": 7569.5,
       "y": -3455.5,
-      "name": "/reponses/rti-avdt/pourquoi-mon-dossier-part-en-rti",
+      "name": "/guide-import/rti-avdt/pourquoi-mon-dossier-part-en-rti",
       "clip": true,
       "width": 1728,
       "fill": "$color/bg/page",
@@ -11836,9 +11836,9 @@
                 {
                   "type": "text",
                   "id": "My8yC",
-                  "name": "Réponses",
+                  "name": "Guide de l'import",
                   "fill": "$color/grey/500",
-                  "content": "Réponses",
+                  "content": "Guide de l'import",
                   "fontFamily": "$font/family/body",
                   "fontSize": "$font/size/body",
                   "fontWeight": "$font/weight/body"
@@ -12711,9 +12711,9 @@
                         {
                           "type": "text",
                           "id": "nZwGY",
-                          "name": "Réponses",
+                          "name": "Guide de l'import",
                           "fill": "$color/text/primary",
-                          "content": "Réponses",
+                          "content": "Guide de l'import",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/body"
@@ -12723,7 +12723,7 @@
                     {
                       "type": "frame",
                       "id": "f4J2U",
-                      "name": "RÉPONSES",
+                      "name": "GUIDE DE L'IMPORT",
                       "width": 180,
                       "layout": "vertical",
                       "gap": 14,
@@ -12733,7 +12733,7 @@
                           "id": "vEwwW",
                           "name": "Titre",
                           "fill": "$color/grey/500",
-                          "content": "RÉPONSES",
+                          "content": "GUIDE DE L'IMPORT",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/bold",
@@ -15958,9 +15958,9 @@
                 {
                   "type": "text",
                   "id": "TQMSu",
-                  "name": "Réponses",
+                  "name": "Guide de l'import",
                   "fill": "$color/grey/500",
-                  "content": "Réponses",
+                  "content": "Guide de l'import",
                   "fontFamily": "$font/family/body",
                   "fontSize": "$font/size/body",
                   "fontWeight": "$font/weight/body"
@@ -18755,9 +18755,9 @@
                         {
                           "type": "text",
                           "id": "IqZWB",
-                          "name": "Réponses",
+                          "name": "Guide de l'import",
                           "fill": "$color/text/primary",
-                          "content": "Réponses",
+                          "content": "Guide de l'import",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/body"
@@ -18767,7 +18767,7 @@
                     {
                       "type": "frame",
                       "id": "u44EKs",
-                      "name": "RÉPONSES",
+                      "name": "GUIDE DE L'IMPORT",
                       "width": 180,
                       "layout": "vertical",
                       "gap": 14,
@@ -18777,7 +18777,7 @@
                           "id": "R94NHq",
                           "name": "Titre",
                           "fill": "$color/grey/500",
-                          "content": "RÉPONSES",
+                          "content": "GUIDE DE L'IMPORT",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/bold",
@@ -18978,9 +18978,9 @@
                 {
                   "type": "text",
                   "id": "u6ZEGF",
-                  "name": "Réponses",
+                  "name": "Guide de l'import",
                   "fill": "$color/grey/500",
-                  "content": "Réponses",
+                  "content": "Guide de l'import",
                   "fontFamily": "$font/family/body",
                   "fontSize": "$font/size/body",
                   "fontWeight": "$font/weight/body"
@@ -21071,9 +21071,9 @@
                         {
                           "type": "text",
                           "id": "KPZTw",
-                          "name": "Réponses",
+                          "name": "Guide de l'import",
                           "fill": "$color/text/primary",
-                          "content": "Réponses",
+                          "content": "Guide de l'import",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/body"
@@ -21083,7 +21083,7 @@
                     {
                       "type": "frame",
                       "id": "ri6rB",
-                      "name": "RÉPONSES",
+                      "name": "GUIDE DE L'IMPORT",
                       "width": 180,
                       "layout": "vertical",
                       "gap": 14,
@@ -21093,7 +21093,7 @@
                           "id": "z3Z9Jq",
                           "name": "Titre",
                           "fill": "$color/grey/500",
-                          "content": "RÉPONSES",
+                          "content": "GUIDE DE L'IMPORT",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/bold",
@@ -21294,9 +21294,9 @@
                 {
                   "type": "text",
                   "id": "x8CmPE",
-                  "name": "Réponses",
+                  "name": "Guide de l'import",
                   "fill": "$color/grey/500",
-                  "content": "Réponses",
+                  "content": "Guide de l'import",
                   "fontFamily": "$font/family/body",
                   "fontSize": "$font/size/body",
                   "fontWeight": "$font/weight/body"
@@ -22612,9 +22612,9 @@
                         {
                           "type": "text",
                           "id": "i1MffD",
-                          "name": "Réponses",
+                          "name": "Guide de l'import",
                           "fill": "$color/text/primary",
-                          "content": "Réponses",
+                          "content": "Guide de l'import",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/body"
@@ -22624,7 +22624,7 @@
                     {
                       "type": "frame",
                       "id": "X13r7M",
-                      "name": "RÉPONSES",
+                      "name": "GUIDE DE L'IMPORT",
                       "width": 180,
                       "layout": "vertical",
                       "gap": 14,
@@ -22634,7 +22634,7 @@
                           "id": "Escb9",
                           "name": "Titre",
                           "fill": "$color/grey/500",
-                          "content": "RÉPONSES",
+                          "content": "GUIDE DE L'IMPORT",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/bold",
@@ -22835,9 +22835,9 @@
                 {
                   "type": "text",
                   "id": "a7014s",
-                  "name": "Réponses",
+                  "name": "Guide de l'import",
                   "fill": "$color/grey/500",
-                  "content": "Réponses",
+                  "content": "Guide de l'import",
                   "fontFamily": "$font/family/body",
                   "fontSize": "$font/size/body",
                   "fontWeight": "$font/weight/body"
@@ -24241,9 +24241,9 @@
                         {
                           "type": "text",
                           "id": "p1uQJ8",
-                          "name": "Réponses",
+                          "name": "Guide de l'import",
                           "fill": "$color/text/primary",
-                          "content": "Réponses",
+                          "content": "Guide de l'import",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/body"
@@ -24253,7 +24253,7 @@
                     {
                       "type": "frame",
                       "id": "FIhWv",
-                      "name": "RÉPONSES",
+                      "name": "GUIDE DE L'IMPORT",
                       "width": 180,
                       "layout": "vertical",
                       "gap": 14,
@@ -24263,7 +24263,7 @@
                           "id": "DeD2g",
                           "name": "Titre",
                           "fill": "$color/grey/500",
-                          "content": "RÉPONSES",
+                          "content": "GUIDE DE L'IMPORT",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/bold",
@@ -24464,9 +24464,9 @@
                 {
                   "type": "text",
                   "id": "pxBWW",
-                  "name": "Réponses",
+                  "name": "Guide de l'import",
                   "fill": "$color/grey/500",
-                  "content": "Réponses",
+                  "content": "Guide de l'import",
                   "fontFamily": "$font/family/body",
                   "fontSize": "$font/size/body",
                   "fontWeight": "$font/weight/body"
@@ -26643,9 +26643,9 @@
                         {
                           "type": "text",
                           "id": "ctYuP",
-                          "name": "Réponses",
+                          "name": "Guide de l'import",
                           "fill": "$color/text/primary",
-                          "content": "Réponses",
+                          "content": "Guide de l'import",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/body"
@@ -26655,7 +26655,7 @@
                     {
                       "type": "frame",
                       "id": "ZU9O3",
-                      "name": "RÉPONSES",
+                      "name": "GUIDE DE L'IMPORT",
                       "width": 180,
                       "layout": "vertical",
                       "gap": 14,
@@ -26665,7 +26665,7 @@
                           "id": "i45qbr",
                           "name": "Titre",
                           "fill": "$color/grey/500",
-                          "content": "RÉPONSES",
+                          "content": "GUIDE DE L'IMPORT",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/bold",
@@ -26866,9 +26866,9 @@
                 {
                   "type": "text",
                   "id": "Cwirm",
-                  "name": "Réponses",
+                  "name": "Guide de l'import",
                   "fill": "$color/grey/500",
-                  "content": "Réponses",
+                  "content": "Guide de l'import",
                   "fontFamily": "$font/family/body",
                   "fontSize": "$font/size/body",
                   "fontWeight": "$font/weight/body"
@@ -28091,9 +28091,9 @@
                         {
                           "type": "text",
                           "id": "yI3ce",
-                          "name": "Réponses",
+                          "name": "Guide de l'import",
                           "fill": "$color/text/primary",
-                          "content": "Réponses",
+                          "content": "Guide de l'import",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/body"
@@ -28103,7 +28103,7 @@
                     {
                       "type": "frame",
                       "id": "Q4ypS",
-                      "name": "RÉPONSES",
+                      "name": "GUIDE DE L'IMPORT",
                       "width": 180,
                       "layout": "vertical",
                       "gap": 14,
@@ -28113,7 +28113,7 @@
                           "id": "NYKXd",
                           "name": "Titre",
                           "fill": "$color/grey/500",
-                          "content": "RÉPONSES",
+                          "content": "GUIDE DE L'IMPORT",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/bold",

@@ -1,78 +1,99 @@
 # immatis
 
-Moteur d'évaluation administrative pour l'immatriculation en France d'un véhicule importé.
+Simule l'instruction française d'un véhicule importé à partir des scans de sa carte grise
+étrangère. En ligne : https://www.immatis.com
 
-Entrée : les scans d'un certificat d'immatriculation étranger. Sortie : les décisions que
-l'administration française appliquera au dossier, chacune accompagnée du champ lu et de la
-règle qui l'a produite.
+Entrée : 1 à 3 volets du certificat (photo ou PDF). Sortie : voie d'homologation, TVA,
+chevaux fiscaux, malus — chacun avec le champ lu et la règle appliquée. Pas de compte, pas
+de formulaire.
 
-> En construction. Le moteur de règles est incomplet, rien n'est utilisable en production.
-
-## Principe
-
-Le certificat d'immatriculation est harmonisé à l'échelle de l'UE (directive 1999/37/CE) :
-les mêmes codes — `A`, `B`, `E`, `P.2`, `V.7`… — portent les mêmes données quel que soit
-l'État émetteur, seuls les libellés changent de langue. Le pipeline s'appuie sur les codes,
-jamais sur les libellés, ce qui le rend indépendant du pays.
+## Pipeline
 
 ```
-scans → extraction → certificat normalisé → moteur de règles → verdicts
+scans → extraction (Gemini, sortie contrainte par le schéma Zod) → certificat → règles → bilan
 ```
 
-- **Extraction** — modèle de vision, sortie contrainte par un schéma JSON. Un code absent,
-  illisible ou vide reste `null` : aucune valeur n'est déduite ni complétée.
-- **Certificat normalisé** — un objet par code harmonisé, chacun avec son état :
-  `rempli | absent_document | illisible | non_saisi`.
-- **Moteur de règles** — fonctions pures sur ce certificat. Les barèmes et le catalogue des
-  codes sont en JSON versionné, hors du code.
-- **Verdicts** — discriminés sur `statut` : `concluant | indeterminable | bloquant`. Une
-  donnée manquante produit `indeterminable`, jamais une estimation.
+- **Certificat** : 19 codes harmonisés UE (directive 1999/37/CE), `null` si absent, illisible
+  ou vide. Le modèle lit les codes, jamais les libellés : le pays n'intervient pas.
+- **Règles** : fonctions pures dans `packages/core/rules.ts`. Barèmes en JSON versionné
+  (`packages/core/json`), chacun avec sa source et sa date de vérification.
+- **Bilan** : `{ reception, fiscal: { TVA, malus, chevaux } }`. Une donnée manquante donne
+  `null`, jamais une estimation.
 
-## Pays couverts
+## Règles
 
-Allemagne, Belgique, Pays-Bas. Le format allemand (Teil I / Teil II) est la cible de
-référence pour les fixtures et les cas limites.
+| Sortie | Règle |
+| --- | --- |
+| **Voie** | `K` renseigné → réception déjà faite, pas de voie. Sinon les 15 codes exigés (A, B, C.1, D.1, D.2, D.3, E, F.1, G, H, I, P.1, P.2, P.3, S.1) tous remplis → **AVDT**, un seul vide → **RTI**. J, V.7, V.9 ignorés. |
+| **TVA** | Écart entre `B` et aujourd'hui en mois calendaires. ≤ 6 → due. |
+| **Chevaux fiscaux** | `CV = arrondi(1,8·(P.2/100)² + 3,87·(P.2/100) + 1,34)`. Prix = CV × 53,50 € (moyenne des tarifs régionaux 2026). |
+| **Malus** | Exonéré si ≥ 181 mois ou `B` ≤ 01/01/2015. Sinon malus CO₂ (`V.7`, barème en vigueur à la date `B`) + malus masse (`G`, barème ≥ 2022), décote d'ancienneté sur la somme, arrondi à l'euro. V.7 et G absents → `null` ; un seul absent → compte pour 0. |
 
-Les autres États membres relèvent du même format harmonisé et sortiront à mesure que les
-fixtures existent — le moteur n'a pas de code spécifique à un pays.
+`B` absent : ni TVA ni malus. Seuls les CV sortent si `P.2` est lu.
 
-Un document non harmonisé, provisoire ou d'export sort du périmètre et renvoie
-`indeterminable`.
+25 tests Vitest sur réception et fiscalité (`packages/core/rules.test.ts`).
 
-## Périmètre v1
+## API — `apps/api` (Hono)
 
-| Sortie | Règle | État |
-| --- | --- | --- |
-| Voie **RTI / AVDT** | AVDT si les 15 codes requis (A, B, C.1, D.1, D.2, D.3, E, F.1, G, H, I, P.1, P.2, P.3, S.1) sont remplis, catégorie M1/N1, document harmonisé et définitif. D.2 absent → RTI. | implémentée |
-| **Radiation** | lue au verso du volet I : radié / non radié / inconnu | spécifiée |
-| **TVA** | seuil sur la date de première mise en circulation (`B`) ; en deçà du seuil, la facture est requise | seuil à fixer |
-| **Malus / coût du certificat** | depuis `P.2` et le CO2 (`V.7`), barème selon la méthode d'homologation | bloquée — `V.7` et la donnée d'homologation sont souvent absents du volet I |
+- `GET /` → `{ ok: true }`
+- `POST /scans` — multipart, champ `file` répété (1 à 3 fichiers, jpeg/png/webp/pdf, 10 Mo
+  chacun). Réponse en SSE : `upload` → `certificate` → `bilan`, ou `error`.
+- CORS : `localhost:3000`, les origines de `WEB_ORIGIN`, les previews Vercel du projet.
 
-Hors périmètre : concordance technique DREAL, chaîne de détention, contrôle technique,
-historique du véhicule, FFVE, génération de pièces.
+## Site — `apps/web` (Next.js)
+
+- `/` : hero, dépôt des volets, trois étapes animées, bande de paysages.
+- `/result` : bilan lu depuis `sessionStorage`, une explication fixe par verdict
+  (`result/conform.js`), export par impression.
+- `/example` : certificat synthétique pour tester sans document.
+- `/homologation`, `/taxes`, `/papiers` : articles Markdown de `public/articles`, rendus
+  statiquement par silo (`[silo]/[[...rest]]`).
+
+### Canvas
+
+Un seul système de particules WebGL2 (`components/lib/particles.js`,
+`design/shaders/particles.glsl`) : grille de glyphes ASCII tramés, pointeur qui grossit les
+particules via transform feedback, pas de déplacement.
+
+- **LandscapeStrip** : paysages échantillonnés en particules, défilement en boucle, route
+  sinueuse (spline Catmull-Rom en texture) suivie d'une flèche.
+- **ParticleScene** : les scènes des étapes (`lib/stepScenes.js`) sont dessinées en niveaux
+  de gris dans un canvas 2D à la résolution de la grille, envoyées en texture, rendues en
+  monochrome encre → fond. Rendu coupé hors écran.
+- **Vol** (`lib/routeFlight.js`) : le paysage décolle au dépôt, voyage pendant le scan
+  (phases `upload` puis `analyse`, calées sur les événements SSE), se pose quand
+  `certificate` et `bilan` sont arrivés, puis `/result` s'ouvre. `prefers-reduced-motion`
+  coupe le vol.
 
 ## Structure
 
 Monorepo npm workspaces.
 
 ```
-packages/core   types du certificat, catalogue des codes, évaluateur, barèmes JSON
-apps/api        Hono — extraction et évaluation
-apps/web        Next.js — dépôt du document, affichage des verdicts
+packages/core   types, schéma Zod, règles, barèmes JSON, tests
+apps/api        Hono — POST /scans, extraction Gemini
+apps/web        Next.js — site, résultat, articles, canvas
+design/         maquette .pen, shader
 ```
 
 ## Développement
 
 ```bash
 npm install
-npm run dev:api   # http://localhost:3000
-npm run dev:web
+npm run dev:api   # http://localhost:3001
+npm run dev:web   # http://localhost:3000
+npm test
 ```
 
-`apps/api` lit un `.env` contenant la clé d'API du fournisseur d'extraction.
+`apps/api/.env` : `GEMINI_API_KEY`, `WEB_ORIGIN` (origines séparées par des virgules).
+`apps/web/.env` : `NEXT_PUBLIC_API_URL`, lu au build.
 
-## Mise en production
+## Production
 
-Le site est le projet Vercel `immatis` (`apps/web`). L'API tourne sur le serveur, avec le PM2 de l'utilisateur `samy` (`immatis-api`, port 3010). Le PM2 de root, qui sert `standard_api` sur le port 9001, n'est pas utilisé.
+Site sur Vercel (`apps/web`), API sur un serveur derrière Caddy (`api.immatis.com`,
+PM2). Procédure dans `DEPLOY.md`, hors dépôt.
 
-`NEXT_PUBLIC_API_URL` sur Vercel pointe vers l'API. Sur le serveur, `apps/api/.env` contient `GEMINI_API_KEY` et `WEB_ORIGIN`.
+## Hors périmètre
+
+Radiation, concordance DREAL, chaîne de détention, contrôle technique, historique, FFVE,
+génération de pièces.

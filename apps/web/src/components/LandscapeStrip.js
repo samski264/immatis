@@ -34,7 +34,8 @@ const SETTINGS = {
 
 const ASCII_AUTO_CELL = 10; // pas par défaut en mode ASCII quand `cell` est auto
 
-// Même courbe que la bande CSS : 200px à 390 de large, 413px à 1728, linéaire entre les deux.
+// Référence caméra, pas la hauteur affichée de la bande (elle suit le dépôt).
+// 200 px à 390 de large, 413 px à 1728, linéaire entre les deux.
 const bandRef = () => {
   const vw = window.innerWidth;
   const h = 200 + ((vw - 390) * 213) / 1338;
@@ -232,7 +233,10 @@ void main() {
     float mh = rise * (0.4 + 0.6 * ridge) * range * eye * uRelief;
     float nearDist = uRef * uNear;
     float depth = max(max(ahead + back, back - nearDist), 1.0);
-    vec2 gpsPx = vec2(resolution.x * 0.5 + lat * focal / depth, horizon + (eye - mh) * focal / depth);
+    // Le sol utile tient dans ~0,8 fois la largeur. Au-delà, on l'étire jusqu'en bas.
+    // Un écran paysage reste en dessous : le facteur vaut 1.
+    float yScale = max(1.0, resolution.y / max(resolution.x * 0.8, 1.0));
+    vec2 gpsPx = vec2(resolution.x * 0.5 + lat * focal / depth, (horizon + (eye - mh) * focal / depth) * yScale);
     vec2 gpsNdc = vec2(gpsPx.x / resolution.x * 2.0 - 1.0, 1.0 - gpsPx.y / resolution.y * 2.0);
     placed = mix(plane, gpsNdc, uGps);
     gl_Position = vec4(placed, 0.0, 1.0);
@@ -504,8 +508,9 @@ export default function LandscapeStrip({ motion }) {
         const rise = u * u * (3 - 2 * u);
         mh = rise * (0.4 + 0.6 * ridge) * range * eye * gpsTune.relief;
       }
+      const yScale = Math.max(1, h / Math.max(w * 0.8, 1));
       const px = w * 0.5 + (lat * focal) / depth;
-      const py = horizon + ((eye - mh) * focal) / depth;
+      const py = (horizon + ((eye - mh) * focal) / depth) * yScale;
       return { x: x + (px - x) * gps, y: y + (py - y) * gps };
     };
 
@@ -821,7 +826,8 @@ export default function LandscapeStrip({ motion }) {
       bindAttrib(gl, 1, state.grow[dst], 1);
       bindAttrib(gl, 3, state.colorBuf, 3);
       gl.uniform2f(drawU.resolution, state.resolution[0], state.resolution[1]);
-      gl.uniform1f(drawU.pointSize, state.pointSize);
+      const yScale = Math.max(1, state.resolution[1] / Math.max(state.resolution[0] * 0.8, 1));
+      gl.uniform1f(drawU.pointSize, state.pointSize * (1 + (Math.sqrt(yScale) - 1) * gps));
       gl.uniform1f(drawU.growAmount, GROW);
       gl.uniform1f(drawU.maxPointSize, maxPointSize);
       gl.uniform1f(drawU.scroll, scroll);

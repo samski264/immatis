@@ -37,7 +37,35 @@ const measure = (frame) => {
   document.body.appendChild(probe);
   const rect = probe.getBoundingClientRect();
   probe.remove();
-  return { w: rect.width, h: rect.height, top: rect.top + window.scrollY, height: rect.height };
+  const box = { w: rect.width, h: rect.height, top: rect.top + window.scrollY, height: rect.height };
+  if (frame.key !== "home") return box;
+  // Le dépôt mobile dépasse la cote de la bande : le canvas descend jusqu'à son bas.
+  const depot = document.getElementById("depot");
+  if (!depot) return box;
+  const bottom = depot.getBoundingClientRect().bottom + window.scrollY;
+  const height = Math.max(box.height, bottom - box.top);
+  return { ...box, h: height, height };
+};
+
+const pinFull = (el) => {
+  el.style.position = "fixed";
+  el.style.top = "0px";
+  el.style.left = "0px";
+  el.style.right = "0px";
+  el.style.width = "100%";
+  el.style.maxWidth = "none";
+  el.style.height = "100dvh";
+  el.style.margin = "0px";
+  el.style.opacity = "1";
+};
+
+const unpinFull = (el) => {
+  el.style.position = "";
+  el.style.left = "";
+  el.style.right = "";
+  el.style.width = "";
+  el.style.maxWidth = "";
+  el.style.margin = "";
 };
 
 // Lent au décollage, vif au milieu, posé à l'arrivée.
@@ -88,6 +116,7 @@ export default function RouteStage() {
       motion.current.rush = 1;
       motion.current.gps = 0;
       motion.current.detail = false;
+      unpinFull(el);
       el.style.top = "";
       el.style.height = "";
       el.style.transition = "";
@@ -114,6 +143,7 @@ export default function RouteStage() {
     if (to.opacity > fromOpacity) arm();
 
     el.style.transition = "none";
+    unpinFull(el);
     el.style.top = "";
     el.style.height = "";
     el.className = `${styles.stage} ${place}`;
@@ -138,6 +168,7 @@ export default function RouteStage() {
       if (!armed && (done || (toResult ? dockT > 0 : true))) arm();
       if (done) {
         poseRef.current = to;
+        unpinFull(el);
         el.style.top = "";
         el.style.height = "";
         el.style.transition = "";
@@ -150,11 +181,10 @@ export default function RouteStage() {
         return true;
       }
       if (toResult && dock === 0) {
-        el.style.top = "";
-        el.style.height = "";
-        el.style.opacity = "1";
+        pinFull(el);
         return false;
       }
+      unpinFull(el);
       el.style.top = `${fromTop + (dest.top - fromTop) * dock}px`;
       el.style.height = `${fromH + (dest.height - fromH) * dock}px`;
       el.style.opacity = String(fromOpacity + (to.opacity - fromOpacity) * dock);
@@ -225,8 +255,24 @@ export default function RouteStage() {
 
   useLayoutEffect(() => {
     if (!full) {
-      motion.current.target = measure(atResult ? RESULT : HOME);
-      return;
+      const fitHome = () => {
+        if (flightRef.current) return;
+        const el = stageRef.current;
+        const home = poseRef.current.key === "home";
+        const frame = measure(atResult ? RESULT : HOME);
+        if (el && home) el.style.height = `${frame.height}px`;
+        else if (el) el.style.height = "";
+        motion.current.target = { w: frame.w, h: frame.h };
+      };
+      fitHome();
+      const depot = document.getElementById("depot");
+      const ro = depot ? new ResizeObserver(fitHome) : null;
+      ro?.observe(depot);
+      window.addEventListener("resize", fitHome);
+      return () => {
+        ro?.disconnect();
+        window.removeEventListener("resize", fitHome);
+      };
     }
     // La fenêtre en pixels réels, avec le pas serré, atteint le plafond de 3,6 M
     // de particules et reconstruit la grille sur le thread principal. On garde
@@ -235,15 +281,20 @@ export default function RouteStage() {
     const home = measure(HOME);
     const cap = home.w * home.h;
     const fit = () => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
+      const view = window.visualViewport;
+      const w = view?.width ?? window.innerWidth;
+      const h = view?.height ?? window.innerHeight;
       const area = w * h;
       const scale = area > cap ? Math.sqrt(cap / area) : 1;
       motion.current.target = { w: Math.max(2, w * scale), h: Math.max(2, h * scale) };
     };
     fit();
     window.addEventListener("resize", fit);
-    return () => window.removeEventListener("resize", fit);
+    window.visualViewport?.addEventListener("resize", fit);
+    return () => {
+      window.removeEventListener("resize", fit);
+      window.visualViewport?.removeEventListener("resize", fit);
+    };
   }, [full, atResult]);
 
   useLayoutEffect(

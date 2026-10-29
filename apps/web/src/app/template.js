@@ -39,9 +39,14 @@ export default function Template({ children }) {
     };
   }, []);
 
+  const onAnimationEnd = (event) => {
+    if (event.target !== event.currentTarget) return;
+    if (String(event.animationName).endsWith("arrive")) setArrive(false);
+  };
+
   const className = [styles.slot, arrive && styles.arrive, leave && styles.leave].filter(Boolean).join(" ");
   return (
-    <div className={className}>
+    <div className={className} onAnimationEnd={onAnimationEnd}>
       <div className={reading ? styles.quiet : undefined} aria-hidden={reading || undefined}>
         {children}
       </div>

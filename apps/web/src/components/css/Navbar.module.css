@@ -1,6 +1,7 @@
 /* Nav bar (Pencil zoHLm) : 96 px, logo à gauche, liens à droite, écart 32. */
 
 .bar {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -49,12 +50,125 @@
   transition: color 150ms ease;
 }
 
-.link:hover {
+/* Au survol d'un lien, les autres passent en gris ; celui sous le pointeur reste noir. */
+.links:has(.link:hover) .link,
+.links:has(.link:focus-visible) .link {
   color: var(--color-link-hover);
 }
 
+.links .link:hover,
+.links .link:focus-visible {
+  color: var(--color-text-primary);
+}
+
 .link:focus-visible,
-.logo:focus-visible {
+.logo:focus-visible,
+.burger:focus-visible {
   outline: var(--focus-ring-width) solid var(--color-focus-ring);
   outline-offset: var(--focus-ring-offset);
+}
+
+.burger {
+  display: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.glyph {
+  display: grid;
+  gap: 4px;
+  width: 16px;
+}
+
+.glyph span {
+  display: block;
+  height: 1.5px;
+  border-radius: 1px;
+  background: currentColor;
+  transform-origin: center;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.glyph[data-open] span:nth-child(1) {
+  transform: translateY(5.5px) rotate(45deg);
+}
+
+.glyph[data-open] span:nth-child(2) {
+  opacity: 0;
+}
+
+.glyph[data-open] span:nth-child(3) {
+  transform: translateY(-5.5px) rotate(-45deg);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Sous 900 px, le burger ouvre un voile plein écran. Le flou est celui du verre du système. */
+@media (max-width: 900px) {
+  .bar {
+    flex-wrap: nowrap;
+    gap: 16px;
+    min-height: 72px;
+  }
+
+  .logo,
+  .burger {
+    position: relative;
+    z-index: 2;
+  }
+
+  .burger {
+    display: grid;
+  }
+
+  .links {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 96px var(--s-39);
+    gap: 6px;
+    background: rgb(255 255 255 / 46%);
+    backdrop-filter: blur(calc(var(--blur-glass) * var(--u)));
+  }
+
+  .open {
+    display: flex;
+  }
+
+  .link {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: var(--size-heading);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glyph span {
+    transition: none;
+  }
 }

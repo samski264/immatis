@@ -102,7 +102,7 @@
   width: 100%;
   max-width: 1078px;
   height: auto;
-  min-height: clamp(0px, calc(100vw * 239 / 1728), 239px);
+  min-height: 239px;
 }
 
 .title {
@@ -136,7 +136,7 @@
   width: 100%;
   max-width: 719px;
   height: auto;
-  min-height: clamp(0px, calc(100vw * 338 / 1728), 338px);
+  min-height: 338px;
   flex-shrink: 0;
 }
 
