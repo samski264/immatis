@@ -79,6 +79,7 @@ const PRODUCT_LINKS = [
   ["Pourquoi avant l'achat", "#avant-achat"],
   ["Pays couverts", "#documents"],
   ["Documents acceptés", "#documents"],
+  ["Blog", "/blog"],
 ];
 
 const ANSWER_LINKS = [
@@ -149,6 +150,9 @@ export default function Home() {
             </a>
             <a className={styles.navLink} href="#avant-achat">
               Pourquoi avant l&apos;achat
+            </a>
+            <a className={styles.navLink} href="/blog">
+              Blog
             </a>
           </nav>
           <a className={styles.countries} href="#documents">

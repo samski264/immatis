@@ -150,9 +150,12 @@ export default function RouteStage() {
     flightRef.current = { to, raf: requestAnimationFrame(tick) };
   };
 
+  const blog = pathname.startsWith("/blog");
+
   useLayoutEffect(() => {
+    if (blog) return;
     goRef.current(frameFor(pathname));
-  }, [pathname]);
+  }, [pathname, blog]);
 
   useLayoutEffect(() => onDepart((path) => goRef.current(frameFor(path))), []);
 
@@ -164,6 +167,7 @@ export default function RouteStage() {
   const full = hold || expanded;
 
   useLayoutEffect(() => {
+    if (blog) return;
     if (!full) {
       motion.current.target = measure(atResult ? RESULT : HOME);
       return;
@@ -174,7 +178,7 @@ export default function RouteStage() {
     fit();
     window.addEventListener("resize", fit);
     return () => window.removeEventListener("resize", fit);
-  }, [full, atResult]);
+  }, [full, atResult, blog]);
 
   useLayoutEffect(
     () => () => {
@@ -182,6 +186,8 @@ export default function RouteStage() {
     },
     []
   );
+
+  if (blog) return null;
 
   return (
     <>
