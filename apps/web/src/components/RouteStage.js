@@ -257,9 +257,12 @@ export default function RouteStage() {
     if (toResult) registerCruise((done) => flight.finish(done));
   };
 
+  const blog = pathname.startsWith("/blog");
+
   useLayoutEffect(() => {
+    if (blog) return;
     goRef.current(frameFor(pathname));
-  }, [pathname]);
+  }, [pathname, blog]);
 
   useLayoutEffect(() => onDepart((path) => goRef.current(frameFor(path))), []);
 
@@ -274,6 +277,7 @@ export default function RouteStage() {
   const full = hold || expanded;
 
   useLayoutEffect(() => {
+    if (blog) return;
     if (!full) {
       const fitHome = () => {
         if (flightRef.current) return;
@@ -315,7 +319,7 @@ export default function RouteStage() {
       window.removeEventListener("resize", fit);
       window.visualViewport?.removeEventListener("resize", fit);
     };
-  }, [full, atResult]);
+  }, [full, atResult, blog]);
 
   useLayoutEffect(
     () => () => {
@@ -323,6 +327,8 @@ export default function RouteStage() {
     },
     []
   );
+
+  if (blog) return null;
 
   return (
     <>

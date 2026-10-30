@@ -8,6 +8,7 @@ const NAV = [
   ["Comment ça marche", "/#comment-ca-marche"],
   ["Pourquoi avant l'achat", "/#avant-achat"],
   ["Réponses", "/#reponses"],
+  ["Blog", "/blog"],
 ];
 
 const PRODUCT_LINKS = [
@@ -16,6 +17,7 @@ const PRODUCT_LINKS = [
   ["Pays couverts", "/#documents"],
   ["Documents acceptés", "/#documents"],
   ["Réponses", "/#reponses"],
+  ["Blog", "/blog"],
 ];
 
 const ANSWER_LINKS = [

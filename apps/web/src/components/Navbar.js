@@ -9,6 +9,7 @@ const LINKS = [
   ["Comment ça marche", "#comment-ca-marche"],
   ["Pourquoi avant l'achat", "#avant-achat"],
   ["Réponses", "#reponses"],
+  ["Blog", "/blog"],
 ];
 
 export default function Navbar({ links = LINKS }) {

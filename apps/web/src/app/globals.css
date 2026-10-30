@@ -16,6 +16,7 @@
   --color-surface-card-lime: #c8f57a;
   --color-surface-card-sky: #d9f3ff;
   --color-text-primary: #000000;
+  --color-text-inverse: #ffffff;
   --color-text-card-neutral: #505050;
   --color-text-card-result: #40484b;
   --color-text-upload: #000000a8;
@@ -26,6 +27,7 @@
   --color-grey-100: #f4f6f2;
   --color-text-heading-neutral: #3a3a3a;
   --color-text-heading-lime: #273e00;
+  --color-text-heading-sky: #0e3a4f;
   --color-link-hover: #757575;
   --color-focus-ring: var(--color-text-primary);
   --focus-ring-width: 2px;

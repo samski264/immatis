@@ -80,6 +80,7 @@ const PRODUCT_LINKS = [
   ["Pourquoi avant l'achat", "#avant-achat"],
   ["Pays couverts", "#documents"],
   ["Documents acceptés", "#documents"],
+  ["Blog", "/blog"],
 ];
 
 const ANSWER_LINKS = [
