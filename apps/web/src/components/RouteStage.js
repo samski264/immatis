@@ -111,6 +111,8 @@ export default function RouteStage() {
     detail: false,
     interactive: pathname === "/",
     target: null,
+    // 1 sur l'accueil : le haut de la bande est flouté dans le canvas, pas par le compositeur.
+    veil: frameFor(pathname).key === "home" ? 1 : 0,
   });
   const goRef = useRef(null);
 
@@ -277,6 +279,10 @@ export default function RouteStage() {
   const full = hold || expanded;
 
   useLayoutEffect(() => {
+    motion.current.veil = !blog && !full && !atResult && !quiet ? 1 : 0;
+  }, [blog, full, atResult, quiet]);
+
+  useLayoutEffect(() => {
     if (blog) return;
     if (!full) {
       const fitHome = () => {
@@ -331,15 +337,12 @@ export default function RouteStage() {
   if (blog) return null;
 
   return (
-    <>
-      <div
-        ref={stageRef}
-        className={full ? `${styles.stage} ${styles.full}` : `${styles.stage} ${placeClass(pose)}`}
-        aria-hidden="true"
-      >
-        <LandscapeStrip motion={motion} />
-      </div>
-      <div className={full || atResult || quiet ? `${styles.veil} ${styles.veilOff}` : styles.veil} aria-hidden="true" />
-    </>
+    <div
+      ref={stageRef}
+      className={full ? `${styles.stage} ${styles.full}` : `${styles.stage} ${placeClass(pose)}`}
+      aria-hidden="true"
+    >
+      <LandscapeStrip motion={motion} />
+    </div>
   );
 }

@@ -8,6 +8,8 @@ import { flyTo } from "@/lib/routeFlight";
 import { loadResult } from "@/lib/scanResult";
 import ExportButton from "./ExportButton";
 import { conformResult } from "./conform";
+import SortieCard from "@/components/SortieCard";
+import cardStyles from "@/components/css/SortieCard.module.css";
 import styles from "./page.module.css";
 
 function CheckIcon() {
@@ -78,7 +80,7 @@ export default function ResultView() {
       {view ? (
         <div className={styles.content}>
           <section className={styles.synthesis} aria-labelledby="verdict-title">
-            <div className={`${styles.verdict} ${styles.deposit}`} style={{ animationDelay: "0.34s" }}>
+            <div className={`${styles.verdict} ${styles.deposit}`} data-frost="" style={{ animationDelay: "0.34s" }}>
               <div className={styles.badgeIcon}>
                 <CheckIcon />
               </div>
@@ -88,35 +90,20 @@ export default function ResultView() {
               </div>
             </div>
 
-            <div className={styles.cards}>
+            <div className={cardStyles.row}>
               {view.cards.map((card, index) => (
-                <article
+                <SortieCard
                   key={card.label}
-                  className={`${styles.card} ${styles.deposit}`}
+                  className={styles.deposit}
                   style={{ animationDelay: `${0.5 + index * 0.11}s` }}
-                >
-                  <header className={styles.cardHead}>
-                    <p>{card.label}</p>
-                    <span className={card.warn ? `${styles.status} ${styles.statusWarn}` : styles.status}>
-                      <span className={styles.dot} aria-hidden="true" />
-                      {card.status}
-                    </span>
-                  </header>
-                  <div className={styles.cardValue}>
-                    <p className={styles.figure}>{card.value}</p>
-                    {card.detail ? <p>{card.detail}</p> : null}
-                  </div>
-                  <div className={styles.trace}>
-                    <div>
-                      <p className={styles.traceLabel}>Champ lu</p>
-                      <p className={styles.mono}>{card.field}</p>
-                    </div>
-                    <div>
-                      <p className={styles.traceLabel}>Règle appliquée</p>
-                      <p className={styles.rule}>{card.rule}</p>
-                    </div>
-                  </div>
-                </article>
+                  label={card.label}
+                  status={card.status}
+                  tone={card.tone || (card.warn ? "attention" : "ok")}
+                  value={card.value}
+                  detail={card.detail}
+                  verdict={card.verdict}
+                  reasons={card.reasons}
+                />
               ))}
             </div>
 

@@ -741,22 +741,92 @@
                   "id": "Qx8xq",
                   "name": "Sorties",
                   "width": "fill_container",
-                  "height": 307,
                   "gap": 16,
+                  "justifyContent": "space_between",
                   "children": [
                     {
                       "id": "OCFfw",
                       "type": "ref",
                       "ref": "e4JMFF",
                       "name": "Voie d’immatriculation",
-                      "width": "fill_container",
-                      "height": "fill_container",
+                      "width": 290,
+                      "height": 290,
+                      "padding": "$space/17",
+                      "gap": "$space/10",
+                      "justifyContent": "space_between",
                       "descendants": {
+                        "hldHh": {
+                          "gap": "$space/7"
+                        },
                         "lj5R9": {
-                          "content": "Voie d'homologation"
+                          "content": "Voie d'homologation",
+                          "fontSize": "$font/size/caption"
+                        },
+                        "vpOcA": {
+                          "fill": "$color/status/error-bg",
+                          "padding": [
+                            "$space/3",
+                            "$space/10"
+                          ],
+                          "gap": "$space/7"
+                        },
+                        "ojU7s": {
+                          "fill": "$color/status/error-text"
+                        },
+                        "slAqr": {
+                          "content": "Attention requise",
+                          "fill": "$color/status/error-text",
+                          "fontSize": "$font/size/caption"
+                        },
+                        "yubW2": {
+                          "gap": "$space/3"
+                        },
+                        "REdel": {
+                          "fontSize": "$font/size/heading",
+                          "letterSpacing": -1.05,
+                          "fontWeight": "$font/weight/heading",
+                          "fontFamily": "$font/family/display"
+                        },
+                        "afoDQ": {
+                          "fontSize": "$font/size/caption"
                         },
                         "fQFG5": {
-                          "content": "COC partiel nécéssaire. "
+                          "fontSize": "$font/size/body"
+                        },
+                        "r5kdE": {
+                          "gap": "$space/7",
+                          "padding": [
+                            "$space/10",
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        "wAFYu": {
+                          "fontSize": "$font/size/caption",
+                          "letterSpacing": "$font/tracking/normal"
+                        },
+                        "QceQh": {
+                          "gap": "$space/7"
+                        },
+                        "z5v4p": {
+                          "width": 14,
+                          "height": 14
+                        },
+                        "lRU4D": {
+                          "content": "Pas de numéro de réception (case K vide)",
+                          "fontSize": "$font/size/caption"
+                        },
+                        "GLbHa": {
+                          "gap": "$space/7"
+                        },
+                        "VhCzE": {
+                          "width": 14,
+                          "height": 14
+                        },
+                        "i9tUap": {
+                          "content": "Les 15 rubriques exigées sont lues",
+                          "fontSize": "$font/size/caption"
                         }
                       }
                     },
@@ -765,23 +835,81 @@
                       "type": "ref",
                       "ref": "e4JMFF",
                       "name": "TVA",
-                      "width": "fill_container",
-                      "height": "fill_container",
+                      "width": 290,
+                      "height": 290,
+                      "padding": "$space/17",
+                      "gap": "$space/10",
+                      "justifyContent": "space_between",
                       "descendants": {
+                        "hldHh": {
+                          "gap": "$space/7"
+                        },
                         "lj5R9": {
-                          "content": "TVA"
+                          "content": "TVA",
+                          "fontSize": "$font/size/caption"
+                        },
+                        "vpOcA": {
+                          "padding": [
+                            "$space/3",
+                            "$space/10"
+                          ],
+                          "gap": "$space/7"
+                        },
+                        "slAqr": {
+                          "fontSize": "$font/size/caption"
+                        },
+                        "yubW2": {
+                          "gap": "$space/3"
                         },
                         "REdel": {
-                          "content": "0 €"
+                          "content": "0 €",
+                          "fontSize": "$font/size/heading",
+                          "letterSpacing": -1.05,
+                          "fontWeight": "$font/weight/heading",
+                          "fontFamily": "$font/family/display"
+                        },
+                        "afoDQ": {
+                          "enabled": false,
+                          "fontSize": "$font/size/caption"
                         },
                         "fQFG5": {
-                          "content": " "
+                          "content": "Pas de TVA à payer à l’import.",
+                          "fontSize": "$font/size/body"
+                        },
+                        "r5kdE": {
+                          "gap": "$space/7",
+                          "padding": [
+                            "$space/10",
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        "wAFYu": {
+                          "fontSize": "$font/size/caption",
+                          "letterSpacing": "$font/tracking/normal"
+                        },
+                        "QceQh": {
+                          "gap": "$space/7"
+                        },
+                        "z5v4p": {
+                          "width": 14,
+                          "height": 14
                         },
                         "lRU4D": {
-                          "content": "B · 14.05.2021 · 64 mois"
+                          "content": "Première immatriculation (case B) : 14/05/2021",
+                          "fontSize": "$font/size/caption"
+                        },
+                        "GLbHa": {
+                          "gap": "$space/7"
+                        },
+                        "VhCzE": {
+                          "width": 14,
+                          "height": 14
                         },
                         "i9tUap": {
-                          "content": "Mise en circulation au-delà du seuil de 6 mois : pas de TVA."
+                          "content": "64 mois écoulés, au-delà du seuil de 6 mois",
+                          "fontSize": "$font/size/caption"
                         }
                       }
                     },
@@ -790,26 +918,82 @@
                       "type": "ref",
                       "ref": "e4JMFF",
                       "name": "Chevaux fiscaux",
-                      "width": "fill_container",
-                      "height": "fill_container",
+                      "width": 290,
+                      "height": 290,
+                      "padding": "$space/17",
+                      "gap": "$space/10",
+                      "justifyContent": "space_between",
                       "descendants": {
+                        "hldHh": {
+                          "gap": "$space/7"
+                        },
                         "lj5R9": {
-                          "content": "Chevaux fiscaux"
+                          "content": "Chevaux fiscaux",
+                          "fontSize": "$font/size/caption"
+                        },
+                        "vpOcA": {
+                          "padding": [
+                            "$space/3",
+                            "$space/10"
+                          ],
+                          "gap": "$space/7"
                         },
                         "slAqr": {
-                          "content": "Estimé"
+                          "content": "Estimé",
+                          "fontSize": "$font/size/caption"
+                        },
+                        "yubW2": {
+                          "gap": "$space/3"
                         },
                         "REdel": {
-                          "content": "5 CV"
+                          "content": "5 CV",
+                          "fontSize": "$font/size/heading",
+                          "letterSpacing": -1.05,
+                          "fontWeight": "$font/weight/heading",
+                          "fontFamily": "$font/family/display"
+                        },
+                        "afoDQ": {
+                          "enabled": false,
+                          "fontSize": "$font/size/caption"
                         },
                         "fQFG5": {
-                          "content": "Base du tarif régional de la carte grise."
+                          "content": "Base du prix de la carte grise.",
+                          "fontSize": "$font/size/body"
+                        },
+                        "r5kdE": {
+                          "gap": "$space/7",
+                          "padding": [
+                            "$space/10",
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        "wAFYu": {
+                          "fontSize": "$font/size/caption",
+                          "letterSpacing": "$font/tracking/normal"
+                        },
+                        "QceQh": {
+                          "gap": "$space/7"
+                        },
+                        "z5v4p": {
+                          "width": 14,
+                          "height": 14
                         },
                         "lRU4D": {
-                          "content": "P.2 · 67 kW · V.7 · 128 g/km"
+                          "content": "Puissance lue (case P.2) : 67 kW",
+                          "fontSize": "$font/size/caption"
+                        },
+                        "GLbHa": {
+                          "gap": "$space/7"
+                        },
+                        "VhCzE": {
+                          "width": 14,
+                          "height": 14
                         },
                         "i9tUap": {
-                          "content": "CO₂/45 + (P/40)^1,6, arrondi à l’entier : 5,13 → 5 CV."
+                          "content": "Calcul : 5,13 CV, arrondi à 5 CV",
+                          "fontSize": "$font/size/caption"
                         }
                       }
                     },
@@ -818,23 +1002,81 @@
                       "type": "ref",
                       "ref": "e4JMFF",
                       "name": "Malus",
-                      "width": "fill_container",
-                      "height": "fill_container",
+                      "width": 290,
+                      "height": 290,
+                      "padding": "$space/17",
+                      "gap": "$space/10",
+                      "justifyContent": "space_between",
                       "descendants": {
+                        "hldHh": {
+                          "gap": "$space/7"
+                        },
                         "lj5R9": {
-                          "content": "Malus"
+                          "content": "Malus",
+                          "fontSize": "$font/size/caption"
+                        },
+                        "vpOcA": {
+                          "padding": [
+                            "$space/3",
+                            "$space/10"
+                          ],
+                          "gap": "$space/7"
+                        },
+                        "slAqr": {
+                          "fontSize": "$font/size/caption"
+                        },
+                        "yubW2": {
+                          "gap": "$space/3"
                         },
                         "REdel": {
-                          "content": "0 €"
+                          "content": "0 €",
+                          "fontSize": "$font/size/heading",
+                          "letterSpacing": -1.05,
+                          "fontWeight": "$font/weight/heading",
+                          "fontFamily": "$font/family/display"
+                        },
+                        "afoDQ": {
+                          "enabled": false,
+                          "fontSize": "$font/size/caption"
                         },
                         "fQFG5": {
-                          "content": "CO₂ et poids, abattements et décote compris."
+                          "content": "Aucun malus à payer.",
+                          "fontSize": "$font/size/body"
+                        },
+                        "r5kdE": {
+                          "gap": "$space/7",
+                          "padding": [
+                            "$space/10",
+                            0,
+                            0,
+                            0
+                          ]
+                        },
+                        "wAFYu": {
+                          "fontSize": "$font/size/caption",
+                          "letterSpacing": "$font/tracking/normal"
+                        },
+                        "QceQh": {
+                          "gap": "$space/7"
+                        },
+                        "z5v4p": {
+                          "width": 14,
+                          "height": 14
                         },
                         "lRU4D": {
-                          "content": "V.7 · 128 g/km · G · 1 361 kg"
+                          "content": "CO₂ (V.7) : 128 g/km · masse (G) : 1 361 kg",
+                          "fontSize": "$font/size/caption"
+                        },
+                        "GLbHa": {
+                          "gap": "$space/7"
+                        },
+                        "VhCzE": {
+                          "width": 14,
+                          "height": 14
                         },
                         "i9tUap": {
-                          "content": "Barème WLTP 2021 puis décote de 43 %. Détail ci-dessous."
+                          "content": "Barème 2021, puis décote d’ancienneté de 43 %",
+                          "fontSize": "$font/size/caption"
                         }
                       }
                     }
@@ -2922,42 +3164,43 @@
                   "id": "lQF4V",
                   "name": "Cartes",
                   "width": "fill_container",
-                  "height": 344,
-                  "gap": 17,
+                  "height": 377,
+                  "gap": "$space/10",
+                  "justifyContent": "space_between",
                   "children": [
                     {
                       "id": "c3YBi",
                       "type": "ref",
                       "ref": "e4JMFF",
                       "name": "Carte Voie",
-                      "width": "fill_container",
-                      "height": "fill_container",
+                      "width": 290,
+                      "height": 290,
                       "descendants": {
                         "lj5R9": {
                           "content": "Voie d'homologation"
                         },
                         "vpOcA": {
-                          "fill": "$color/status/ok-bg"
+                          "fill": "$color/status/error-bg"
                         },
                         "ojU7s": {
-                          "fill": "$color/text/heading-lime"
+                          "fill": "$color/status/error-text"
                         },
                         "slAqr": {
-                          "content": "Concluant",
-                          "fill": "$color/text/heading-lime"
+                          "content": "Attention requise",
+                          "fill": "$color/status/error-text"
                         },
                         "REdel": {
                           "content": "AVDT",
                           "fill": "$color/text/heading-lime"
                         },
                         "fQFG5": {
-                          "content": "Pas de passage en RTI."
+                          "content": "La carte grise ne suffit pas : il faut demander une attestation AVDT (67,38 €)."
                         },
                         "lRU4D": {
-                          "content": "K absent · 15 / 15 champs harmonisés"
+                          "content": "Pas de numéro de réception (case K vide)"
                         },
                         "i9tUap": {
-                          "content": "Sans numéro de réception K, tout dépend des champs : tous présents, voie AVDT. Un seul absent, et c'est la RTI."
+                          "content": "Les 15 rubriques exigées sont lues"
                         }
                       }
                     },
@@ -2966,8 +3209,8 @@
                       "type": "ref",
                       "ref": "e4JMFF",
                       "name": "Carte TVA",
-                      "width": "fill_container",
-                      "height": "fill_container",
+                      "width": 290,
+                      "height": 290,
                       "descendants": {
                         "lj5R9": {
                           "content": "TVA"
@@ -2986,14 +3229,17 @@
                           "content": "0 €",
                           "fill": "$color/text/heading-lime"
                         },
+                        "afoDQ": {
+                          "enabled": false
+                        },
                         "fQFG5": {
-                          "content": "Pas de TVA à l'import."
+                          "content": "Pas de TVA à l’import."
                         },
                         "lRU4D": {
-                          "content": "B · 14.05.2021 · 64 mois"
+                          "content": "Première immatriculation (case B) : 14/05/2021"
                         },
                         "i9tUap": {
-                          "content": "Mise en circulation au-delà du seuil de 6 mois : pas de TVA."
+                          "content": "64 mois écoulés, au-delà du seuil de 6 mois"
                         }
                       }
                     },
@@ -3002,8 +3248,8 @@
                       "type": "ref",
                       "ref": "e4JMFF",
                       "name": "Carte Chevaux",
-                      "width": "fill_container",
-                      "height": "fill_container",
+                      "width": 290,
+                      "height": 290,
                       "descendants": {
                         "lj5R9": {
                           "content": "Chevaux fiscaux"
@@ -3022,14 +3268,21 @@
                           "content": "5 CV",
                           "fill": "$color/status/warn-text"
                         },
+                        "afoDQ": {
+                          "enabled": false
+                        },
                         "fQFG5": {
-                          "content": "Base du tarif régional de la carte grise."
+                          "content": "Base du prix de la carte grise, à 53,50 € par CV en moyenne."
                         },
                         "lRU4D": {
-                          "content": "P.2 · 67 kW"
+                          "content": "Puissance lue (case P.2) : 67 kW, soit 5 CV"
+                        },
+                        "VhCzE": {
+                          "icon": "circle-alert",
+                          "fill": "$color/status/warn-text"
                         },
                         "i9tUap": {
-                          "content": "Formule puissance → CV : 4,74, arrondi à 5 CV. Prix moyen des régions 2026 : 53,50 € par CV."
+                          "content": "Tarif moyen des régions : le prix exact dépend de la vôtre"
                         }
                       }
                     },
@@ -3038,8 +3291,8 @@
                       "type": "ref",
                       "ref": "e4JMFF",
                       "name": "Carte Malus",
-                      "width": "fill_container",
-                      "height": "fill_container",
+                      "width": 290,
+                      "height": 290,
                       "descendants": {
                         "lj5R9": {
                           "content": "Malus"
@@ -3058,14 +3311,17 @@
                           "content": "0 €",
                           "fill": "$color/text/heading-lime"
                         },
+                        "afoDQ": {
+                          "enabled": false
+                        },
                         "fQFG5": {
-                          "content": "CO₂ et poids, décote d'ancienneté comprise."
+                          "content": "Aucun malus à payer."
                         },
                         "lRU4D": {
-                          "content": "V.7 · 128 g/km · G · 1 361 kg"
+                          "content": "CO₂ (case V.7) : 128 g/km, sous le seuil de 133"
                         },
                         "i9tUap": {
-                          "content": "Barème WLTP 2021 : 128 g/km, sous le seuil de 133. Pas de taxe au poids avant 2022."
+                          "content": "Avant 2022 : pas de taxe au poids"
                         }
                       }
                     }
@@ -4192,7 +4448,7 @@
                           "id": "fOrYA",
                           "name": "Nombre",
                           "fill": "#141414",
-                          "content": "12",
+                          "content": "13",
                           "fontFamily": "Inter",
                           "fontSize": 22,
                           "fontWeight": "500",
@@ -5861,6 +6117,179 @@
                           ]
                         }
                       ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "A5LhR",
+                  "name": "Grille 2",
+                  "width": "fill_container",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "bXkpP",
+                      "name": "color/status/error-bg",
+                      "width": 276,
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "wUJSF",
+                          "name": "Aplat",
+                          "clip": true,
+                          "width": "fill_container",
+                          "height": 112,
+                          "fill": "#FFFFFF",
+                          "cornerRadius": 10,
+                          "stroke": "#E6E6E6",
+                          "strokeWidth": 1,
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "id": "yOwYQ",
+                              "name": "Valeur",
+                              "fill": "$color/status/error-bg",
+                              "width": "fill_container",
+                              "height": "fill_container"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "lIfMN",
+                          "name": "Infos",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 4,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "nbTyq",
+                              "name": "Token",
+                              "fill": "#141414",
+                              "content": "color/status/error-bg",
+                              "fontFamily": "JetBrains Mono",
+                              "fontSize": 12,
+                              "fontWeight": "500"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "athD2",
+                              "name": "Méta",
+                              "width": "fill_container",
+                              "justifyContent": "space_between",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "IKreq",
+                                  "name": "Usage",
+                                  "fill": "#6B6B6B",
+                                  "content": "Puce d’état · manquant",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "SYQ6B",
+                                  "name": "Hex",
+                                  "fill": "#8A8A8A",
+                                  "content": "#FBE2DF",
+                                  "fontFamily": "JetBrains Mono",
+                                  "fontSize": 11,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "kXAdK",
+                      "name": "color/status/error-text",
+                      "width": 276,
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "MZijC",
+                          "name": "Aplat",
+                          "clip": true,
+                          "width": "fill_container",
+                          "height": 112,
+                          "fill": "#FFFFFF",
+                          "cornerRadius": 10,
+                          "stroke": "#E6E6E6",
+                          "strokeWidth": 1,
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "id": "G4I8Jf",
+                              "name": "Valeur",
+                              "fill": "$color/status/error-text",
+                              "width": "fill_container",
+                              "height": "fill_container"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "lCJ4Q",
+                          "name": "Infos",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 4,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "HPhhM",
+                              "name": "Token",
+                              "fill": "#141414",
+                              "content": "color/status/error-text",
+                              "fontFamily": "JetBrains Mono",
+                              "fontSize": 12,
+                              "fontWeight": "500"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "lIlgh",
+                              "name": "Méta",
+                              "width": "fill_container",
+                              "justifyContent": "space_between",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "iS5hk",
+                                  "name": "Usage",
+                                  "fill": "#6B6B6B",
+                                  "content": "Texte d’état · manquant",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "fuWJX",
+                                  "name": "Hex",
+                                  "fill": "#8A8A8A",
+                                  "content": "#9A1B12",
+                                  "fontFamily": "JetBrains Mono",
+                                  "fontSize": 11,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
                     },
                     {
                       "type": "frame",
@@ -6453,7 +6882,7 @@
                   "fill": "#6B6B6B",
                   "textGrowth": "fixed-width",
                   "width": 480,
-                  "content": "Deux familles, quatre niveaux : 63, 35, 22 et 14 px. Les aperçus sont des images du rendu d’origine à taille réelle ; libellés et valeurs restent éditables.",
+                  "content": "Deux familles, cinq niveaux : 63, 35, 22, 14 et 12 px. Les aperçus sont des images du rendu d’origine à taille réelle, sauf Caption (texte en direct, ajouté pour les cartes sortie) ; libellés et valeurs restent éditables.",
                   "lineHeight": 1.5,
                   "fontFamily": "Inter",
                   "fontSize": 14,
@@ -7374,6 +7803,196 @@
                           },
                           "width": 641,
                           "height": 51
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "CLKlc",
+                  "name": "Niveau Caption",
+                  "width": "fill_container",
+                  "stroke": "#E6E6E6",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "gap": 32,
+                  "padding": [
+                    28,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "JQpix",
+                      "name": "Méta",
+                      "width": 300,
+                      "layout": "vertical",
+                      "gap": 10,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "jPHLV",
+                          "name": "Titre",
+                          "gap": 10,
+                          "alignItems": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "KGWCC",
+                              "name": "Niveau",
+                              "fill": "#141414",
+                              "content": "Caption",
+                              "fontFamily": "Inter",
+                              "fontSize": 18,
+                              "fontWeight": "500"
+                            },
+                            {
+                              "type": "text",
+                              "id": "s7fF7",
+                              "name": "Taille",
+                              "fill": "#8A8A8A",
+                              "content": "12 px",
+                              "fontFamily": "JetBrains Mono",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "lig53",
+                          "name": "Spéc",
+                          "fill": "#6B6B6B",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Parabole Trial Regular Text",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "A47eC",
+                          "name": "Tokens",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "z9uTb",
+                              "name": "font/size/caption",
+                              "fill": "#F6F6F6",
+                              "cornerRadius": 6,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "N6vA6x",
+                                  "name": "Token",
+                                  "fill": "#4A4A4A",
+                                  "content": "font/size/caption",
+                                  "fontFamily": "JetBrains Mono",
+                                  "fontSize": 11,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "cjnvI",
+                              "name": "font/family/body",
+                              "fill": "#F6F6F6",
+                              "cornerRadius": 6,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "IhnBK",
+                                  "name": "Token",
+                                  "fill": "#4A4A4A",
+                                  "content": "font/family/body",
+                                  "fontFamily": "JetBrains Mono",
+                                  "fontSize": 11,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "bzZNi",
+                              "name": "font/weight/body",
+                              "fill": "#F6F6F6",
+                              "cornerRadius": 6,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "zDtFp",
+                                  "name": "Token",
+                                  "fill": "#4A4A4A",
+                                  "content": "font/weight/body",
+                                  "fontFamily": "JetBrains Mono",
+                                  "fontSize": 11,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "lnnY7",
+                              "name": "font/tracking/normal",
+                              "fill": "#F6F6F6",
+                              "cornerRadius": 6,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "qHuxJ",
+                                  "name": "Token",
+                                  "fill": "#4A4A4A",
+                                  "content": "font/tracking/normal",
+                                  "fontFamily": "JetBrains Mono",
+                                  "fontSize": 11,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "MNK7P",
+                      "name": "Aperçu",
+                      "clip": true,
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "bpdB1",
+                          "name": "Exemple — type/caption",
+                          "fill": "#1A1A1A",
+                          "content": "Première immatriculation (B) : 14/05/2021",
+                          "fontFamily": "$font/family/body",
+                          "fontSize": "$font/size/caption",
+                          "fontWeight": "$font/weight/body"
                         }
                       ]
                     }
@@ -8831,18 +9450,25 @@
       "y": -3855.5,
       "name": "Carte sortie",
       "reusable": true,
-      "width": 334,
-      "fill": "$color/surface/card-neutral",
+      "width": 290,
+      "height": 290,
+      "fill": "$color/glass/fill-neutral",
       "cornerRadius": 17,
+      "effect": {
+        "type": "background_blur",
+        "radius": "$blur/glass-button"
+      },
       "layout": "vertical",
-      "gap": 20,
-      "padding": 24,
+      "gap": "$space/10",
+      "padding": "$space/17",
+      "justifyContent": "space_between",
       "children": [
         {
           "type": "frame",
           "id": "hldHh",
           "name": "En-tête",
           "width": "fill_container",
+          "gap": "$space/7",
           "justifyContent": "space_between",
           "alignItems": "center",
           "children": [
@@ -8851,9 +9477,11 @@
               "id": "lj5R9",
               "name": "Sortie",
               "fill": "$color/grey/500",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
               "content": "Voie d’immatriculation",
               "fontFamily": "$font/family/body",
-              "fontSize": 13,
+              "fontSize": "$font/size/caption",
               "fontWeight": "500"
             },
             {
@@ -8862,10 +9490,10 @@
               "name": "Statut",
               "fill": "$color/bg/page",
               "cornerRadius": 999,
-              "gap": 6,
+              "gap": "$space/7",
               "padding": [
-                4,
-                10
+                "$space/3",
+                "$space/10"
               ],
               "alignItems": "center",
               "children": [
@@ -8884,7 +9512,7 @@
                   "fill": "$color/text/heading-neutral",
                   "content": "Concluant",
                   "fontFamily": "$font/family/body",
-                  "fontSize": 12,
+                  "fontSize": "$font/size/caption",
                   "fontWeight": "700"
                 }
               ]
@@ -8897,7 +9525,7 @@
           "name": "Valeur",
           "width": "fill_container",
           "layout": "vertical",
-          "gap": 6,
+          "gap": "$space/3",
           "children": [
             {
               "type": "text",
@@ -8906,73 +9534,94 @@
               "fill": "$color/text/heading-neutral",
               "content": "AVDT",
               "fontFamily": "$font/family/display",
-              "fontSize": 44,
-              "fontWeight": "200",
-              "letterSpacing": -1.3
+              "fontSize": "$font/size/heading",
+              "fontWeight": "$font/weight/heading",
+              "letterSpacing": -1.05
             },
             {
               "type": "text",
-              "id": "fQFG5",
-              "name": "Conséquence",
-              "fill": "$color/text/primary",
+              "id": "afoDQ",
+              "name": "Nom en clair",
+              "fill": "$color/grey/700",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "Pas d’étape COC.",
-              "lineHeight": 1.4,
+              "content": "Vérification des données techniques",
               "fontFamily": "$font/family/body",
-              "fontSize": 14,
-              "fontWeight": "normal"
+              "fontSize": "$font/size/caption",
+              "fontWeight": "500"
             }
           ]
         },
         {
+          "type": "text",
+          "id": "fQFG5",
+          "name": "Verdict",
+          "fill": "$color/text/primary",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "La carte grise ne suffit pas : il faut demander une attestation AVDT (67,38 €).",
+          "lineHeight": 1.4,
+          "fontFamily": "$font/family/body",
+          "fontSize": "$font/size/body",
+          "fontWeight": "normal"
+        },
+        {
           "type": "frame",
           "id": "r5kdE",
-          "name": "Traçabilité",
+          "name": "Pourquoi",
           "width": "fill_container",
           "stroke": "#3A3A3A33",
           "strokeWidth": {
             "top": 1
           },
           "layout": "vertical",
-          "gap": 12,
+          "gap": "$space/7",
           "padding": [
-            16,
+            "$space/10",
             0,
             0,
             0
           ],
           "children": [
             {
+              "type": "text",
+              "id": "wAFYu",
+              "name": "Titre",
+              "fill": "$color/grey/700",
+              "content": "Pourquoi",
+              "fontFamily": "$font/family/body",
+              "fontSize": "$font/size/caption",
+              "fontWeight": "500",
+              "letterSpacing": "$font/tracking/normal"
+            },
+            {
               "type": "frame",
               "id": "QceQh",
-              "name": "Champ lu",
+              "name": "Raison 1",
               "width": "fill_container",
-              "layout": "vertical",
-              "gap": 4,
+              "gap": "$space/7",
               "children": [
                 {
-                  "type": "text",
-                  "id": "wAFYu",
-                  "name": "Libellé",
-                  "fill": "$color/grey/700",
-                  "content": "Champ lu",
-                  "fontFamily": "$font/family/body",
-                  "fontSize": 11,
-                  "fontWeight": "500",
-                  "letterSpacing": 0.2
+                  "type": "icon",
+                  "id": "z5v4p",
+                  "name": "Icône",
+                  "width": 14,
+                  "height": 14,
+                  "icon": "circle-check",
+                  "library": "lucide",
+                  "fill": "$color/text/heading-neutral"
                 },
                 {
                   "type": "text",
                   "id": "lRU4D",
-                  "name": "Valeur",
+                  "name": "Texte",
                   "fill": "$color/text/primary",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "15 / 15 champs harmonisés · J = M1",
-                  "lineHeight": 1.45,
+                  "content": "Pas de numéro de réception (case K vide)",
+                  "lineHeight": 1.35,
                   "fontFamily": "$font/family/body",
-                  "fontSize": 12,
+                  "fontSize": "$font/size/caption",
                   "fontWeight": "normal"
                 }
               ]
@@ -8980,33 +9629,31 @@
             {
               "type": "frame",
               "id": "GLbHa",
-              "name": "Règle appliquée",
+              "name": "Raison 2",
               "width": "fill_container",
-              "layout": "vertical",
-              "gap": 4,
+              "gap": "$space/7",
               "children": [
                 {
-                  "type": "text",
-                  "id": "w30Cn",
-                  "name": "Libellé",
-                  "fill": "$color/grey/700",
-                  "content": "Règle appliquée",
-                  "fontFamily": "$font/family/body",
-                  "fontSize": 11,
-                  "fontWeight": "500",
-                  "letterSpacing": 0.2
+                  "type": "icon",
+                  "id": "VhCzE",
+                  "name": "Icône",
+                  "width": 14,
+                  "height": 14,
+                  "icon": "circle-check",
+                  "library": "lucide",
+                  "fill": "$color/text/heading-neutral"
                 },
                 {
                   "type": "text",
                   "id": "i9tUap",
-                  "name": "Valeur",
+                  "name": "Texte",
                   "fill": "$color/text/primary",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "Document UE harmonisé, définitif, catégorie M1 : voie AVDT.",
-                  "lineHeight": 1.45,
+                  "content": "Les 15 rubriques exigées sont lues",
+                  "lineHeight": 1.35,
                   "fontFamily": "$font/family/body",
-                  "fontSize": 13,
+                  "fontSize": "$font/size/caption",
                   "fontWeight": "normal"
                 }
               ]
@@ -9083,6 +9730,11 @@
       "reusable": true,
       "width": 1384,
       "height": 96,
+      "fill": "$color/glass/fill",
+      "effect": {
+        "type": "background_blur",
+        "radius": "$blur/glass"
+      },
       "padding": [
         0,
         "$space/39"
@@ -9116,16 +9768,6 @@
                   "name": "Comment ça marche",
                   "fill": "$color/text/primary",
                   "content": "Comment ça marche",
-                  "fontFamily": "$font/family/body",
-                  "fontSize": "$font/size/body",
-                  "fontWeight": "$font/weight/body"
-                },
-                {
-                  "type": "text",
-                  "id": "T3Vqww",
-                  "name": "Pourquoi avant l'achat",
-                  "fill": "$color/text/primary",
-                  "content": "Pourquoi avant l'achat",
                   "fontFamily": "$font/family/body",
                   "fontSize": "$font/size/body",
                   "fontWeight": "$font/weight/body"
@@ -12214,7 +12856,7 @@
                               "type": "text",
                               "id": "QmfsB",
                               "name": "Cellule",
-                              "fill": "$color/grey/700",
+                              "fill": "$color/status/error-text",
                               "textGrowth": "fixed-width",
                               "width": "fill_container",
                               "content": "Un champ manquant, dont D.2",
@@ -13320,15 +13962,17 @@
                   "id": "LsAQ5",
                   "type": "ref",
                   "ref": "e4JMFF",
-                  "name": "Carte sortie · neutre"
+                  "name": "Carte sortie · neutre",
+                  "width": 290,
+                  "height": 290
                 },
                 {
                   "id": "b871Q",
                   "type": "ref",
                   "ref": "e4JMFF",
                   "name": "Carte sortie · concluant",
-                  "width": 334,
-                  "height": "fit_content",
+                  "width": 290,
+                  "height": 290,
                   "descendants": {
                     "lj5R9": {
                       "content": "Voie d'homologation"
@@ -13348,13 +13992,13 @@
                       "fill": "$color/text/heading-lime"
                     },
                     "fQFG5": {
-                      "content": "Pas de passage en RTI."
+                      "content": "La carte grise ne suffit pas : il faut demander une attestation AVDT (67,38 €)."
                     },
                     "lRU4D": {
-                      "content": "K absent · 15 / 15 champs harmonisés"
+                      "content": "Pas de numéro de réception (case K vide)"
                     },
                     "i9tUap": {
-                      "content": "Sans numéro de réception K, tout dépend des champs : tous présents, voie AVDT. Un seul absent, et c'est la RTI."
+                      "content": "Les 15 rubriques exigées sont lues"
                     }
                   }
                 },
@@ -13363,8 +14007,8 @@
                   "type": "ref",
                   "ref": "e4JMFF",
                   "name": "Carte sortie · estimé",
-                  "width": 334,
-                  "height": "fit_content",
+                  "width": 290,
+                  "height": 290,
                   "descendants": {
                     "lj5R9": {
                       "content": "Chevaux fiscaux"
@@ -13383,14 +14027,21 @@
                       "content": "5 CV",
                       "fill": "$color/status/warn-text"
                     },
+                    "afoDQ": {
+                      "enabled": false
+                    },
                     "fQFG5": {
-                      "content": "Base du tarif régional de la carte grise."
+                      "content": "Base du prix de la carte grise, à 53,50 € par CV en moyenne."
                     },
                     "lRU4D": {
-                      "content": "P.2 · 67 kW"
+                      "content": "Puissance lue (case P.2) : 67 kW, soit 5 CV"
+                    },
+                    "VhCzE": {
+                      "icon": "circle-alert",
+                      "fill": "$color/status/warn-text"
                     },
                     "i9tUap": {
-                      "content": "Formule puissance → CV : 4,74, arrondi à 5 CV. Prix moyen des régions 2026 : 53,50 € par CV."
+                      "content": "Tarif moyen des régions : le prix exact dépend de la vôtre"
                     }
                   }
                 }
@@ -18114,25 +18765,33 @@
                           "type": "ref",
                           "ref": "e4JMFF",
                           "name": "Carte sortie",
-                          "width": "fill_container",
+                          "width": 290,
+                          "height": 290,
                           "descendants": {
                             "lj5R9": {
                               "content": "Voie d'immatriculation"
                             },
+                            "vpOcA": {
+                              "fill": "$color/status/error-bg"
+                            },
+                            "ojU7s": {
+                              "fill": "$color/status/error-text"
+                            },
                             "slAqr": {
-                              "content": "Concluant"
+                              "content": "Attention requise",
+                              "fill": "$color/status/error-text"
                             },
                             "REdel": {
                               "content": "AVDT"
                             },
                             "fQFG5": {
-                              "content": "Attestation à 67,38 €."
+                              "content": "La carte grise ne suffit pas : il faut demander une attestation AVDT (67,38 €)."
                             },
                             "lRU4D": {
-                              "content": "K vide · 15 / 15 rubriques renseignées"
+                              "content": "Pas de numéro de réception (case K vide)"
                             },
                             "i9tUap": {
-                              "content": "K vide et les quinze rubriques renseignées : voie AVDT."
+                              "content": "Les 15 rubriques exigées sont lues"
                             }
                           }
                         }
@@ -20152,7 +20811,7 @@
                               "type": "text",
                               "id": "e2lZxj",
                               "name": "Texte",
-                              "fill": "$color/text/primary",
+                              "fill": "$color/status/error-text",
                               "textGrowth": "fixed-width",
                               "width": "fill_container",
                               "content": "Une rubrique obligatoire manquante.",
@@ -20430,25 +21089,33 @@
                           "type": "ref",
                           "ref": "e4JMFF",
                           "name": "Carte sortie",
-                          "width": "fill_container",
+                          "width": 290,
+                          "height": 290,
                           "descendants": {
                             "lj5R9": {
                               "content": "Voie d'immatriculation"
                             },
+                            "vpOcA": {
+                              "fill": "$color/status/error-bg"
+                            },
+                            "ojU7s": {
+                              "fill": "$color/status/error-text"
+                            },
                             "slAqr": {
-                              "content": "Concluant"
+                              "content": "Attention requise",
+                              "fill": "$color/status/error-text"
                             },
                             "REdel": {
                               "content": "AVDT"
                             },
                             "fQFG5": {
-                              "content": "Attestation à 67,38 €."
+                              "content": "La carte grise ne suffit pas : il faut demander une attestation AVDT (67,38 €)."
                             },
                             "lRU4D": {
-                              "content": "K vide · 15 / 15 rubriques renseignées"
+                              "content": "Pas de numéro de réception (case K vide)"
                             },
                             "i9tUap": {
-                              "content": "K vide et les quinze rubriques renseignées : voie AVDT."
+                              "content": "Les 15 rubriques exigées sont lues"
                             }
                           }
                         }
@@ -21971,25 +22638,41 @@
                           "type": "ref",
                           "ref": "e4JMFF",
                           "name": "Carte sortie",
-                          "width": "fill_container",
+                          "width": 290,
+                          "height": 290,
                           "descendants": {
                             "lj5R9": {
                               "content": "Voie d'immatriculation"
                             },
+                            "vpOcA": {
+                              "fill": "$color/status/error-bg"
+                            },
+                            "ojU7s": {
+                              "fill": "$color/status/error-text"
+                            },
                             "slAqr": {
-                              "content": "Concluant"
+                              "content": "Attention requise",
+                              "fill": "$color/status/error-text"
                             },
                             "REdel": {
                               "content": "RTI"
                             },
+                            "afoDQ": {
+                              "content": "Réception à titre isolé"
+                            },
                             "fQFG5": {
-                              "content": "Réception à titre isolé."
+                              "content": "La carte grise ne suffit pas : le véhicule doit passer une réception."
                             },
                             "lRU4D": {
-                              "content": "K vide · D.2 vide"
+                              "content": "Pas de numéro de réception (case K vide)"
+                            },
+                            "VhCzE": {
+                              "icon": "circle-x",
+                              "fill": "$color/status/error-text"
                             },
                             "i9tUap": {
-                              "content": "K vide et une des quinze rubriques vide : voie RTI."
+                              "content": "Rubrique manquante : D.2 (type, variante, version)",
+                              "fill": "$color/status/error-text"
                             }
                           }
                         }
@@ -23600,7 +24283,8 @@
                           "type": "ref",
                           "ref": "e4JMFF",
                           "name": "Carte sortie",
-                          "width": "fill_container",
+                          "width": 290,
+                          "height": 290,
                           "descendants": {
                             "lj5R9": {
                               "content": "Coût de la carte grise"
@@ -23611,14 +24295,17 @@
                             "REdel": {
                               "content": "428 €"
                             },
+                            "afoDQ": {
+                              "enabled": false
+                            },
                             "fQFG5": {
-                              "content": "8 CV × 53,5 € de tarif moyen."
+                              "content": "8 CV × 53,50 € de tarif moyen."
                             },
                             "lRU4D": {
-                              "content": "P.2 = 110 kW"
+                              "content": "Puissance lue (case P.2) : 110 kW"
                             },
                             "i9tUap": {
-                              "content": "1,8 × 1,1² + 3,87 × 1,1 + 1,34 = 7,78, arrondi à 8 CV."
+                              "content": "Soit 7,78 CV, arrondi à 8 CV"
                             }
                           }
                         }
@@ -26002,7 +26689,8 @@
                           "type": "ref",
                           "ref": "e4JMFF",
                           "name": "Carte sortie",
-                          "width": "fill_container",
+                          "width": 290,
+                          "height": 290,
                           "descendants": {
                             "lj5R9": {
                               "content": "Malus"
@@ -26013,14 +26701,17 @@
                             "REdel": {
                               "content": "0 €"
                             },
+                            "afoDQ": {
+                              "enabled": false
+                            },
                             "fQFG5": {
-                              "content": "Première immatriculation avant 2015."
+                              "content": "Aucun malus à payer."
                             },
                             "lRU4D": {
-                              "content": "B = 12/03/2014 · V.7 = 142 g/km"
+                              "content": "Première immatriculation (case B) : 12/03/2014"
                             },
                             "i9tUap": {
-                              "content": "Antérieure au 1er janvier 2015 : aucun malus."
+                              "content": "Avant le 1er janvier 2015 : pas de malus"
                             }
                           }
                         }
@@ -27450,7 +28141,8 @@
                           "type": "ref",
                           "ref": "e4JMFF",
                           "name": "Carte sortie",
-                          "width": "fill_container",
+                          "width": 290,
+                          "height": 290,
                           "descendants": {
                             "lj5R9": {
                               "content": "Volets lus"
@@ -27461,14 +28153,17 @@
                             "REdel": {
                               "content": "3 / 3"
                             },
+                            "afoDQ": {
+                              "enabled": false
+                            },
                             "fQFG5": {
-                              "content": "Lus comme un seul certificat."
+                              "content": "Les trois volets sont lus comme un seul certificat."
                             },
                             "lRU4D": {
-                              "content": "E, J, F.1, P.1 sur le volet technique"
+                              "content": "E, J, F.1 et P.1 lus sur le volet technique"
                             },
                             "i9tUap": {
-                              "content": "Deux valeurs pour une rubrique : le volet technique fait foi."
+                              "content": "Deux valeurs pour une rubrique : le volet technique fait foi"
                             }
                           }
                         }
@@ -28267,6 +28962,1258 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "tFgyN",
+      "x": 1775,
+      "y": -4729,
+      "name": "Carte sortie · 4 cas",
+      "gap": 24,
+      "children": [
+        {
+          "id": "LYyMs",
+          "type": "ref",
+          "ref": "e4JMFF",
+          "name": "Carte sortie · AVDT",
+          "width": 290,
+          "flipX": false,
+          "flipY": false,
+          "height": 290,
+          "x": 0,
+          "y": 0,
+          "padding": "$space/17",
+          "gap": "$space/10",
+          "justifyContent": "space_between",
+          "descendants": {
+            "hldHh": {
+              "gap": "$space/7"
+            },
+            "lj5R9": {
+              "fontSize": "$font/size/caption"
+            },
+            "vpOcA": {
+              "fill": "$color/status/error-bg",
+              "padding": [
+                "$space/3",
+                "$space/10"
+              ],
+              "gap": "$space/7"
+            },
+            "ojU7s": {
+              "fill": "$color/status/error-text",
+              "width": 6,
+              "height": 6
+            },
+            "slAqr": {
+              "content": "Attention requise",
+              "fill": "$color/status/error-text",
+              "fontSize": "$font/size/caption"
+            },
+            "yubW2": {
+              "gap": "$space/3"
+            },
+            "REdel": {
+              "fontSize": "$font/size/heading",
+              "letterSpacing": -1.05,
+              "fontWeight": "$font/weight/heading",
+              "fontFamily": "$font/family/display"
+            },
+            "afoDQ": {
+              "fontSize": "$font/size/caption"
+            },
+            "fQFG5": {
+              "fontSize": "$font/size/body"
+            },
+            "r5kdE": {
+              "gap": "$space/7",
+              "padding": [
+                "$space/10",
+                0,
+                0,
+                0
+              ]
+            },
+            "wAFYu": {
+              "fontSize": "$font/size/caption",
+              "letterSpacing": "$font/tracking/normal"
+            },
+            "QceQh": {
+              "gap": "$space/7"
+            },
+            "z5v4p": {
+              "width": 14,
+              "height": 14
+            },
+            "lRU4D": {
+              "fontSize": "$font/size/caption"
+            },
+            "GLbHa": {
+              "gap": "$space/7"
+            },
+            "VhCzE": {
+              "width": 14,
+              "height": 14
+            },
+            "i9tUap": {
+              "fontSize": "$font/size/caption"
+            }
+          }
+        },
+        {
+          "id": "OitEd",
+          "type": "ref",
+          "ref": "e4JMFF",
+          "name": "Carte sortie · RTI",
+          "width": 290,
+          "height": 290,
+          "padding": "$space/17",
+          "gap": "$space/10",
+          "justifyContent": "space_between",
+          "descendants": {
+            "hldHh": {
+              "gap": "$space/7"
+            },
+            "lj5R9": {
+              "fontSize": "$font/size/caption"
+            },
+            "vpOcA": {
+              "fill": "$color/status/error-bg",
+              "padding": [
+                "$space/3",
+                "$space/10"
+              ],
+              "gap": "$space/7"
+            },
+            "ojU7s": {
+              "fill": "$color/status/error-text",
+              "width": 6,
+              "height": 6
+            },
+            "slAqr": {
+              "content": "Attention requise",
+              "fill": "$color/status/error-text",
+              "fontSize": "$font/size/caption"
+            },
+            "yubW2": {
+              "gap": "$space/3"
+            },
+            "REdel": {
+              "content": "RTI",
+              "fontSize": "$font/size/heading",
+              "letterSpacing": -1.05,
+              "fontWeight": "$font/weight/heading",
+              "fontFamily": "$font/family/display"
+            },
+            "afoDQ": {
+              "content": "Réception à titre isolé",
+              "fontSize": "$font/size/caption"
+            },
+            "fQFG5": {
+              "content": "La carte grise ne suffit pas : le véhicule doit passer une réception.",
+              "fontSize": "$font/size/body"
+            },
+            "r5kdE": {
+              "gap": "$space/7",
+              "padding": [
+                "$space/10",
+                0,
+                0,
+                0
+              ]
+            },
+            "wAFYu": {
+              "fontSize": "$font/size/caption",
+              "letterSpacing": "$font/tracking/normal"
+            },
+            "QceQh": {
+              "gap": "$space/7"
+            },
+            "z5v4p": {
+              "width": 14,
+              "height": 14
+            },
+            "lRU4D": {
+              "fontSize": "$font/size/caption"
+            },
+            "GLbHa": {
+              "gap": "$space/7"
+            },
+            "VhCzE": {
+              "icon": "circle-x",
+              "fill": "$color/status/error-text",
+              "width": 14,
+              "height": 14
+            },
+            "i9tUap": {
+              "content": "Rubrique manquante : P.2 (puissance)",
+              "fill": "$color/status/error-text",
+              "fontSize": "$font/size/caption"
+            }
+          }
+        },
+        {
+          "id": "jAiCL",
+          "type": "ref",
+          "ref": "e4JMFF",
+          "name": "Carte sortie · Réception déjà portée",
+          "width": 290,
+          "height": 290,
+          "padding": "$space/17",
+          "gap": "$space/10",
+          "justifyContent": "space_between",
+          "descendants": {
+            "hldHh": {
+              "gap": "$space/7"
+            },
+            "lj5R9": {
+              "fontSize": "$font/size/caption"
+            },
+            "vpOcA": {
+              "fill": "$color/status/ok-bg",
+              "padding": [
+                "$space/3",
+                "$space/10"
+              ],
+              "gap": "$space/7"
+            },
+            "ojU7s": {
+              "fill": "$color/text/heading-lime",
+              "width": 6,
+              "height": 6
+            },
+            "slAqr": {
+              "content": "Concluant",
+              "fill": "$color/text/heading-lime",
+              "fontSize": "$font/size/caption"
+            },
+            "yubW2": {
+              "gap": "$space/3"
+            },
+            "REdel": {
+              "content": "Déjà reçue",
+              "fontSize": "$font/size/heading",
+              "letterSpacing": -1.05,
+              "fontWeight": "$font/weight/heading",
+              "fontFamily": "$font/family/display"
+            },
+            "afoDQ": {
+              "content": "Réception par type déjà portée",
+              "fontSize": "$font/size/caption"
+            },
+            "fQFG5": {
+              "content": "Véhicule déjà réceptionné : un certificat de conformité (COC) reste nécessaire.",
+              "fontSize": "$font/size/body"
+            },
+            "r5kdE": {
+              "gap": "$space/7",
+              "padding": [
+                "$space/10",
+                0,
+                0,
+                0
+              ]
+            },
+            "wAFYu": {
+              "fontSize": "$font/size/caption",
+              "letterSpacing": "$font/tracking/normal"
+            },
+            "QceQh": {
+              "gap": "$space/7"
+            },
+            "z5v4p": {
+              "width": 14,
+              "height": 14
+            },
+            "lRU4D": {
+              "content": "Numéro de réception lu en case K",
+              "fontSize": "$font/size/caption"
+            },
+            "GLbHa": {
+              "enabled": true,
+              "gap": "$space/7"
+            },
+            "VhCzE": {
+              "icon": "circle-alert",
+              "fill": "$color/status/warn-text",
+              "width": 14,
+              "height": 14
+            },
+            "i9tUap": {
+              "content": "COC à demander au constructeur",
+              "fontSize": "$font/size/caption"
+            }
+          }
+        },
+        {
+          "id": "a3Qb2",
+          "type": "ref",
+          "ref": "e4JMFF",
+          "name": "Carte sortie · Inconnue",
+          "width": 290,
+          "height": 290,
+          "padding": "$space/17",
+          "gap": "$space/10",
+          "justifyContent": "space_between",
+          "descendants": {
+            "hldHh": {
+              "gap": "$space/7"
+            },
+            "lj5R9": {
+              "fontSize": "$font/size/caption"
+            },
+            "vpOcA": {
+              "fill": "$color/status/error-bg",
+              "padding": [
+                "$space/3",
+                "$space/10"
+              ],
+              "gap": "$space/7"
+            },
+            "ojU7s": {
+              "fill": "$color/status/error-text",
+              "width": 6,
+              "height": 6
+            },
+            "slAqr": {
+              "content": "Attention requise",
+              "fill": "$color/status/error-text",
+              "fontSize": "$font/size/caption"
+            },
+            "yubW2": {
+              "gap": "$space/3"
+            },
+            "REdel": {
+              "content": "Inconnue",
+              "fontSize": "$font/size/heading",
+              "letterSpacing": -1.05,
+              "fontWeight": "$font/weight/heading",
+              "fontFamily": "$font/family/display"
+            },
+            "afoDQ": {
+              "content": "Voie non déterminée",
+              "fontSize": "$font/size/caption"
+            },
+            "fQFG5": {
+              "content": "Le numéro de réception n’a pas pu être lu : la voie reste à confirmer.",
+              "fontSize": "$font/size/body"
+            },
+            "r5kdE": {
+              "gap": "$space/7",
+              "padding": [
+                "$space/10",
+                0,
+                0,
+                0
+              ]
+            },
+            "wAFYu": {
+              "fontSize": "$font/size/caption",
+              "letterSpacing": "$font/tracking/normal"
+            },
+            "QceQh": {
+              "gap": "$space/7"
+            },
+            "z5v4p": {
+              "icon": "circle-alert",
+              "fill": "$color/status/warn-text",
+              "width": 14,
+              "height": 14
+            },
+            "lRU4D": {
+              "content": "Case K illisible ou hors de la photo",
+              "fontSize": "$font/size/caption"
+            },
+            "GLbHa": {
+              "gap": "$space/7"
+            },
+            "VhCzE": {
+              "icon": "camera",
+              "width": 14,
+              "height": 14
+            },
+            "i9tUap": {
+              "content": "Reprenez une photo nette de la carte grise",
+              "fontSize": "$font/size/caption"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "snYLv",
+      "x": 1785.5,
+      "y": -5117,
+      "name": "Carte sortie · TVA · 3 cas",
+      "gap": 24,
+      "children": [
+        {
+          "id": "cgs2j",
+          "type": "ref",
+          "ref": "e4JMFF",
+          "name": "Carte sortie · TVA · Aucune",
+          "width": 290,
+          "height": 290,
+          "padding": "$space/17",
+          "gap": "$space/10",
+          "justifyContent": "space_between",
+          "descendants": {
+            "hldHh": {
+              "gap": "$space/7"
+            },
+            "lj5R9": {
+              "content": "TVA",
+              "fontSize": "$font/size/caption"
+            },
+            "vpOcA": {
+              "fill": "$color/status/ok-bg",
+              "padding": [
+                "$space/3",
+                "$space/10"
+              ],
+              "gap": "$space/7"
+            },
+            "ojU7s": {
+              "fill": "$color/text/heading-lime",
+              "width": 6,
+              "height": 6
+            },
+            "slAqr": {
+              "content": "Concluant",
+              "fill": "$color/text/heading-lime",
+              "fontSize": "$font/size/caption"
+            },
+            "yubW2": {
+              "gap": "$space/3"
+            },
+            "REdel": {
+              "content": "0 €",
+              "fontSize": "$font/size/heading",
+              "letterSpacing": -1.05,
+              "fontWeight": "$font/weight/heading",
+              "fontFamily": "$font/family/display"
+            },
+            "afoDQ": {
+              "content": "Pas de TVA à l’import",
+              "fontSize": "$font/size/caption"
+            },
+            "fQFG5": {
+              "content": "Le véhicule a plus de 6 mois : aucune TVA à payer en France.",
+              "fontSize": "$font/size/body"
+            },
+            "r5kdE": {
+              "gap": "$space/7",
+              "padding": [
+                "$space/10",
+                0,
+                0,
+                0
+              ]
+            },
+            "wAFYu": {
+              "fontSize": "$font/size/caption",
+              "letterSpacing": "$font/tracking/normal"
+            },
+            "QceQh": {
+              "gap": "$space/7"
+            },
+            "z5v4p": {
+              "icon": "circle-check",
+              "fill": "$color/text/heading-neutral",
+              "width": 14,
+              "height": 14
+            },
+            "lRU4D": {
+              "content": "Première immatriculation (B) : 14/05/2021",
+              "fontSize": "$font/size/caption"
+            },
+            "GLbHa": {
+              "gap": "$space/7"
+            },
+            "VhCzE": {
+              "icon": "circle-check",
+              "fill": "$color/text/heading-neutral",
+              "width": 14,
+              "height": 14
+            },
+            "i9tUap": {
+              "content": "66 mois écoulés, plus de 6 mois",
+              "fontSize": "$font/size/caption"
+            }
+          }
+        },
+        {
+          "id": "u1RgsU",
+          "type": "ref",
+          "ref": "e4JMFF",
+          "name": "Carte sortie · TVA · Due",
+          "width": 290,
+          "height": 290,
+          "padding": "$space/17",
+          "gap": "$space/10",
+          "justifyContent": "space_between",
+          "descendants": {
+            "hldHh": {
+              "gap": "$space/7"
+            },
+            "lj5R9": {
+              "content": "TVA",
+              "fontSize": "$font/size/caption"
+            },
+            "vpOcA": {
+              "fill": "$color/status/warn-bg",
+              "padding": [
+                "$space/3",
+                "$space/10"
+              ],
+              "gap": "$space/7"
+            },
+            "ojU7s": {
+              "fill": "$color/status/warn-text",
+              "width": 6,
+              "height": 6
+            },
+            "slAqr": {
+              "content": "Attention requise",
+              "fill": "$color/status/warn-text",
+              "fontSize": "$font/size/caption"
+            },
+            "yubW2": {
+              "gap": "$space/3"
+            },
+            "REdel": {
+              "content": "Due",
+              "fontSize": "$font/size/heading",
+              "letterSpacing": -1.05,
+              "fontWeight": "$font/weight/heading",
+              "fontFamily": "$font/family/display"
+            },
+            "afoDQ": {
+              "content": "TVA française à payer",
+              "fontSize": "$font/size/caption"
+            },
+            "fQFG5": {
+              "content": "Moins de 6 mois : la TVA est à payer en France, montant non calculé.",
+              "fontSize": "$font/size/body"
+            },
+            "r5kdE": {
+              "gap": "$space/7",
+              "padding": [
+                "$space/10",
+                0,
+                0,
+                0
+              ]
+            },
+            "wAFYu": {
+              "fontSize": "$font/size/caption",
+              "letterSpacing": "$font/tracking/normal"
+            },
+            "QceQh": {
+              "gap": "$space/7"
+            },
+            "z5v4p": {
+              "icon": "circle-check",
+              "fill": "$color/text/heading-neutral",
+              "width": 14,
+              "height": 14
+            },
+            "lRU4D": {
+              "content": "Première immatriculation (B) : 12/07/2026",
+              "fontSize": "$font/size/caption"
+            },
+            "GLbHa": {
+              "gap": "$space/7"
+            },
+            "VhCzE": {
+              "icon": "circle-alert",
+              "fill": "$color/status/warn-text",
+              "width": 14,
+              "height": 14
+            },
+            "i9tUap": {
+              "content": "4 mois écoulés, sous le seuil de 6 mois",
+              "fontSize": "$font/size/caption"
+            }
+          }
+        },
+        {
+          "id": "fT4Wu",
+          "type": "ref",
+          "ref": "e4JMFF",
+          "name": "Carte sortie · TVA · Sans date",
+          "width": 290,
+          "height": 290,
+          "padding": "$space/17",
+          "gap": "$space/10",
+          "justifyContent": "space_between",
+          "descendants": {
+            "hldHh": {
+              "gap": "$space/7"
+            },
+            "lj5R9": {
+              "content": "TVA",
+              "fontSize": "$font/size/caption"
+            },
+            "vpOcA": {
+              "fill": "$color/status/warn-bg",
+              "padding": [
+                "$space/3",
+                "$space/10"
+              ],
+              "gap": "$space/7"
+            },
+            "ojU7s": {
+              "fill": "$color/status/warn-text",
+              "width": 6,
+              "height": 6
+            },
+            "slAqr": {
+              "content": "Attention requise",
+              "fill": "$color/status/warn-text",
+              "fontSize": "$font/size/caption"
+            },
+            "yubW2": {
+              "gap": "$space/3"
+            },
+            "REdel": {
+              "content": "Non calculée",
+              "fontSize": "$font/size/heading",
+              "letterSpacing": -1.05,
+              "fontWeight": "$font/weight/heading",
+              "fontFamily": "$font/family/display"
+            },
+            "afoDQ": {
+              "content": "Date de première immatriculation absente",
+              "fontSize": "$font/size/caption"
+            },
+            "fQFG5": {
+              "content": "Sans la date de première immatriculation, la TVA ne peut pas être calculée.",
+              "fontSize": "$font/size/body"
+            },
+            "r5kdE": {
+              "gap": "$space/7",
+              "padding": [
+                "$space/10",
+                0,
+                0,
+                0
+              ]
+            },
+            "wAFYu": {
+              "fontSize": "$font/size/caption",
+              "letterSpacing": "$font/tracking/normal"
+            },
+            "QceQh": {
+              "gap": "$space/7"
+            },
+            "z5v4p": {
+              "icon": "circle-x",
+              "fill": "$color/status/warn-text",
+              "width": 14,
+              "height": 14
+            },
+            "lRU4D": {
+              "content": "Case B vide ou illisible",
+              "fontSize": "$font/size/caption"
+            },
+            "GLbHa": {
+              "gap": "$space/7"
+            },
+            "VhCzE": {
+              "icon": "camera",
+              "fill": "$color/text/heading-neutral",
+              "width": 14,
+              "height": 14
+            },
+            "i9tUap": {
+              "content": "Reprenez une photo nette de la carte grise",
+              "fontSize": "$font/size/caption"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "EAoWn",
+      "x": 1785.5,
+      "y": -5505,
+      "name": "Carte sortie · Malus · 6 cas",
+      "gap": 24,
+      "children": [
+        {
+          "id": "Ilukl",
+          "type": "ref",
+          "ref": "e4JMFF",
+          "name": "Carte sortie · Malus · Calculé",
+          "width": 290,
+          "height": 290,
+          "padding": "$space/17",
+          "gap": "$space/10",
+          "justifyContent": "space_between",
+          "descendants": {
+            "hldHh": {
+              "gap": "$space/7"
+            },
+            "lj5R9": {
+              "content": "Malus",
+              "fontSize": "$font/size/caption"
+            },
+            "vpOcA": {
+              "fill": "$color/status/ok-bg",
+              "padding": [
+                "$space/3",
+                "$space/10"
+              ],
+              "gap": "$space/7"
+            },
+            "ojU7s": {
+              "fill": "$color/text/heading-lime",
+              "width": 6,
+              "height": 6
+            },
+            "slAqr": {
+              "content": "Concluant",
+              "fill": "$color/text/heading-lime",
+              "fontSize": "$font/size/caption"
+            },
+            "yubW2": {
+              "gap": "$space/3"
+            },
+            "REdel": {
+              "content": "2 914 €",
+              "fontSize": "$font/size/heading",
+              "letterSpacing": -1.05,
+              "fontWeight": "$font/weight/heading",
+              "fontFamily": "$font/family/display"
+            },
+            "afoDQ": {
+              "content": "Malus CO₂ et masse à payer",
+              "fontSize": "$font/size/caption"
+            },
+            "fQFG5": {
+              "content": "Malus calculé sur le barème de l’année d’immatriculation, décote comprise.",
+              "fontSize": "$font/size/body"
+            },
+            "r5kdE": {
+              "gap": "$space/7",
+              "padding": [
+                "$space/10",
+                0,
+                0,
+                0
+              ]
+            },
+            "wAFYu": {
+              "fontSize": "$font/size/caption",
+              "letterSpacing": "$font/tracking/normal"
+            },
+            "QceQh": {
+              "gap": "$space/7"
+            },
+            "z5v4p": {
+              "icon": "circle-check",
+              "fill": "$color/text/heading-neutral",
+              "width": 14,
+              "height": 14
+            },
+            "lRU4D": {
+              "content": "CO₂ : 168 g/km · masse : 1 640 kg",
+              "fontSize": "$font/size/caption"
+            },
+            "GLbHa": {
+              "gap": "$space/7"
+            },
+            "VhCzE": {
+              "icon": "circle-check",
+              "fill": "$color/text/heading-neutral",
+              "width": 14,
+              "height": 14
+            },
+            "i9tUap": {
+              "content": "Décote d’ancienneté de 22 % appliquée",
+              "fontSize": "$font/size/caption"
+            }
+          }
+        },
+        {
+          "id": "R2iZRp",
+          "type": "ref",
+          "ref": "e4JMFF",
+          "name": "Carte sortie · Malus · Exonéré · ancienneté",
+          "width": 290,
+          "height": 290,
+          "padding": "$space/17",
+          "gap": "$space/10",
+          "justifyContent": "space_between",
+          "descendants": {
+            "hldHh": {
+              "gap": "$space/7"
+            },
+            "lj5R9": {
+              "content": "Malus",
+              "fontSize": "$font/size/caption"
+            },
+            "vpOcA": {
+              "fill": "$color/status/ok-bg",
+              "padding": [
+                "$space/3",
+                "$space/10"
+              ],
+              "gap": "$space/7"
+            },
+            "ojU7s": {
+              "fill": "$color/text/heading-lime",
+              "width": 6,
+              "height": 6
+            },
+            "slAqr": {
+              "content": "Concluant",
+              "fill": "$color/text/heading-lime",
+              "fontSize": "$font/size/caption"
+            },
+            "yubW2": {
+              "gap": "$space/3"
+            },
+            "REdel": {
+              "content": "Exonéré",
+              "fontSize": "$font/size/heading",
+              "letterSpacing": -1.05,
+              "fontWeight": "$font/weight/heading",
+              "fontFamily": "$font/family/display"
+            },
+            "afoDQ": {
+              "content": "Véhicule de plus de 15 ans",
+              "fontSize": "$font/size/caption"
+            },
+            "fQFG5": {
+              "content": "Le véhicule a plus de 15 ans : aucun malus à payer.",
+              "fontSize": "$font/size/body"
+            },
+            "r5kdE": {
+              "gap": "$space/7",
+              "padding": [
+                "$space/10",
+                0,
+                0,
+                0
+              ]
+            },
+            "wAFYu": {
+              "fontSize": "$font/size/caption",
+              "letterSpacing": "$font/tracking/normal"
+            },
+            "QceQh": {
+              "gap": "$space/7"
+            },
+            "z5v4p": {
+              "icon": "circle-check",
+              "fill": "$color/text/heading-neutral",
+              "width": 14,
+              "height": 14
+            },
+            "lRU4D": {
+              "content": "Première immatriculation (B) : 03/2010",
+              "fontSize": "$font/size/caption"
+            },
+            "GLbHa": {
+              "gap": "$space/7"
+            },
+            "VhCzE": {
+              "icon": "circle-check",
+              "fill": "$color/text/heading-neutral",
+              "width": 14,
+              "height": 14
+            },
+            "i9tUap": {
+              "content": "200 mois écoulés, au-delà de 180",
+              "fontSize": "$font/size/caption"
+            }
+          }
+        },
+        {
+          "id": "Vb5BP",
+          "type": "ref",
+          "ref": "e4JMFF",
+          "name": "Carte sortie · Malus · Exonéré · avant 2015",
+          "width": 290,
+          "height": 290,
+          "padding": "$space/17",
+          "gap": "$space/10",
+          "justifyContent": "space_between",
+          "descendants": {
+            "hldHh": {
+              "gap": "$space/7"
+            },
+            "lj5R9": {
+              "content": "Malus",
+              "fontSize": "$font/size/caption"
+            },
+            "vpOcA": {
+              "fill": "$color/status/ok-bg",
+              "padding": [
+                "$space/3",
+                "$space/10"
+              ],
+              "gap": "$space/7"
+            },
+            "ojU7s": {
+              "fill": "$color/text/heading-lime",
+              "width": 6,
+              "height": 6
+            },
+            "slAqr": {
+              "content": "Concluant",
+              "fill": "$color/text/heading-lime",
+              "fontSize": "$font/size/caption"
+            },
+            "yubW2": {
+              "gap": "$space/3"
+            },
+            "REdel": {
+              "content": "Exonéré",
+              "fontSize": "$font/size/heading",
+              "letterSpacing": -1.05,
+              "fontWeight": "$font/weight/heading",
+              "fontFamily": "$font/family/display"
+            },
+            "afoDQ": {
+              "content": "Immatriculé avant 2015",
+              "fontSize": "$font/size/caption"
+            },
+            "fQFG5": {
+              "content": "Première immatriculation avant le 1er janvier 2015 : aucun malus à payer.",
+              "fontSize": "$font/size/body"
+            },
+            "r5kdE": {
+              "gap": "$space/7",
+              "padding": [
+                "$space/10",
+                0,
+                0,
+                0
+              ]
+            },
+            "wAFYu": {
+              "fontSize": "$font/size/caption",
+              "letterSpacing": "$font/tracking/normal"
+            },
+            "QceQh": {
+              "gap": "$space/7"
+            },
+            "z5v4p": {
+              "icon": "circle-check",
+              "fill": "$color/text/heading-neutral",
+              "width": 14,
+              "height": 14
+            },
+            "lRU4D": {
+              "content": "Première immatriculation (B) : 12/03/2014",
+              "fontSize": "$font/size/caption"
+            },
+            "GLbHa": {
+              "gap": "$space/7"
+            },
+            "VhCzE": {
+              "icon": "circle-check",
+              "fill": "$color/text/heading-neutral",
+              "width": 14,
+              "height": 14
+            },
+            "i9tUap": {
+              "content": "Exonéré même si CO₂ et masse sont lus",
+              "fontSize": "$font/size/caption"
+            }
+          }
+        },
+        {
+          "id": "l7R1Zx",
+          "type": "ref",
+          "ref": "e4JMFF",
+          "name": "Carte sortie · Malus · Partiel",
+          "width": 290,
+          "height": 290,
+          "padding": "$space/17",
+          "gap": "$space/10",
+          "justifyContent": "space_between",
+          "descendants": {
+            "hldHh": {
+              "gap": "$space/7"
+            },
+            "lj5R9": {
+              "content": "Malus",
+              "fontSize": "$font/size/caption"
+            },
+            "vpOcA": {
+              "fill": "$color/status/warn-bg",
+              "padding": [
+                "$space/3",
+                "$space/10"
+              ],
+              "gap": "$space/7"
+            },
+            "ojU7s": {
+              "fill": "$color/status/warn-text",
+              "width": 6,
+              "height": 6
+            },
+            "slAqr": {
+              "content": "Attention requise",
+              "fill": "$color/status/warn-text",
+              "fontSize": "$font/size/caption"
+            },
+            "yubW2": {
+              "gap": "$space/3"
+            },
+            "REdel": {
+              "content": "1 420 €",
+              "fontSize": "$font/size/heading",
+              "letterSpacing": -1.05,
+              "fontWeight": "$font/weight/heading",
+              "fontFamily": "$font/family/display"
+            },
+            "afoDQ": {
+              "content": "Estimé sans la masse",
+              "fontSize": "$font/size/caption"
+            },
+            "fQFG5": {
+              "content": "Le malus au poids n’est pas compté : le montant peut être plus élevé.",
+              "fontSize": "$font/size/body"
+            },
+            "r5kdE": {
+              "gap": "$space/7",
+              "padding": [
+                "$space/10",
+                0,
+                0,
+                0
+              ]
+            },
+            "wAFYu": {
+              "fontSize": "$font/size/caption",
+              "letterSpacing": "$font/tracking/normal"
+            },
+            "QceQh": {
+              "gap": "$space/7"
+            },
+            "z5v4p": {
+              "icon": "circle-check",
+              "fill": "$color/text/heading-neutral",
+              "width": 14,
+              "height": 14
+            },
+            "lRU4D": {
+              "content": "CO₂ (V.7) : 152 g/km",
+              "fontSize": "$font/size/caption"
+            },
+            "GLbHa": {
+              "gap": "$space/7"
+            },
+            "VhCzE": {
+              "icon": "circle-alert",
+              "fill": "$color/status/warn-text",
+              "width": 14,
+              "height": 14
+            },
+            "i9tUap": {
+              "content": "Masse (case G) non lue, comptée pour 0",
+              "fontSize": "$font/size/caption"
+            }
+          }
+        },
+        {
+          "id": "qIybR",
+          "type": "ref",
+          "ref": "e4JMFF",
+          "name": "Carte sortie · Malus · Sans date",
+          "width": 290,
+          "height": 290,
+          "padding": "$space/17",
+          "gap": "$space/10",
+          "justifyContent": "space_between",
+          "descendants": {
+            "hldHh": {
+              "gap": "$space/7"
+            },
+            "lj5R9": {
+              "content": "Malus",
+              "fontSize": "$font/size/caption"
+            },
+            "vpOcA": {
+              "fill": "$color/status/warn-bg",
+              "padding": [
+                "$space/3",
+                "$space/10"
+              ],
+              "gap": "$space/7"
+            },
+            "ojU7s": {
+              "fill": "$color/status/warn-text",
+              "width": 6,
+              "height": 6
+            },
+            "slAqr": {
+              "content": "Attention requise",
+              "fill": "$color/status/warn-text",
+              "fontSize": "$font/size/caption"
+            },
+            "yubW2": {
+              "gap": "$space/3"
+            },
+            "REdel": {
+              "content": "Non calculé",
+              "fontSize": "$font/size/heading",
+              "letterSpacing": -1.05,
+              "fontWeight": "$font/weight/heading",
+              "fontFamily": "$font/family/display"
+            },
+            "afoDQ": {
+              "content": "Date de première immatriculation absente",
+              "fontSize": "$font/size/caption"
+            },
+            "fQFG5": {
+              "content": "Sans la date de première immatriculation, le malus ne peut pas être calculé.",
+              "fontSize": "$font/size/body"
+            },
+            "r5kdE": {
+              "gap": "$space/7",
+              "padding": [
+                "$space/10",
+                0,
+                0,
+                0
+              ]
+            },
+            "wAFYu": {
+              "fontSize": "$font/size/caption",
+              "letterSpacing": "$font/tracking/normal"
+            },
+            "QceQh": {
+              "gap": "$space/7"
+            },
+            "z5v4p": {
+              "icon": "circle-x",
+              "fill": "$color/status/warn-text",
+              "width": 14,
+              "height": 14
+            },
+            "lRU4D": {
+              "content": "Case B vide ou illisible",
+              "fontSize": "$font/size/caption"
+            },
+            "GLbHa": {
+              "gap": "$space/7"
+            },
+            "VhCzE": {
+              "icon": "camera",
+              "fill": "$color/text/heading-neutral",
+              "width": 14,
+              "height": 14
+            },
+            "i9tUap": {
+              "content": "Reprenez une photo nette de la carte grise",
+              "fontSize": "$font/size/caption"
+            }
+          }
+        },
+        {
+          "id": "RrsDQ",
+          "type": "ref",
+          "ref": "e4JMFF",
+          "name": "Carte sortie · Malus · Sans mesure",
+          "width": 290,
+          "height": 290,
+          "padding": "$space/17",
+          "gap": "$space/10",
+          "justifyContent": "space_between",
+          "descendants": {
+            "hldHh": {
+              "gap": "$space/7"
+            },
+            "lj5R9": {
+              "content": "Malus",
+              "fontSize": "$font/size/caption"
+            },
+            "vpOcA": {
+              "fill": "$color/status/warn-bg",
+              "padding": [
+                "$space/3",
+                "$space/10"
+              ],
+              "gap": "$space/7"
+            },
+            "ojU7s": {
+              "fill": "$color/status/warn-text",
+              "width": 6,
+              "height": 6
+            },
+            "slAqr": {
+              "content": "Attention requise",
+              "fill": "$color/status/warn-text",
+              "fontSize": "$font/size/caption"
+            },
+            "yubW2": {
+              "gap": "$space/3"
+            },
+            "REdel": {
+              "content": "Non calculé",
+              "fontSize": "$font/size/heading",
+              "letterSpacing": -1.05,
+              "fontWeight": "$font/weight/heading",
+              "fontFamily": "$font/family/display"
+            },
+            "afoDQ": {
+              "content": "Ni CO₂ ni masse lus",
+              "fontSize": "$font/size/caption"
+            },
+            "fQFG5": {
+              "content": "Il faut au moins le CO₂ ou la masse pour calculer le malus.",
+              "fontSize": "$font/size/body"
+            },
+            "r5kdE": {
+              "gap": "$space/7",
+              "padding": [
+                "$space/10",
+                0,
+                0,
+                0
+              ]
+            },
+            "wAFYu": {
+              "fontSize": "$font/size/caption",
+              "letterSpacing": "$font/tracking/normal"
+            },
+            "QceQh": {
+              "gap": "$space/7"
+            },
+            "z5v4p": {
+              "icon": "circle-check",
+              "fill": "$color/text/heading-neutral",
+              "width": 14,
+              "height": 14
+            },
+            "lRU4D": {
+              "content": "Première immatriculation (B) : 09/2019",
+              "fontSize": "$font/size/caption"
+            },
+            "GLbHa": {
+              "gap": "$space/7"
+            },
+            "VhCzE": {
+              "icon": "circle-x",
+              "fill": "$color/status/warn-text",
+              "width": 14,
+              "height": 14
+            },
+            "i9tUap": {
+              "content": "Cases V.7 et G vides",
+              "fontSize": "$font/size/caption"
+            }
+          }
+        }
+      ]
     }
   ],
   "variables": {
@@ -28485,6 +30432,26 @@
     "blur/glass-button": {
       "type": "number",
       "value": 12
+    },
+    "color/status/error-bg": {
+      "type": "color",
+      "value": "#FBE2DF"
+    },
+    "color/status/error-text": {
+      "type": "color",
+      "value": "#9A1B12"
+    },
+    "font/size/caption": {
+      "type": "number",
+      "value": 12
+    },
+    "color/glass/fill-neutral": {
+      "type": "color",
+      "value": "#F4F6F2B3"
+    },
+    "blur/glass": {
+      "type": "number",
+      "value": 17.6
     }
   },
   "fileToken": "a1b83ee6-abf6-4302-9617-6b6d053813e3",

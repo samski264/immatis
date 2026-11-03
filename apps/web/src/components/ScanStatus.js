@@ -38,7 +38,7 @@ export default function ScanStatus() {
   return (
     <div className={show ? styles.anchor : styles.rest} role="status" aria-live="polite">
       {show ? (
-        <div key={status} className={styles.card}>
+        <div key={status} className={styles.card} data-frost="">
           <div className={styles.row}>
             <Mark status={status} />
             <p className={styles.title}>{copy.title}</p>

@@ -9,18 +9,14 @@ import cheval from './json/cheval.json' with {type: "json"}
 //Reception
 
 export function getReception(certificate: CarCertificate): DrealStatus {
-    if (certificate.K != null) {   //do the car have a reception ?
-        return null
-    }
-    return isAnAVDT(certificate)
+    const receptionCE = certificate.K != null
+    const categorie = certificate.J === "M1" || certificate.J === "N1"
+    return receptionCE && categorie && quinzeChamps(certificate) ? "AVDT" : "RTI"
 }
 
-function isAnAVDT(certificate: CarCertificate): DrealStatus {
-    const { K, J, "V.7": v7, "V.9": v9, ...rest } = certificate    //destructuration for requiered and minimal RTI/AVDT fields 
-    for (const valeur of Object.values(rest)) {
-        if (valeur == null) return 'RTI'
-    }
-    return 'AVDT'
+function quinzeChamps(certificate: CarCertificate): boolean {
+    const { K, J, "V.7": v7, "V.9": v9, ...rest } = certificate
+    return Object.values(rest).every((valeur) => valeur != null)
 }
 
 

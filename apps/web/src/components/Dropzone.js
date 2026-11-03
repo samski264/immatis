@@ -108,6 +108,7 @@ export default function Dropzone({
     <div className={`${styles.stack} ${className ?? ""}`}>
       <div
         className={`${styles.zone} ${over ? styles.over : ""} ${reading ? styles.reading : ""}`}
+        data-frost=""
         role="button"
         tabIndex={reading ? -1 : 0}
         aria-busy={reading}
@@ -165,6 +166,7 @@ export default function Dropzone({
       <button
         type="button"
         className={styles.example}
+        data-frost=""
         disabled={reading || !onExample}
         onClick={(event) => {
           event.stopPropagation();

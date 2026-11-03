@@ -104,7 +104,7 @@ const CHROME = {
       },
     ],
     reading: {
-      label: "Voie d'immatriculation",
+      label: "Homologation",
       status: "Concluant",
       value: "AVDT",
       consequence: "Attestation à 67,38 €.",
@@ -154,7 +154,7 @@ const CHROME = {
       },
     ],
     reading: {
-      label: "Voie d'immatriculation",
+      label: "Homologation",
       status: "Concluant",
       value: "AVDT",
       consequence: "Attestation à 67,38 €.",
@@ -200,7 +200,7 @@ const CHROME = {
       },
     ],
     reading: {
-      label: "Voie d'immatriculation",
+      label: "Homologation",
       status: "Concluant",
       value: "RTI",
       consequence: "Réception à titre isolé.",

@@ -12,6 +12,7 @@
   --color-surface-overlay: #ffffff03;
   --color-surface-glass: #ffffff4d;
   --color-surface-glass-hover: #ffffff73;
+  --color-glass-fill-neutral: #f4f6f2b3;
   --color-surface-card-neutral: #e7e7e7;
   --color-surface-card-lime: #c8f57a;
   --color-surface-card-sky: #d9f3ff;
@@ -81,6 +82,7 @@
 
   --blur-hero: 12.9;
   --blur-glass: 17.6;
+  --blur-glass-button: 12;
   --blur-text: 2;
 
   --effect-inner-glass: inset 0 0 calc(18 * var(--u)) calc(16 * var(--u)) rgb(255 255 255 / 25%);

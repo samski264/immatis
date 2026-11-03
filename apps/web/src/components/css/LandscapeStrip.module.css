@@ -11,24 +11,3 @@
   pointer-events: none;
   overflow: visible;
 }
-
-.road {
-  fill: none;
-  stroke: var(--road-color, var(--color-bg-page));
-  stroke-width: 8;
-  opacity: 0.94;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.arrow path {
-  stroke: var(--color-bg-page);
-  stroke-width: 2.2;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 2px 4px var(--color-shadow-road));
-}
-
-/* En GPS la flèche est déjà dans le plan du sol : pas d'ombre écran. */
-.gps .arrow path {
-  filter: none;
-}

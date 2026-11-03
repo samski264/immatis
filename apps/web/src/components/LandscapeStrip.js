@@ -71,6 +71,235 @@ const ARROW_X = 0.35; // position horizontale de la flèche (fraction de la larg
 const ARROW_D =
   "M0 -14 C1.2 -14 2.2 -13.2 2.8 -11.9 L12.2 8.2 C13.2 10.4 11.1 12.8 8.8 11.8 L1.2 8.4 C0.4 8.1 -0.4 8.1 -1.2 8.4 L-8.8 11.8 C-11.1 12.8 -13.2 10.4 -12.2 8.2 L-2.8 -11.9 C-2.2 -13.2 -1.2 -14 0 -14 Z";
 
+// Écart-type du flou CSS (blur(17,6 px) → σ = 8,8). Fait dans le canvas : un backdrop-filter
+// au-dessus d'une surface qui change à chaque image est recalculé par WindowServer.
+const FROST_SIGMA = 8.8;
+
+const BLIT_VS = `#version 300 es
+out vec2 vUv;
+void main() {
+  vec2 p = vec2(float((gl_VertexID << 1) & 2), float(gl_VertexID & 2));
+  vUv = p;
+  gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0);
+}`;
+
+// 9 texels en 5 lectures bilinéaires (Jam3). uTexel est déjà en UV, multiplié par σ.
+const BLUR_FS = `#version 300 es
+precision highp float;
+uniform sampler2D uTex;
+uniform vec2 uTexel;
+in vec2 vUv;
+out vec4 outColor;
+void main() {
+  vec4 color = texture(uTex, vUv) * 0.2270270270;
+  vec2 off1 = 1.3846153846 * uTexel;
+  vec2 off2 = 3.2307692308 * uTexel;
+  color += texture(uTex, vUv + off1) * 0.3162162162;
+  color += texture(uTex, vUv - off1) * 0.3162162162;
+  color += texture(uTex, vUv + off2) * 0.0702702703;
+  color += texture(uTex, vUv - off2) * 0.0702702703;
+  outColor = color;
+}`;
+
+const PRESENT_FS = `#version 300 es
+precision highp float;
+uniform sampler2D uSharp;
+uniform sampler2D uBlur;
+uniform vec2 uResolution;
+uniform vec4 uRect[4];
+uniform float uRadius[4];
+uniform float uCover[4];
+uniform vec2 uVeil;
+uniform int uBlurOn;
+in vec2 vUv;
+out vec4 outColor;
+
+float frost(vec2 p, vec4 r, float rad) {
+  if (r.z < 1.0 || r.w < 1.0) return 0.0;
+  rad = min(rad, min(r.z, r.w) * 0.5);
+  vec2 c = r.xy + r.zw * 0.5;
+  vec2 h = max(r.zw * 0.5 - vec2(rad), vec2(0.0));
+  vec2 q = abs(p - c) - h;
+  float dist = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - rad;
+  return 1.0 - smoothstep(-0.75, 0.75, dist);
+}
+
+void main() {
+  vec3 sharp = texture(uSharp, vUv).rgb;
+  if (uBlurOn == 0) {
+    outColor = vec4(sharp, 1.0);
+    return;
+  }
+  vec2 p = vec2(gl_FragCoord.x, uResolution.y - gl_FragCoord.y);
+  float mask = 0.0;
+  if (uVeil.y > 0.0) mask = 1.0 - smoothstep(uVeil.x, max(uVeil.y, uVeil.x + 1.0), p.y);
+  mask = max(mask, frost(p, uRect[0], uRadius[0]) * uCover[0]);
+  mask = max(mask, frost(p, uRect[1], uRadius[1]) * uCover[1]);
+  mask = max(mask, frost(p, uRect[2], uRadius[2]) * uCover[2]);
+  mask = max(mask, frost(p, uRect[3], uRadius[3]) * uCover[3]);
+  vec3 blurred = texture(uBlur, vUv).rgb;
+  outColor = vec4(mix(sharp, blurred, clamp(mask, 0.0, 1.0)), 1.0);
+}`;
+
+// Tracé et flèche, dans la cible de la scène. vOut est la distance au-delà du bord
+// idéal : négatif à l'intérieur, uFeather sur le contour élargi. Le fondu tient
+// lieu d'anticrénelage.
+const INK_FEATHER = 0.85;
+const INK_VS = `#version 300 es
+layout(location = 0) in vec2 aPos;
+layout(location = 1) in vec4 aColor;
+layout(location = 2) in float aOut;
+uniform vec2 uResolution;
+out vec4 vColor;
+out float vOut;
+void main() {
+  vec2 ndc = vec2(aPos.x / uResolution.x * 2.0 - 1.0, 1.0 - aPos.y / uResolution.y * 2.0);
+  gl_Position = vec4(ndc, 0.0, 1.0);
+  vColor = aColor;
+  vOut = aOut;
+}`;
+const INK_FS = `#version 300 es
+precision highp float;
+uniform float uFeather;
+in vec4 vColor;
+in float vOut;
+out vec4 outColor;
+void main() {
+  outColor = vColor * (1.0 - smoothstep(0.0, uFeather, vOut));
+}`;
+
+function hexRgb(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
+}
+
+function premul(rgb, a) {
+  return [rgb[0] * a, rgb[1] * a, rgb[2] * a, a];
+}
+
+// Bandeau d'épaisseur constante. Les jointures trop vives sont biseautées,
+// les extrémités sont des demi-disques.
+function appendStroke(points, half, color, closed, vert) {
+  let n = points.length;
+  if (n < 2) return;
+  if (closed) {
+    const a = points[0];
+    const b = points[n - 1];
+    if (Math.hypot(a.x - b.x, a.y - b.y) < 0.4) n -= 1;
+    if (n < 3) return;
+  }
+  const segCount = closed ? n : n - 1;
+  const segs = new Array(segCount);
+  for (let i = 0; i < segCount; i++) {
+    const a = points[i];
+    const b = points[(i + 1) % n];
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    const len = Math.hypot(dx, dy) || 1e-4;
+    segs[i] = { dx: dx / len, dy: dy / len, nx: -dy / len, ny: dx / len };
+  }
+  const rad = half + INK_FEATHER;
+  const rim = (x, y) => ({ x, y, o: INK_FEATHER });
+  const hub = (p) => ({ x: p.x, y: p.y, o: -half });
+  const tri = (a, b, c) => {
+    vert(a.x, a.y, color, a.o);
+    vert(b.x, b.y, color, b.o);
+    vert(c.x, c.y, color, c.o);
+  };
+  const along = (p, seg) => ({
+    L: rim(p.x + seg.nx * rad, p.y + seg.ny * rad),
+    R: rim(p.x - seg.nx * rad, p.y - seg.ny * rad),
+  });
+  const offsets = new Array(n);
+  for (let i = 0; i < n; i++) {
+    const incoming = closed || i > 0 ? segs[(i - 1 + segCount) % segCount] : null;
+    const outgoing = closed || i < n - 1 ? segs[i % segCount] : null;
+    const p = points[i];
+    if (incoming && outgoing) {
+      const dot = incoming.nx * outgoing.nx + incoming.ny * outgoing.ny;
+      const denom = 1 + dot;
+      if (denom > 0.3) {
+        const s = rad / denom;
+        const mx = (incoming.nx + outgoing.nx) * s;
+        const my = (incoming.ny + outgoing.ny) * s;
+        if (mx * mx + my * my <= rad * rad * 2.25) {
+          const L = rim(p.x + mx, p.y + my);
+          const R = rim(p.x - mx, p.y - my);
+          offsets[i] = { inL: L, inR: R, outL: L, outR: R };
+          continue;
+        }
+      }
+      const inn = along(p, incoming);
+      const out = along(p, outgoing);
+      offsets[i] = { inL: inn.L, inR: inn.R, outL: out.L, outR: out.R, bevel: true, p };
+      continue;
+    }
+    const side = along(p, outgoing || incoming);
+    offsets[i] = { inL: side.L, inR: side.R, outL: side.L, outR: side.R };
+  }
+  for (let i = 0; i < segCount; i++) {
+    const i1 = (i + 1) % n;
+    const a = offsets[i];
+    const b = offsets[i1];
+    const c0 = hub(points[i]);
+    const c1 = hub(points[i1]);
+    tri(c0, a.outL, b.inL);
+    tri(c0, b.inL, c1);
+    tri(c0, b.inR, a.outR);
+    tri(c0, c1, b.inR);
+    if (b.bevel) {
+      const prev = segs[i];
+      const next = segs[i1 % segCount];
+      const cross = prev.dx * next.dy - prev.dy * next.dx;
+      if (cross >= 0) tri(c1, b.inR, b.outR);
+      else tri(c1, b.outL, b.inL);
+    }
+  }
+  if (closed) return;
+  const cap = (index, seg, outward) => {
+    const p = points[index];
+    const c = hub(p);
+    const lx = seg.nx * rad;
+    const ly = seg.ny * rad;
+    const sign = lx * outward.y - ly * outward.x >= 0 ? 1 : -1;
+    let prev = rim(p.x + lx, p.y + ly);
+    for (let s = 1; s <= 6; s++) {
+      const ang = (sign * Math.PI * s) / 6;
+      const co = Math.cos(ang);
+      const sn = Math.sin(ang);
+      const curr = rim(p.x + lx * co - ly * sn, p.y + lx * sn + ly * co);
+      tri(c, prev, curr);
+      prev = curr;
+    }
+  };
+  cap(0, segs[0], { x: -segs[0].dx, y: -segs[0].dy });
+  cap(n - 1, segs[segCount - 1], { x: segs[segCount - 1].dx, y: segs[segCount - 1].dy });
+}
+
+function appendFan(points, colorOf, vert) {
+  const n = points.length;
+  if (n < 3) return;
+  let cx = 0;
+  let cy = 0;
+  let ck = 0;
+  for (const p of points) {
+    cx += p.x;
+    cy += p.y;
+    ck += p.k;
+  }
+  cx /= n;
+  cy /= n;
+  ck /= n;
+  const cc = colorOf(ck);
+  for (let i = 0; i < n; i++) {
+    const a = points[i];
+    const b = points[(i + 1) % n];
+    vert(cx, cy, cc, -100);
+    vert(a.x, a.y, colorOf(a.k), -100);
+    vert(b.x, b.y, colorOf(b.k), -100);
+  }
+}
+
 // Position affichée d'une particule : sa tuile défile et boucle sur la longueur totale.
 // Route : spline échantillonnée sur la boucle, lue avec interpolation linéaire.
 // La route est une texture (texelFetch). Un tableau uniform indexé par un entier
@@ -260,9 +489,6 @@ void main() {
 export default function LandscapeStrip({ motion }) {
   const rootRef = useRef(null);
   const canvasRef = useRef(null);
-  const roadRef = useRef(null);
-  const arrowRef = useRef(null);
-  const svgRef = useRef(null);
   // `motion` est un ref stable tenu par RouteStage : la boucle lit flight / rush sans re-render
   const motionRef = useRef(motion);
   motionRef.current = motion;
@@ -270,8 +496,17 @@ export default function LandscapeStrip({ motion }) {
   useEffect(() => {
     const root = rootRef.current;
     const canvas = canvasRef.current;
-    const gl = canvas.getContext("webgl2", { antialias: false });
+    // Opaque : WindowServer copie la surface au lieu de la recomposer pixel par pixel.
+    // Le fond de page est blanc, les trous des glyphes aussi.
+    const gl = canvas.getContext("webgl2", {
+      alpha: false,
+      antialias: false,
+      depth: false,
+      stencil: false,
+    });
     if (!gl) return;
+    const vao = gl.createVertexArray();
+    gl.bindVertexArray(vao);
 
     let disposed = false;
     let raf = 0;
@@ -323,6 +558,201 @@ export default function LandscapeStrip({ motion }) {
       "uMouse", "uHover", "uTime", "uReach", "uCore", "uRippleFreq", "uRippleSpeed", "uRippleAmp", "uSwirl", "uGrow",
       ...GRADE_UNIFORMS,
     ]);
+
+    const blurPrg = createProgram(gl, BLIT_VS, BLUR_FS);
+    const presentPrg = createProgram(gl, BLIT_VS, PRESENT_FS);
+    const blitVao = gl.createVertexArray();
+    const blurU = uniforms(blurPrg, ["uTex", "uTexel"]);
+    const presentU = uniforms(presentPrg, [
+      "uSharp", "uBlur", "uResolution", "uRect", "uRadius", "uCover", "uVeil", "uBlurOn",
+    ]);
+    gl.useProgram(blurPrg);
+    gl.uniform1i(blurU.uTex, 1);
+    gl.useProgram(presentPrg);
+    gl.uniform1i(presentU.uSharp, 1);
+    gl.uniform1i(presentU.uBlur, 3);
+
+    const inkPrg = createProgram(gl, INK_VS, INK_FS);
+    const inkU = uniforms(inkPrg, ["uResolution", "uFeather"]);
+    const inkVao = gl.createVertexArray();
+    const inkBuf = gl.createBuffer();
+    gl.bindVertexArray(inkVao);
+    gl.bindBuffer(gl.ARRAY_BUFFER, inkBuf);
+    gl.bufferData(gl.ARRAY_BUFFER, 4, gl.DYNAMIC_DRAW);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 28, 0);
+    gl.enableVertexAttribArray(1);
+    gl.vertexAttribPointer(1, 4, gl.FLOAT, false, 28, 8);
+    gl.enableVertexAttribArray(2);
+    gl.vertexAttribPointer(2, 1, gl.FLOAT, false, 28, 24);
+    gl.bindVertexArray(vao);
+    let ink = new Float32Array(1 << 16);
+    let inkN = 0;
+    const inkVert = (x, y, color, out) => {
+      const o = inkN * 7;
+      if (o + 7 > ink.length) {
+        const next = new Float32Array(ink.length * 2);
+        next.set(ink);
+        ink = next;
+      }
+      ink[o] = x;
+      ink[o + 1] = y;
+      ink[o + 2] = color[0];
+      ink[o + 3] = color[1];
+      ink[o + 4] = color[2];
+      ink[o + 5] = color[3];
+      ink[o + 6] = out;
+      inkN += 1;
+    };
+    const arrowLight = hexRgb(lighten(SETTINGS.arrow, 0.45));
+    const arrowDark = hexRgb(SETTINGS.arrow);
+
+    const makeTarget = (w, h) => {
+      const tex = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+      const fbo = gl.createFramebuffer();
+      gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      return { tex, fbo, w, h };
+    };
+    const dropTarget = (target) => {
+      if (!target) return;
+      gl.deleteTexture(target.tex);
+      gl.deleteFramebuffer(target.fbo);
+    };
+    let scene = null;
+    let blurA = null;
+    let blurB = null;
+    const ensureTargets = (w, h) => {
+      if (!scene || scene.w !== w || scene.h !== h) {
+        dropTarget(scene);
+        scene = makeTarget(w, h);
+      }
+      const bw = Math.max(1, w >> 1);
+      const bh = Math.max(1, h >> 1);
+      if (!blurA || blurA.w !== bw || blurA.h !== bh) {
+        dropTarget(blurA);
+        dropTarget(blurB);
+        blurA = makeTarget(bw, bh);
+        blurB = makeTarget(bw, bh);
+      }
+    };
+    const rectData = new Float32Array(16);
+    const radData = new Float32Array(4);
+    const coverData = new Float32Array(4);
+
+    // L'opacité CSS se multiplie le long des ancêtres. L'animation d'arrivée ou
+    // de départ est sur un parent : sans ça, le flou du canvas reste plein
+    // pendant que la vitre disparaît.
+    const frostCover = (node) => {
+      let cover = 1;
+      for (let el = node; el; el = el.parentElement) {
+        const style = getComputedStyle(el);
+        if (style.visibility === "hidden" || style.contentVisibility === "hidden") return 0;
+        cover *= Number(style.opacity);
+        if (cover < 0.004) return 0;
+      }
+      return cover;
+    };
+
+    // Vrai si une animation CSS déplace ou efface une vitre (elle-même ou un ancêtre).
+    const frostLive = () => {
+      for (const anim of document.getAnimations()) {
+        const el = anim.effect?.target;
+        if (!el?.querySelector) continue;
+        if (el.hasAttribute("data-frost") || el.querySelector("[data-frost]")) return true;
+      }
+      return false;
+    };
+
+    // Le flou des vitres et du haut de bande est peint ici. WindowServer ne reçoit
+    // qu'une surface opaque, sans backdrop-filter à recalculer à chaque image.
+    const present = (view, live) => {
+      const w = canvas.width;
+      const h = canvas.height;
+      const sx = view.width > 0 ? w / view.width : 1;
+      const sy = view.height > 0 ? h / view.height : 1;
+      let count = 0;
+      for (const node of document.querySelectorAll("[data-frost]")) {
+        if (count >= 4) break;
+        const box = node.getBoundingClientRect();
+        if (box.width < 2 || box.height < 2) continue;
+        const cover = frostCover(node);
+        if (cover <= 0) continue;
+        if (
+          box.right <= view.left ||
+          box.left >= view.right ||
+          box.bottom <= view.top ||
+          box.top >= view.bottom
+        ) {
+          continue;
+        }
+        const i = count * 4;
+        rectData[i] = (box.left - view.left) * sx;
+        rectData[i + 1] = (box.top - view.top) * sy;
+        rectData[i + 2] = box.width * sx;
+        rectData[i + 3] = box.height * sy;
+        radData[count] = (parseFloat(getComputedStyle(node).borderTopLeftRadius) || 0) * sx;
+        coverData[count] = cover;
+        count += 1;
+      }
+      for (let i = count; i < 4; i += 1) {
+        rectData[i * 4 + 2] = 0;
+        radData[i] = 0;
+        coverData[i] = 0;
+      }
+      let veilSolid = -1;
+      let veilGone = -1;
+      if ((live?.veil ?? 0) > 0.5) {
+        const raw = 220 + ((window.innerWidth - 390) * 297) / 1338;
+        const veilH = Math.min(517, Math.max(200, raw));
+        veilSolid = (veilH * 0.35 - view.top) * sy;
+        veilGone = (veilH * 0.97 - view.top) * sy;
+      }
+      const blurOn = count > 0 || veilGone > 0;
+      gl.bindVertexArray(blitVao);
+      gl.disable(gl.BLEND);
+      if (blurOn) {
+        const sigma = FROST_SIGMA * sy;
+        gl.useProgram(blurPrg);
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, blurA.fbo);
+        gl.bindTexture(gl.TEXTURE_2D, scene.tex);
+        gl.viewport(0, 0, blurA.w, blurA.h);
+        gl.uniform2f(blurU.uTexel, sigma / w, 0);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, blurB.fbo);
+        gl.bindTexture(gl.TEXTURE_2D, blurA.tex);
+        gl.viewport(0, 0, blurB.w, blurB.h);
+        gl.uniform2f(blurU.uTexel, 0, sigma / h);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+      }
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.viewport(0, 0, w, h);
+      gl.useProgram(presentPrg);
+      gl.activeTexture(gl.TEXTURE1);
+      gl.bindTexture(gl.TEXTURE_2D, scene.tex);
+      if (blurOn) {
+        gl.activeTexture(gl.TEXTURE3);
+        gl.bindTexture(gl.TEXTURE_2D, blurB.tex);
+      }
+      gl.uniform2f(presentU.uResolution, w, h);
+      gl.uniform4fv(presentU.uRect, rectData);
+      gl.uniform1fv(presentU.uRadius, radData);
+      gl.uniform1fv(presentU.uCover, coverData);
+      gl.uniform2f(presentU.uVeil, veilSolid, veilGone);
+      gl.uniform1i(presentU.uBlurOn, blurOn ? 1 : 0);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      gl.bindVertexArray(vao);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    };
 
     const roadTex = gl.createTexture();
     gl.activeTexture(gl.TEXTURE2);
@@ -458,14 +888,6 @@ export default function LandscapeStrip({ motion }) {
       };
       scroll %= loopLength;
       contacts.clear();
-      paintRestRoad();
-      // Le buffer est parfois plus petit que la boîte CSS (vol plein écran) : le
-      // canvas est étiré. Le même viewBox étire la flèche et le tracé avec lui,
-      // sinon le pointeur reste dans le coin au lieu du centre de la vue.
-      if (svgRef.current) {
-        svgRef.current.setAttribute("viewBox", `0 0 ${width} ${height}`);
-        svgRef.current.setAttribute("preserveAspectRatio", "none");
-      }
     };
 
     // Même spline qu'au repos. Le relief et la vue GPS ne changent pas le tracé.
@@ -528,81 +950,89 @@ export default function LandscapeStrip({ motion }) {
       return pts;
     })();
 
-    // Au repos le tracé ne change pas : on le pose une fois et on le translate.
-    let restRoad = "";
-    let resting = false;
-    const paintRestRoad = () => {
-      if (!state || !roadRef.current) return;
-      const pts = [];
-      const span = state.loopLength + state.width;
-      for (let x = 0; x <= span; x += 8) {
-        const u = x / state.loopLength;
-        const y = state.road.at((u - Math.floor(u)) * state.road.n);
-        pts.push(`${x.toFixed(1)},${y.toFixed(1)}`);
-      }
-      restRoad = `M${pts.join(" L")}`;
-      roadRef.current.setAttribute("d", restRoad);
-      resting = true;
-    };
-
-    const updateRoad = (gps, arrow) => {
-      if (gps <= 0.02) {
-        const shift = scroll % state.loopLength;
-        roadRef.current.setAttribute("transform", `translate(${(-shift).toFixed(1)} 0)`);
-        if (!resting) {
-          roadRef.current.setAttribute("d", restRoad);
-          arrowRef.current.querySelector("path").setAttribute("d", ARROW_D);
-          resting = true;
-        }
-        const flat = (arrow.heading * 180) / Math.PI + 90;
-        arrowRef.current.setAttribute(
-          "transform",
-          `translate(${arrow.x.toFixed(1)} ${arrow.y.toFixed(1)}) rotate(${flat.toFixed(1)})`
-        );
-        return;
-      }
-      resting = false;
-      roadRef.current.setAttribute("transform", "");
+    // Même tracé qu'avant, peint dans la scène pour passer sous le flou des vitres.
+    const paintMark = (gps, arrow, alpha) => {
+      inkN = 0;
+      if (alpha < 0.004 || !state) return;
+      const morph = gps > 0.02 ? gps : 0;
+      const roadColor = premul(hexRgb(SETTINGS.road), 0.94 * alpha);
       const fx = Math.cos(arrow.heading);
       const fy = Math.sin(arrow.heading);
       const backPx = Math.max(gpsTune.back, 0.05) * bandRef();
       const nearDist = bandRef() * gpsTune.near;
-      // Devant la caméra, la profondeur est bornée à 1 px : le point part
-      // hors du sol. On ne le relie pas, sinon le trait quitte le plan GPS.
-      const parts = [];
       let run = [];
       const flush = () => {
-        if (run.length > 1) parts.push(`M${run.join(" L")}`);
+        if (run.length > 1) appendStroke(run, 4, roadColor, false, inkVert);
         run = [];
       };
-      for (let x = -10; x <= state.width + 10; x += 4) {
+      const step = morph > 0 ? 4 : 6;
+      for (let x = -10; x <= state.width + 10; x += step) {
         const y = roadY(x);
-        const ahead = (x - arrow.x) * fx + (y - arrow.y) * fy;
-        if (ahead + backPx <= 2 || (gps > 0.55 && ahead < -nearDist)) {
-          flush();
-          continue;
+        if (morph > 0) {
+          const ahead = (x - arrow.x) * fx + (y - arrow.y) * fy;
+          if (ahead + backPx <= 2 || (gps > 0.55 && ahead < -nearDist)) {
+            flush();
+            continue;
+          }
         }
-        const p = project(x, y, gps, arrow);
-        run.push(`${p.x.toFixed(1)},${p.y.toFixed(1)}`);
+        const p = project(x, y, morph, arrow);
+        const last = run[run.length - 1];
+        if (last && Math.hypot(last.x - p.x, last.y - p.y) < 0.4) continue;
+        run.push(p);
       }
       flush();
-      if (parts.length) roadRef.current.setAttribute("d", parts.join(" "));
 
-      const arrowPath = arrowRef.current.querySelector("path");
-      const outline = arrowOutline;
-      // La flèche reste dans le plan de la route : latéral et avance au sol,
-      // sans le relief des bas-côtés. Même caméra que les particules.
       const rot = arrow.heading + Math.PI / 2;
       const cos = Math.cos(rot);
       const sin = Math.sin(rot);
-      const shape = outline.map(([lx, ly]) => {
-        const x = lx * cos - ly * sin;
-        const y = lx * sin + ly * cos;
-        const p = project(arrow.x + x, arrow.y + y, gps, arrow, true);
-        return `${p.x.toFixed(1)},${p.y.toFixed(1)}`;
-      });
-      arrowPath.setAttribute("d", `M${shape.join(" L")} Z`);
-      arrowRef.current.setAttribute("transform", "");
+      const shape = [];
+      const shadow = [];
+      for (let i = 0; i < arrowOutline.length - 1; i++) {
+        const lx = arrowOutline[i][0];
+        const ly = arrowOutline[i][1];
+        const place = (oy) => {
+          const x = lx * cos - (ly + oy) * sin;
+          const y = lx * sin + (ly + oy) * cos;
+          return project(arrow.x + x, arrow.y + y, morph, arrow, true);
+        };
+        const p = place(0);
+        shape.push({ x: p.x, y: p.y, k: morph > 0 ? p.y : ly });
+        if (morph === 0) {
+          const s = place(2);
+          shadow.push({ x: s.x, y: s.y, k: 0 });
+        }
+      }
+      if (shadow.length > 2) appendFan(shadow, () => premul([0, 0, 0], 0.28 * alpha), inkVert);
+      appendStroke(shape, 1.1, premul([1, 1, 1], alpha), true, inkVert);
+      let minK = Infinity;
+      let maxK = -Infinity;
+      for (const p of shape) {
+        minK = Math.min(minK, p.k);
+        maxK = Math.max(maxK, p.k);
+      }
+      const spanK = maxK - minK || 1;
+      const colorOf = (k) => {
+        const t = (k - minK) / spanK;
+        return premul(
+          [
+            arrowLight[0] + (arrowDark[0] - arrowLight[0]) * t,
+            arrowLight[1] + (arrowDark[1] - arrowLight[1]) * t,
+            arrowLight[2] + (arrowDark[2] - arrowLight[2]) * t,
+          ],
+          alpha
+        );
+      };
+      appendFan(shape, colorOf, inkVert);
+
+      if (inkN < 3) return;
+      gl.bindVertexArray(inkVao);
+      gl.useProgram(inkPrg);
+      gl.uniform2f(inkU.uResolution, canvas.width, canvas.height);
+      gl.uniform1f(inkU.uFeather, INK_FEATHER);
+      gl.bindBuffer(gl.ARRAY_BUFFER, inkBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, ink.subarray(0, inkN * 7), gl.DYNAMIC_DRAW);
+      gl.drawArrays(gl.TRIANGLES, 0, inkN);
+      gl.bindVertexArray(vao);
     };
 
     let images = null;
@@ -771,21 +1201,24 @@ export default function LandscapeStrip({ motion }) {
         build(images, { w: state.resolution[0], h: state.resolution[1] }, !!live.detail);
       }
       if (!state) return;
+      const view = root.getBoundingClientRect();
+      if (view.width < 2 || view.height < 2) return;
       syncPointer();
       const gpsNow = live?.gps ?? 0;
-      if (gpsNow < 0.02 && mouse.power < 0.05 && contacts.size === 0 && now - last < 32) return;
+      if (gpsNow < 0.02 && mouse.power < 0.05 && contacts.size === 0 && now - last < 32) {
+        // La simulation reste à 30 Hz au repos, mais le masque de flou suit
+        // l'animation CSS de la vitre à chaque image.
+        if (scene && frostLive()) present(view, live);
+        return;
+      }
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
       const flight = live?.flight ?? 0;
       const rush = live?.rush ?? 1;
       const gps = live?.gps ?? 0;
       if (!mouse.inside) mouse.power *= 0.95;
-      if (svgRef.current) {
-        svgRef.current.style.transform = "";
-        svgRef.current.style.opacity =
-          gps > 0.02 ? String(Math.min(1, gps)) : String(Math.max(0, 1 - flight / 0.18));
-        svgRef.current.classList.toggle(styles.gps, gps > 0.2);
-      }
+      const markAlpha =
+        gps > 0.02 ? Math.min(1, gps) : Math.max(0, 1 - flight / 0.18);
       scroll = (scroll + SPEED * rush * dt) % state.loopLength;
 
       const src = state.idx;
@@ -817,9 +1250,18 @@ export default function LandscapeStrip({ motion }) {
       gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 0, null);
       gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, null);
 
-      // Rendu
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      gl.clearColor(0, 0, 0, 0);
+      // Rendu hors écran. Le fond est blanc : avec un canvas opaque, WindowServer
+      // n'a plus à mélanger la surface avec la page à chaque image.
+      ensureTargets(canvas.width, canvas.height);
+      gl.activeTexture(gl.TEXTURE1);
+      gl.bindTexture(gl.TEXTURE_2D, null);
+      gl.activeTexture(gl.TEXTURE2);
+      gl.bindTexture(gl.TEXTURE_2D, roadTex);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, scene.fbo);
+      gl.viewport(0, 0, scene.w, scene.h);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      gl.clearColor(1, 1, 1, 1);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.useProgram(drawPrg);
       bindAttrib(gl, 0, state.homeBuf, 2);
@@ -870,9 +1312,10 @@ export default function LandscapeStrip({ motion }) {
       gl.enableVertexAttribArray(4);
       gl.vertexAttribPointer(4, 2, gl.FLOAT, false, 0, 0);
       gl.drawArrays(gl.POINTS, 0, state.count);
+      paintMark(gps, arrow, markAlpha);
+      present(view, live);
 
       if (mouse.power > 0.02 || contacts.size) stirLandscape(dt);
-      updateRoad(gps, arrow);
     };
 
     // Écoute au niveau de la fenêtre : la zone de dépôt, le voile flouté et les textes passent
@@ -913,36 +1356,22 @@ export default function LandscapeStrip({ motion }) {
       gl.deleteTransformFeedback(tf);
       gl.deleteProgram(simPrg);
       gl.deleteProgram(drawPrg);
+      gl.deleteProgram(blurPrg);
+      gl.deleteProgram(presentPrg);
+      gl.deleteProgram(inkPrg);
+      gl.deleteBuffer(inkBuf);
+      gl.deleteVertexArray(inkVao);
+      dropTarget(scene);
+      dropTarget(blurA);
+      dropTarget(blurB);
+      gl.deleteVertexArray(vao);
+      gl.deleteVertexArray(blitVao);
     };
   }, []);
 
   return (
-    <div
-      ref={rootRef}
-      className={styles.root}
-      style={{
-        "--road-color": SETTINGS.road,
-        "--arrow-color": SETTINGS.arrow,
-        "--arrow-light": lighten(SETTINGS.arrow, 0.45),
-      }}
-    >
+    <div ref={rootRef} className={styles.root}>
       <canvas ref={canvasRef} className={styles.layer} />
-      <svg ref={svgRef} className={styles.layer} aria-hidden="true">
-        <path ref={roadRef} className={styles.road} />
-        {/* Flèche de navigation façon Apple Plans : pointe vers le haut, orientée selon le cap */}
-        <defs>
-          <linearGradient id="arrowFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" style={{ stopColor: "var(--arrow-light)" }} />
-            <stop offset="1" style={{ stopColor: "var(--arrow-color)" }} />
-          </linearGradient>
-        </defs>
-        <g ref={arrowRef} className={styles.arrow}>
-          <path
-            d="M0 -14 C1.2 -14 2.2 -13.2 2.8 -11.9 L12.2 8.2 C13.2 10.4 11.1 12.8 8.8 11.8 L1.2 8.4 C0.4 8.1 -0.4 8.1 -1.2 8.4 L-8.8 11.8 C-11.1 12.8 -13.2 10.4 -12.2 8.2 L-2.8 -11.9 C-2.2 -13.2 -1.2 -14 0 -14 Z"
-            fill="url(#arrowFill)"
-          />
-        </g>
-      </svg>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import RouteStage from "@/components/RouteStage";
 import ScanStatus from "@/components/ScanStatus";
 import { aquawax, parabole } from "./fonts";
@@ -16,6 +17,7 @@ export default function RootLayout({ children }) {
         <RouteStage />
         <ScanStatus />
         {children}
+        <Analytics />
       </body>
     </html>
   );

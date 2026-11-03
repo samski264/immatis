@@ -3,6 +3,8 @@ import Scan from "@/components/Scan";
 import Navbar from "@/components/Navbar";
 import StepBloc from "@/components/StepBloc";
 import DepositButton from "@/components/DepositButton";
+import SortieCard from "@/components/SortieCard";
+import cardStyles from "@/components/css/SortieCard.module.css";
 import styles from "./page.module.css";
 
 const INPUT_ID = "carte-grise";
@@ -10,13 +12,13 @@ const INPUT_ID = "carte-grise";
 const ANSWERS = [
   {
     id: "voie",
-    label: "Voie d'homologation",
-    status: "Concluant",
-    tone: "ok",
+    label: "Homologation",
+    status: "Attention requise",
+    tone: "attention",
     value: "AVDT",
-    consequence: "Pas de passage en RTI.",
-    field: "K absent · 15 / 15 champs harmonisés",
-    rule: "Sans numéro de réception K, tout dépend des champs : tous présents, voie AVDT. Un seul absent, et c'est la RTI.",
+    detail: "Vérification des données techniques",
+    verdict: "La carte grise ne suffit pas : il faut demander une attestation AVDT (67,38 €).",
+    reasons: ["Pas de numéro de réception (case K vide)", "Les 15 rubriques exigées sont lues"],
   },
   {
     id: "tva",
@@ -24,9 +26,8 @@ const ANSWERS = [
     status: "Concluant",
     tone: "ok",
     value: "0 €",
-    consequence: "Pas de TVA à l'import.",
-    field: "B · 14.05.2021 · 64 mois",
-    rule: "Mise en circulation au-delà du seuil de 6 mois : pas de TVA.",
+    verdict: "Pas de TVA à l’import.",
+    reasons: ["Première immatriculation (case B) : 14/05/2021", "64 mois écoulés, au-delà du seuil de 6 mois"],
   },
   {
     id: "chevaux",
@@ -34,9 +35,11 @@ const ANSWERS = [
     status: "Estimé",
     tone: "estimate",
     value: "5 CV",
-    consequence: "Base du tarif régional de la carte grise.",
-    field: "P.2 · 67 kW",
-    rule: "Formule puissance → CV : 4,74, arrondi à 5 CV. Prix moyen des régions 2026 : 53,50 € par CV.",
+    verdict: "Base du prix de la carte grise, à 53,50 € par CV en moyenne.",
+    reasons: [
+      "Puissance lue (case P.2) : 67 kW, soit 5 CV",
+      { text: "Tarif moyen des régions : le prix exact dépend de la vôtre", alert: true },
+    ],
   },
   {
     id: "malus",
@@ -44,9 +47,8 @@ const ANSWERS = [
     status: "Concluant",
     tone: "ok",
     value: "0 €",
-    consequence: "CO₂ et poids, décote d'ancienneté comprise.",
-    field: "V.7 · 128 g/km · G · 1 361 kg",
-    rule: "Barème WLTP 2021 : 128 g/km, sous le seuil de 133. Pas de taxe au poids avant 2022.",
+    verdict: "Aucun malus à payer.",
+    reasons: ["CO₂ (case V.7) : 128 g/km, sous le seuil de 133", "Avant 2022 : pas de taxe au poids"],
   },
 ];
 
@@ -59,15 +61,15 @@ const DOCUMENTS = [
 const QUESTIONS = [
   [
     "Comment Immatis décide de la TVA ?",
-    "Sur la date de première mise en circulation, champ B. Au-delà de six mois, pas de TVA à l'import. En deçà, le véhicule est traité comme neuf et la TVA française est due.",
+    "Trois lectures sur la date B : elle est imprimée, l'écart se compte en mois de calendrier, il dépasse six mois. Les trois vraies : pas de TVA. Sous six mois : elle est due. Sans date : non calculée.",
   ],
   [
     "Il manque un champ sur le certificat, et alors ?",
-    "Sans numéro de réception en K, l'AVDT exige tous les champs harmonisés. Un seul absent, D.2 par exemple, et le dossier part en RTI. Immatis vous le dit avant l'achat, pas après l'acompte.",
+    "Trois lectures : réception CE en K, catégorie M1 ou N1 en J, quinze champs imprimés. Les trois vraies : AVDT. Une seule manque : RTI. Immatis vous le dit avant l'achat, pas après l'acompte.",
   ],
   [
     "Comment le malus est-il calculé ?",
-    "Malus CO₂ sur V.7 et taxe au poids sur G, au barème de l'année de première immatriculation, puis une décote d'ancienneté de 3 % à 100 % selon l'âge. Avant 2015 ou après quinze ans : exonéré. Un champ absent n'est jamais deviné.",
+    "Trois lectures : moins de 181 mois, première immatriculation après 2015, CO₂ ou masse imprimé. Les trois vraies : le malus se calcule, barème de l'année B puis décote. L'âge ou l'année manque : exonéré. Ni V.7 ni G : non calculé.",
   ],
   [
     "Immatis remplace-t-il l'ANTS ?",
@@ -212,31 +214,9 @@ export default function Home() {
             champ lu et la règle appliquée, pour que vous puissiez la vérifier vous-même.
           </p>
         </div>
-        <div className={styles.cards}>
+        <div className={cardStyles.row}>
           {ANSWERS.map((card) => (
-            <article id={card.id} key={card.id} className={styles.card}>
-              <header className={styles.cardHead}>
-                <p>{card.label}</p>
-                <span className={card.tone === "estimate" ? `${styles.badge} ${styles.estimate}` : styles.badge}>
-                  <span className={styles.dot} aria-hidden="true" />
-                  {card.status}
-                </span>
-              </header>
-              <div className={card.tone === "estimate" ? `${styles.cardValue} ${styles.estimate}` : styles.cardValue}>
-                <p className={styles.figure}>{card.value}</p>
-                <p>{card.consequence}</p>
-              </div>
-              <div className={styles.trace}>
-                <div>
-                  <p className={styles.traceLabel}>Champ lu</p>
-                  <p className={styles.traceValue}>{card.field}</p>
-                </div>
-                <div>
-                  <p className={styles.traceLabel}>Règle appliquée</p>
-                  <p className={styles.rule}>{card.rule}</p>
-                </div>
-              </div>
-            </article>
+            <SortieCard key={card.id} {...card} />
           ))}
         </div>
       </section>

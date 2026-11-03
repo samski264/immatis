@@ -129,7 +129,9 @@
   display: flex;
   flex-direction: column;
   gap: clamp(32px, 4vw, 56px);
-  padding: 0 var(--s-172) clamp(48px, 6vw, 96px);
+  width: min(100% - 32px, 1273px);
+  margin-inline: auto;
+  padding: 0 0 clamp(48px, 6vw, 96px);
 }
 
 .synthesis {
@@ -146,7 +148,6 @@
   padding: clamp(16px, 2vw, 28px);
   border-radius: var(--radius);
   background: #f1f1f10f;
-  backdrop-filter: blur(16.5px);
 }
 
 .badgeIcon {
@@ -282,6 +283,26 @@
   font-weight: var(--wght-text);
   letter-spacing: var(--tracking-normal);
   line-height: 1.4;
+}
+
+.cardVerdict {
+  font-size: 15px;
+  font-weight: var(--wght-text);
+  letter-spacing: var(--tracking-normal);
+  line-height: 1.45;
+  color: #202320;
+}
+
+.reasons {
+  display: flex;
+  flex-direction: column;
+  gap: calc(8 * var(--u));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #202320;
 }
 
 .trace {

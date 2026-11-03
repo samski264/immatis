@@ -6,40 +6,53 @@ const MINIMAL = ["A", "B", "C.1", "D.1", "D.2", "D.3", "E", "F.1", "G", "H", "I"
 const EXPLICATIONS = {
   voie: {
     AVDT: {
-      detail: "Pas de réception individuelle.",
-      rule: "K est vide. A, B, C.1, D.1, D.2, D.3, E, F.1, G, H, I, P.1, P.2, P.3 et S.1 sont tous renseignés. J, V.7 et V.9 peuvent manquer : ils ne sont pas exigés. La voie est AVDT.",
+      detail: "Vérification des données techniques",
+      verdict: "La carte grise ne suffit pas : il faut demander une attestation AVDT (67,38 €).",
+      reasons: ["Pas de numéro de réception (case K vide)", "Les 15 rubriques exigées sont lues"],
+      rule: "Réception CE en K, catégorie M1 ou N1 en J, quinze champs imprimés. Les trois sont vraies : AVDT. Une seule manquée : RTI.",
     },
     RTI: {
-      detail: "Un champ exigé manque.",
-      rule: "K est vide, et au moins un champ parmi A, B, C.1, D.1, D.2, D.3, E, F.1, G, H, I, P.1, P.2, P.3, S.1 est vide. Un seul suffit. La voie est RTI.",
+      detail: "Réception à titre isolé",
+      verdict: "La carte grise ne suffit pas : le véhicule doit passer une réception.",
+      reasons: ["Pas de numéro de réception (case K vide)", "Rubrique manquante : P.2 (puissance)"],
+      rule: "Réception CE en K, catégorie M1 ou N1 en J, quinze champs imprimés. Une de ces lectures manque : RTI.",
     },
     recue: {
-      detail: "Ni AVDT ni RTI.",
-      rule: "K est renseigné. La réception est déjà sur le certificat. Le calcul s’arrête là et ne choisit aucune voie.",
+      detail: "Réception par type déjà portée",
+      verdict: "Véhicule déjà réceptionné : un certificat de conformité (COC) reste nécessaire.",
+      reasons: ["Numéro de réception lu en case K", "COC à demander au constructeur"],
+      rule: "Le calcul n’a pas tranché entre AVDT et RTI.",
     },
     inconnue: {
-      detail: "La voie n’a pas pu être déterminée.",
+      detail: "Voie non déterminée",
+      verdict: "Le numéro de réception n’a pas pu être lu : la voie reste à confirmer.",
+      reasons: ["Case K illisible ou hors de la photo", "Reprenez une photo nette de la carte grise"],
       rule: "Le calcul n’a renvoyé aucune voie, et K n’est pas lu.",
     },
   },
   tva: {
     due: {
-      detail: "Due. Le calcul ne renvoie pas le montant.",
-      rule: "La date B est lue. L’écart se compte en mois de calendrier, pas en jours. S’il est de 6 ou moins, la TVA est due.",
+      detail: "TVA française à payer",
+      verdict: "Moins de 6 mois : la TVA est à payer en France, montant non calculé.",
+      rule: "Date B lue, écart en mois de calendrier de 6 ou moins : la TVA est due. Au-delà : pas de TVA. Sans date : non calculée.",
     },
     aucune: {
-      detail: "Rien à régler.",
-      rule: "La date B est lue et l’écart dépasse 6 mois de calendrier. Pas de TVA.",
+      detail: "Pas de TVA à l’import",
+      verdict: "Le véhicule a plus de 6 mois : aucune TVA à payer en France.",
+      rule: "Date B lue, écart au-delà de 6 mois : pas de TVA. En deçà : elle est due. Sans date : non calculée.",
     },
     sansDate: {
-      detail: "Date de première immatriculation absente.",
-      rule: "Sans la date B, la TVA n’est pas calculée. Si P.2 est quand même lu, seuls les chevaux fiscaux sortent.",
+      detail: "Date de première immatriculation absente",
+      verdict: "Sans la date de première immatriculation, la TVA ne peut pas être calculée.",
+      reasons: ["Case B vide ou illisible", "Reprenez une photo nette de la carte grise"],
+      rule: "Sans la date B, la TVA n’est pas calculée. La station manque : ni due, ni nulle. Si P.2 est lu, seuls les chevaux fiscaux sortent.",
     },
   },
   chevaux: {
     calcules: {
       detail: "Base du tarif régional de la carte grise.",
-      rule: "CV = arrondi de 1,8 × (P.2 ÷ 100)² + 3,87 × (P.2 ÷ 100) + 1,34. Prix = CV × 53,50 €, arrondi au centime. La date B n’entre pas dans ce calcul.",
+      verdict: "Base du prix de la carte grise, à 53,50 € par CV en moyenne.",
+      rule: "Prix moyen des régions : 53,50 € par CV. Le tarif exact dépend de la région.",
     },
     sansP2: {
       detail: "Puissance nette absente.",
@@ -48,32 +61,43 @@ const EXPLICATIONS = {
   },
   malus: {
     sansDate: {
-      detail: "Date de première immatriculation absente.",
-      rule: "Sans la date B, le malus n’est pas calculé. Même si V.7 et G sont lus.",
+      detail: "Date de première immatriculation absente",
+      verdict: "Sans la date de première immatriculation, le malus ne peut pas être calculé.",
+      reasons: ["Case B vide ou illisible", "Reprenez une photo nette de la carte grise"],
+      rule: "Sans la date B, le malus n’est pas calculé. L’âge et l’année ne se lisent pas, même si V.7 et G sont lus.",
     },
     anciennete: {
-      detail: "L’ancienneté suffit.",
-      rule: "L’écart depuis B atteint 181 mois. Le malus est exonéré. Ce test passe avant la date de 2015 et avant les barèmes.",
+      detail: "Véhicule de plus de 15 ans",
+      verdict: "Le véhicule a plus de 15 ans : aucun malus à payer.",
+      rule: "L’écart depuis B atteint 181 mois : exonéré, avant le test de 2015. Moins de 181 mois et après 2015 : le malus se calcule.",
     },
     avant2015: {
-      detail: "Première immatriculation trop ancienne.",
-      rule: "B est le 1er janvier 2015 ou une date antérieure, et le véhicule a moins de 181 mois. Le malus est exonéré, même si V.7 et G sont lus.",
+      detail: "Immatriculé avant 2015",
+      verdict: "Première immatriculation avant le 1er janvier 2015 : aucun malus à payer.",
+      reasons: ["Exonéré même si CO₂ et masse sont lus"],
+      rule: "B est le 1er janvier 2015 ou avant : exonéré. Après cette date, et sous 181 mois, le malus se calcule.",
     },
     sansMesure: {
-      detail: "Ni CO₂ ni masse.",
-      rule: "B est lue et le véhicule n’est pas exonéré, mais V.7 et G sont tous les deux vides. Le malus n’est pas calculé. Un seul des deux suffit pour lancer le calcul : l’autre compte alors pour 0.",
+      detail: "Ni CO₂ ni masse lus",
+      verdict: "Il faut au moins le CO₂ ou la masse pour calculer le malus.",
+      reasons: ["Cases V.7 et G vides"],
+      rule: "Les stations d’âge passent, mais V.7 et G sont vides : non calculé. Un seul des deux suffit, l’autre compte alors pour 0.",
     },
     calcule: {
-      detail: "CO₂ et masse, puis décote d’ancienneté.",
-      rule: "V.7 et G sont lus. Le malus CO₂ suit le barème de la date B : 0 sous le seuil ou sans barème, le plafond au-delà du dernier gramme, sinon le tarif du gramme ou de la bande. La masse, arrondie au kilo, vaut 0 sous le seuil ou sans barème, sinon la somme des tranches. Avant 2022, pas de barème masse. La décote s’applique sur la somme, de 1 à 180 mois. En dessous d’un mois, elle vaut 0. Le montant est arrondi à l’euro.",
+      detail: "Malus CO₂ et masse à payer",
+      verdict: "Malus calculé sur le barème de l’année d’immatriculation, décote comprise.",
+      reasons: ["Décote d’ancienneté appliquée"],
+      rule: "Moins de 181 mois et après 2015. V.7 et G sont lus. Le malus CO₂ suit le barème de la date B : 0 sous le seuil ou sans barème, le plafond au-delà du dernier gramme, sinon le tarif du gramme ou de la bande. La masse, arrondie au kilo, vaut 0 sous le seuil ou sans barème, sinon la somme des tranches. Avant 2022, pas de barème masse. La décote s’applique sur la somme, de 1 à 180 mois. En dessous d’un mois, elle vaut 0. Le montant est arrondi à l’euro.",
     },
     co2Seul: {
-      detail: "La masse absente compte pour zéro.",
-      rule: "G est vide, donc le malus masse vaut 0. Le malus CO₂ suit le barème de la date B : 0 sous le seuil ou si aucun barème ne couvre cette date, le plafond si V.7 le dépasse, sinon le tarif du gramme ou de la bande. Puis la décote d’ancienneté, de 1 à 180 mois. En dessous d’un mois, elle vaut 0.",
+      detail: "Estimé sans la masse",
+      verdict: "Le malus au poids n’est pas compté : le montant peut être plus élevé.",
+      reasons: ["Masse (case G) non lue, comptée pour 0"],
+      rule: "Moins de 181 mois et après 2015. G est vide, donc le malus masse vaut 0. Le malus CO₂ suit le barème de la date B : 0 sous le seuil ou si aucun barème ne couvre cette date, le plafond si V.7 le dépasse, sinon le tarif du gramme ou de la bande. Puis la décote d’ancienneté, de 1 à 180 mois. En dessous d’un mois, elle vaut 0.",
     },
     masseSeule: {
       detail: "Le CO₂ absent compte pour zéro.",
-      rule: "V.7 est vide, donc le malus CO₂ vaut 0. La masse est arrondie au kilo. Elle vaut 0 s’il n’y a pas de barème à la date B, ou si elle est sous le seuil. Avant 2022, il n’y a pas de barème masse. Sinon chaque tranche ajoute les kilos qu’elle contient, multipliés par leur tarif au kilo. Puis la décote d’ancienneté.",
+      rule: "Moins de 181 mois et après 2015. V.7 est vide, donc le malus CO₂ vaut 0. La masse est arrondie au kilo. Elle vaut 0 s’il n’y a pas de barème à la date B, ou si elle est sous le seuil. Avant 2022, il n’y a pas de barème masse. Sinon chaque tranche ajoute les kilos qu’elle contient, multipliés par leur tarif au kilo. Puis la décote d’ancienneté.",
     },
   },
   carteGrise: {
@@ -152,45 +176,57 @@ function formatReadAt(value) {
   return `Lecture terminée le ${readDateFormat.format(date)} à ${readTimeFormat.format(date)}`;
 }
 
-function receptionCard(certificate, reception) {
+function stationField(certificate) {
   const filled = MINIMAL.filter((key) => certificate?.[key] != null).length;
   const missing = MINIMAL.filter((key) => certificate?.[key] == null);
+  const reception = certificate?.K == null ? "K absent" : "K renseigné";
+  const category = certificate?.J == null || certificate.J === "" ? "J absent" : `J = ${certificate.J}`;
+  const fields = missing.length
+    ? `${filled} / ${MINIMAL.length} · manque ${missing.join(", ")}`
+    : `${filled} / ${MINIMAL.length}`;
+  return `${reception} · ${category} · ${fields}`;
+}
+
+function receptionCard(certificate, reception) {
+  const field = stationField(certificate);
 
   if (reception === "AVDT") {
     return {
-      label: "Voie d’homologation",
-      status: "Concluant",
+      label: "Homologation",
+      status: "Attention requise",
+      warn: true,
       value: "AVDT",
       ...EXPLICATIONS.voie.AVDT,
-      field: `${filled} / ${MINIMAL.length} champs exigés · K absent`,
+      field,
     };
   }
 
   if (reception === "RTI") {
     return {
-      label: "Voie d’homologation",
-      status: "Concluant",
+      label: "Homologation",
+      status: "Attention requise",
+      warn: true,
       value: "RTI",
       ...EXPLICATIONS.voie.RTI,
-      field: `${filled} / ${MINIMAL.length} champs exigés · manque ${missing.join(", ")}`,
+      field,
     };
   }
 
   if (certificate?.K) {
     return {
-      label: "Voie d’homologation",
+      label: "Homologation",
       status: "Concluant",
-      value: "Reçue",
+      value: "Déjà reçue",
       ...EXPLICATIONS.voie.recue,
       field: `K · ${certificate.K}`,
     };
   }
 
   return {
-    label: "Voie d’homologation",
-    status: "Incomplet",
+    label: "Homologation",
+    status: "Attention requise",
     warn: true,
-    value: "—",
+    value: "Inconnue",
     ...EXPLICATIONS.voie.inconnue,
     field: "K · non lu",
   };
@@ -204,9 +240,9 @@ function tvaCard(certificate, fiscal) {
   if (!certificate?.B || fiscal == null) {
     return {
       label: "TVA",
-      status: "Incomplet",
+      status: "Attention requise",
       warn: true,
-      value: "—",
+      value: "Non calculée",
       ...EXPLICATIONS.tva.sansDate,
       field,
     };
@@ -215,9 +251,14 @@ function tvaCard(certificate, fiscal) {
   if (fiscal.TVA === "TVA") {
     return {
       label: "TVA",
-      status: "Concluant",
-      value: "TVA",
+      status: "Attention requise",
+      warn: true,
+      value: "Due",
       ...EXPLICATIONS.tva.due,
+      reasons: [
+        `Première immatriculation (B) : ${date}`,
+        `${months} mois écoulés, sous le seuil de 6 mois`,
+      ],
       field,
     };
   }
@@ -227,6 +268,10 @@ function tvaCard(certificate, fiscal) {
     status: "Concluant",
     value: "0 €",
     ...EXPLICATIONS.tva.aucune,
+    reasons: [
+      `Première immatriculation (B) : ${date}`,
+      `${months} mois écoulés, plus de 6 mois`,
+    ],
     field,
   };
 }
@@ -248,22 +293,31 @@ function chevauxCard(certificate, fiscal) {
 
   return {
     label: "Chevaux fiscaux",
-    status: "Concluant",
+    status: "Estimé",
+    tone: "estimate",
     value: `${chevaux.cv} CV`,
     ...EXPLICATIONS.chevaux.calcules,
+    detail: null,
+    reasons: [
+      `Puissance lue (case P.2) : ${quantity(certificate?.["P.2"], "kW")}, soit ${chevaux.cv} CV`,
+      { text: "Tarif moyen des régions : le prix exact dépend de la vôtre", alert: true },
+    ],
     field,
   };
 }
 
 function malusCard(certificate, fiscal) {
-  const field = `V.7 · ${quantity(certificate?.["V.7"], "g/km")} · G · ${quantity(certificate?.G, "kg")}`;
+  const date = formatDate(certificate?.B);
+  const months = monthsSince(certificate?.B);
+  const age = date ? `${date}${months == null ? "" : ` · ${months} mois`}` : "non lu";
+  const field = `B · ${age} · V.7 · ${quantity(certificate?.["V.7"], "g/km")} · G · ${quantity(certificate?.G, "kg")}`;
 
   if (!certificate?.B || fiscal == null) {
     return {
       label: "Malus",
-      status: "Incomplet",
+      status: "Attention requise",
       warn: true,
-      value: "—",
+      value: "Non calculé",
       ...EXPLICATIONS.malus.sansDate,
       field,
     };
@@ -271,11 +325,16 @@ function malusCard(certificate, fiscal) {
 
   const motif = exemption(certificate);
   if (motif) {
+    const lecture = `Première immatriculation (B) : ${date}`;
+    const reasons = motif === "anciennete"
+      ? [lecture, `${months} mois écoulés, au-delà de 180`]
+      : [lecture, ...EXPLICATIONS.malus.avant2015.reasons];
     return {
       label: "Malus",
       status: "Concluant",
       value: "Exonéré",
       ...EXPLICATIONS.malus[motif],
+      reasons,
       field,
     };
   }
@@ -283,26 +342,35 @@ function malusCard(certificate, fiscal) {
   if (typeof fiscal.malus === "number") {
     const co2 = certificate["V.7"] != null;
     const masse = certificate.G != null;
-    const explication = co2 && !masse
+    const partiel = co2 && !masse;
+    const explication = partiel
       ? EXPLICATIONS.malus.co2Seul
       : masse && !co2
         ? EXPLICATIONS.malus.masseSeule
         : EXPLICATIONS.malus.calcule;
+    const reasons = partiel
+      ? [`CO₂ (V.7) : ${quantity(certificate["V.7"], "g/km")}`, ...explication.reasons]
+      : explication === EXPLICATIONS.malus.calcule
+        ? [`CO₂ : ${quantity(certificate["V.7"], "g/km")} · masse : ${quantity(certificate.G, "kg")}`, ...explication.reasons]
+        : explication.reasons;
     return {
       label: "Malus",
-      status: "Concluant",
+      status: partiel ? "Attention requise" : "Concluant",
+      warn: partiel,
       value: euros(fiscal.malus),
       ...explication,
+      reasons,
       field,
     };
   }
 
   return {
     label: "Malus",
-    status: "Incomplet",
+    status: "Attention requise",
     warn: true,
-    value: "—",
+    value: "Non calculé",
     ...EXPLICATIONS.malus.sansMesure,
+    reasons: [`Première immatriculation (B) : ${date}`, ...EXPLICATIONS.malus.sansMesure.reasons],
     field,
   };
 }
@@ -315,7 +383,7 @@ function verdictOf(certificate, bilan) {
   if (reception === "AVDT") clauses.push("Voie AVDT");
   else if (reception === "RTI") clauses.push("Voie RTI");
   else if (certificate?.K) clauses.push("Réception déjà portée au certificat");
-  else clauses.push("Voie d’homologation non déterminée");
+  else clauses.push("Homologation non déterminée");
 
   if (!certificate?.B || fiscal == null) {
     clauses.push("TVA et malus non calculés");

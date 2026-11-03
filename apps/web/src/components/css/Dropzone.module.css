@@ -21,7 +21,6 @@
   border-radius: var(--radius);
   background: var(--color-surface-glass);
   box-shadow: var(--effect-inner-glass), var(--effect-drop-upload);
-  backdrop-filter: blur(calc(var(--blur-glass) * var(--u)));
   color: var(--color-text-primary);
   text-align: center;
   cursor: pointer;
@@ -239,7 +238,6 @@
   border: 1px solid var(--color-text-primary);
   border-radius: 999px;
   background: var(--color-surface-glass);
-  backdrop-filter: blur(12px);
   color: var(--color-text-primary);
   font-weight: var(--wght-text);
   font-size: var(--size-body);

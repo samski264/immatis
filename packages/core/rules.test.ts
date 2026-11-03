@@ -47,7 +47,7 @@ function certificate(overrides: Partial<CarCertificate> = {}): CarCertificate {
     H: "2026-2036",
     I: noon("2026-06-15"),
     J: "M1",
-    K: null,
+    K: "e1*2007/46*0458*11",
     "P.1": 1332,
     "P.2": 90,
     "P.3": "ES",
@@ -72,14 +72,16 @@ function fiscalOn(today: string, overrides: Partial<CarCertificate> = {}) {
 }
 
 describe("getReception", () => {
-  it("classe en AVDT un dossier complet sans numéro de réception", () => {
+  it("classe en AVDT quand les trois stations passent", () => {
     expect(getReception(certificate())).toBe("AVDT");
   });
 
-  it("ignore J, V.7 et V.9 pour distinguer AVDT et RTI", () => {
-    expect(
-      getReception(certificate({ J: null, "V.7": null, "V.9": null })),
-    ).toBe("AVDT");
+  it("accepte la catégorie N1", () => {
+    expect(getReception(certificate({ J: "N1" }))).toBe("AVDT");
+  });
+
+  it("ignore V.7 et V.9", () => {
+    expect(getReception(certificate({ "V.7": null, "V.9": null }))).toBe("AVDT");
   });
 
   it("traite 0 comme une valeur renseignée", () => {
@@ -91,19 +93,24 @@ describe("getReception", () => {
   });
 
   it("traite une chaîne vide comme une valeur renseignée", () => {
-    expect(getReception(certificate({ A: "" }))).toBe("AVDT");
+    expect(getReception(certificate({ A: "", K: "" }))).toBe("AVDT");
   });
 
-  it("ne demande rien à la DREAL quand K est renseigné", () => {
-    expect(getReception(certificate({ K: "e2*2007/46*0000*00" }))).toBeNull();
+  it("classe en RTI sans réception CE", () => {
+    expect(getReception(certificate({ K: null }))).toBe("RTI");
   });
 
-  it("ne demande rien à la DREAL même si le reste du dossier est vide", () => {
+  it("classe en RTI hors catégorie M1 ou N1", () => {
+    expect(getReception(certificate({ J: null }))).toBe("RTI");
+    expect(getReception(certificate({ J: "M2" }))).toBe("RTI");
+  });
+
+  it("classe en RTI quand K est renseigné mais le reste est vide", () => {
     const vide = Object.fromEntries(
       Object.keys(certificate()).map((cle) => [cle, null]),
     ) as CarCertificate;
 
-    expect(getReception({ ...vide, K: "e2*2007/46*0000*00" })).toBeNull();
+    expect(getReception({ ...vide, K: "e2*2007/46*0000*00" })).toBe("RTI");
   });
 
   it.each(champsExiges)("classe en RTI quand %s est absent", (champ) => {
