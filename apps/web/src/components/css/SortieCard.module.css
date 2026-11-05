@@ -25,7 +25,7 @@
   gap: 8px;
 }
 
-.head p {
+.head h3 {
   min-width: 0;
   font-size: 13px;
   font-weight: var(--wght-text);

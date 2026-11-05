@@ -15,7 +15,7 @@ export async function generateMetadata({ params }) {
   const { dossier: slug } = await params;
   const dossier = getDossier(slug);
   if (!dossier) return {};
-  return { title: dossier.title, description: dossier.intro };
+  return { title: dossier.title, description: dossier.description };
 }
 
 function SourceIcon() {

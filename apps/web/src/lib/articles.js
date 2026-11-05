@@ -489,11 +489,35 @@ function formatDate(iso) {
 
 const cache = new Map();
 
+export function articleIndex() {
+  return Object.entries(FILES).map(([route, file]) => {
+    const raw = fs.readFileSync(path.join(ROOT, file), "utf8");
+    const { meta } = splitFrontmatter(raw);
+    return { path: route, updated: meta.date || undefined };
+  });
+}
+
 export function articleParams() {
   return Object.keys(FILES).map((route) => {
     const [silo, ...rest] = route.slice(1).split("/");
     return rest.length ? { silo, rest } : { silo };
   });
+}
+
+export function guideIndex() {
+  return DOSSIER.flatMap(({ silo, pages }) =>
+    pages.map(({ href, label }) => {
+      const [first, ...rest] = href.slice(1).split("/");
+      const article = getArticle(first, rest);
+      return {
+        path: href,
+        silo,
+        title: label,
+        description: article.description,
+        rule: article.reading.rule,
+      };
+    }),
+  );
 }
 
 export function getArticle(silo, rest) {

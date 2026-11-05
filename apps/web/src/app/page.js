@@ -143,6 +143,148 @@ function InfoIcon() {
 export default function Home() {
   return (
     <main className={styles.main}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: `{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://www.immatis.com/#website",
+      "url": "https://www.immatis.com/",
+      "name": "Immatis",
+      "description": "Immatis simule l'instruction de votre dossier d'immatriculation à partir de la carte grise étrangère, avant que vous n'achetiez le véhicule.",
+      "inLanguage": "fr"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.immatis.com/#webpage",
+      "url": "https://www.immatis.com/",
+      "name": "Immatis — L'ANTS en moins de dix secondes",
+      "description": "Immatis simule l'instruction de votre dossier d'immatriculation à partir de la carte grise étrangère, avant que vous n'achetiez le véhicule.",
+      "inLanguage": "fr",
+      "isPartOf": { "@id": "https://www.immatis.com/#website" },
+      "mainEntity": { "@id": "https://www.immatis.com/#app" }
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://www.immatis.com/#app",
+      "name": "Immatis",
+      "url": "https://www.immatis.com/",
+      "description": "Immatis simule l'instruction de votre dossier d'immatriculation à partir de la carte grise étrangère, avant que vous n'achetiez le véhicule.",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Web",
+      "inLanguage": "fr",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "featureList": ["AVDT ou RTI", "TVA", "Chevaux fiscaux", "Malus"]
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://www.immatis.com/#reponses",
+      "name": "Quatre réponses, toutes lues dans le certificat",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Homologation",
+          "description": "Vérification des données techniques. AVDT. La carte grise ne suffit pas : il faut demander une attestation AVDT (67,38 €). Pas de numéro de réception (case K vide). Les 15 rubriques exigées sont lues."
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "TVA",
+          "description": "0 €. Pas de TVA à l'import. Première immatriculation (case B) : 14/05/2021. 64 mois écoulés, au-delà du seuil de 6 mois."
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Chevaux fiscaux",
+          "description": "5 CV. Base du prix de la carte grise, à 53,50 € par CV en moyenne. Puissance lue (case P.2) : 67 kW, soit 5 CV. Tarif moyen des régions : le prix exact dépend de la vôtre."
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Malus",
+          "description": "0 €. Aucun malus à payer. CO₂ (case V.7) : 128 g/km, sous le seuil de 133. Avant 2022 : pas de taxe au poids."
+        }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://www.immatis.com/#documents",
+      "name": "Documents acceptés",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Allemagne : Zulassungsbescheinigung Teil I et Teil II",
+          "description": "Teil I et Teil II lus ensemble"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Belgique : Certificat d'immatriculation",
+          "description": "Champs harmonisés UE"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Pays-Bas : Kentekenbewijs",
+          "description": "Champs harmonisés UE"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.immatis.com/#faq",
+      "url": "https://www.immatis.com/#faq",
+      "inLanguage": "fr",
+      "isPartOf": { "@id": "https://www.immatis.com/#webpage" },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Comment Immatis décide de la TVA ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Trois lectures sur la date B : elle est imprimée, l'écart se compte en mois de calendrier, il dépasse six mois. Les trois vraies : pas de TVA. Sous six mois : elle est due. Sans date : non calculée."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Il manque un champ sur le certificat, et alors ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Trois lectures : réception CE en K, catégorie M1 ou N1 en J, quinze champs imprimés. Les trois vraies : AVDT. Une seule manque : RTI. Immatis vous le dit avant l'achat, pas après l'acompte."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment le malus est-il calculé ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Trois lectures : moins de 181 mois, première immatriculation après 2015, CO₂ ou masse imprimé. Les trois vraies : le malus se calcule, barème de l'année B puis décote. L'âge ou l'année manque : exonéré. Ni V.7 ni G : non calculé."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Immatis remplace-t-il l'ANTS ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Non. Immatis simule l'instruction, il ne dépose rien. Le dossier reste à faire sur ants.gouv.fr, mais vous savez à l'avance ce qui en sortira."
+          }
+        }
+      ]
+    }
+  ]
+}`,
+        }}
+      />
 
       <Navbar />
 
@@ -233,16 +375,18 @@ export default function Home() {
           </p>
         </div>
         <div className={styles.rows}>
-          {DOCUMENTS.map(([country, document, scope]) => (
-            <div key={country}>
-              <hr className={styles.filet} />
-              <div className={styles.docRow}>
-                <p className={styles.rowLabel}>{country}</p>
-                <p className={styles.rowBody}>{document}</p>
-                <p className={styles.rowMeta}>{scope}</p>
-              </div>
-            </div>
-          ))}
+          <ul className={styles.list}>
+            {DOCUMENTS.map(([country, document, scope]) => (
+              <li key={country}>
+                <hr className={styles.filet} />
+                <div className={styles.docRow}>
+                  <h3 className={styles.rowLabel}>{country}</h3>
+                  <p className={styles.rowBody}>{document}</p>
+                  <p className={styles.rowMeta}>{scope}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
           <hr className={styles.filet} />
           <p className={styles.note}>
             <InfoIcon />
@@ -260,15 +404,17 @@ export default function Home() {
           </h2>
         </div>
         <div className={styles.rows}>
-          {QUESTIONS.map(([question, answer]) => (
-            <div key={question}>
-              <hr className={styles.filet} />
-              <div className={styles.faqRow}>
-                <h3 className={styles.rowLabel}>{question}</h3>
-                <p className={styles.rowBody}>{answer}</p>
-              </div>
-            </div>
-          ))}
+          <ul className={styles.list}>
+            {QUESTIONS.map(([question, answer]) => (
+              <li key={question}>
+                <hr className={styles.filet} />
+                <div className={styles.faqRow}>
+                  <h3 className={styles.rowLabel}>{question}</h3>
+                  <p className={styles.rowBody}>{answer}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
           <hr className={styles.filet} />
         </div>
       </section>

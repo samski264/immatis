@@ -1,6 +1,8 @@
 import { Analytics } from "@vercel/analytics/next";
 import RouteStage from "@/components/RouteStage";
 import ScanStatus from "@/components/ScanStatus";
+import WebMcp from "@/components/WebMcp";
+import { guideIndex } from "@/lib/articles";
 import { aquawax, parabole } from "./fonts";
 import "./globals.css";
 
@@ -17,6 +19,7 @@ export default function RootLayout({ children }) {
         <RouteStage />
         <ScanStatus />
         {children}
+        <WebMcp guides={guideIndex()} />
         <Analytics />
       </body>
     </html>

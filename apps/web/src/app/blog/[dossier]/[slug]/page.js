@@ -13,7 +13,7 @@ export async function generateMetadata({ params }) {
   const { dossier, slug } = await params;
   const article = getArticle(dossier, slug);
   if (!article) return {};
-  return { title: article.title, description: article.lede };
+  return { title: article.title, description: article.description };
 }
 
 function Field({ code, label, example }) {

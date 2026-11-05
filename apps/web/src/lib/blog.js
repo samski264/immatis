@@ -86,6 +86,8 @@ const RTI = {
   label: "RTI ou AVDT",
   eyebrow: "Dossier 01 · voie d'immatriculation",
   title: "RTI ou AVDT : qu'est-ce qui décide de la voie de mon dossier ?",
+  description:
+    "Quinze champs, la catégorie et un titre définitif décident entre l'AVDT et la réception à titre isolé. Ce que la carte grise tranche.",
   intro:
     "La DREAL ne lit pas votre dossier, elle lit la carte grise. Quinze champs harmonisés, la catégorie et le caractère définitif du document décident entre l'attestation de vérification des données techniques et la réception à titre isolé.",
   rule: {
@@ -124,9 +126,12 @@ const ARTICLE = {
   crumb: "Pourquoi mon dossier part en RTI ?",
   eyebrow: "Dossier 01 · voie d'immatriculation",
   title: "Pourquoi mon dossier part en RTI alors que la voiture est européenne ?",
+  description:
+    "Sans numéro de réception par type imprimé sur la carte grise, l'AVDT se ferme avant l'examen du dossier. Pas d'étape COC : la voie est la RTI.",
   lede:
     "Le numéro de réception par type est l'un des quinze champs que la DREAL exige pour une AVDT. Quand il n'est pas imprimé, la voie se ferme avant même l'examen du dossier : pas d'étape COC, un rendez-vous de réception à titre isolé.",
   published: "Publié le 14 octobre 2026",
+  date: "2026-10-14",
   reading: "5 min de lecture",
   blocks: [
     { type: "h2", text: "Le champ D.2, c'est quoi ?" },
@@ -187,6 +192,16 @@ export function getArticle(dossier, slug) {
 
 export function dossierParams() {
   return Object.keys(DOSSIERS).map((dossier) => ({ dossier }));
+}
+
+export function blogIndex() {
+  return [
+    ...Object.values(DOSSIERS).map((dossier) => ({ path: `/blog/${dossier.slug}` })),
+    ...Object.values(ARTICLES).map((article) => ({
+      path: `/blog/${article.dossier}/${article.slug}`,
+      updated: article.date,
+    })),
+  ];
 }
 
 export function articleParams() {

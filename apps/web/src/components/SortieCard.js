@@ -36,7 +36,7 @@ export default function SortieCard({
   return (
     <article id={id} className={[styles.card, toneClass, className].filter(Boolean).join(" ")} style={style}>
       <header className={styles.head}>
-        <p>{label}</p>
+        <h3>{label}</h3>
         <span className={styles.badge}>
           <span className={styles.dot} aria-hidden="true" />
           {status}
