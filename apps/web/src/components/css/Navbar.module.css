@@ -21,10 +21,6 @@
   transition: opacity 150ms ease;
 }
 
-.logo:hover {
-  opacity: 0.7;
-}
-
 .logo img {
   display: block;
   width: 100%;
@@ -50,15 +46,14 @@
   transition: color 150ms ease;
 }
 
-/* Au survol d'un lien, les autres passent en gris ; celui sous le pointeur reste noir. */
-.links:has(.link:hover) .link,
-.links:has(.link:focus-visible) .link {
+/* Au survol du logo ou d'un lien, tout le reste de la barre passe en gris ; l'élément sous le pointeur reste noir.
+   Le logo est noir pur : 0.54 d'opacité sur blanc donne le gris de --color-link-hover. */
+.bar:has(.link:hover, .logo:hover, .link:focus-visible, .logo:focus-visible) .link:not(:hover, :focus-visible) {
   color: var(--color-link-hover);
 }
 
-.links .link:hover,
-.links .link:focus-visible {
-  color: var(--color-text-primary);
+.bar:has(.link:hover, .logo:hover, .link:focus-visible, .logo:focus-visible) .logo:not(:hover, :focus-visible) {
+  opacity: 0.54;
 }
 
 .link:focus-visible,

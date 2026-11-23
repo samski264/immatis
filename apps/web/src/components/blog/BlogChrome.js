@@ -1,6 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 import styles from "@/app/blog/blog.module.css";
+
+const NAV = [
+  ["Comment ça marche", "/#comment-ca-marche"],
+  ["Guide de l'import", "/blog"],
+];
 
 const PRODUCT = [
   ["Comment ça marche", "/#comment-ca-marche"],
@@ -55,38 +61,7 @@ export function Crumb({ items }) {
 }
 
 export function BlogNav() {
-  return (
-    <header className={styles.nav}>
-      <Link href="/" aria-label="immatis">
-        <Image
-          className={styles.lockup}
-          src="/logo-lockup.svg"
-          alt=""
-          width={146}
-          height={30}
-          priority
-          unoptimized
-        />
-      </Link>
-      <div className={styles.navRight}>
-        <nav className={styles.navLinks} aria-label="Page">
-          <Link className={styles.navLink} href="/#comment-ca-marche">
-            Comment ça marche
-          </Link>
-          <Link className={styles.navLink} href="/#avant-achat">
-            Pourquoi avant l&apos;achat
-          </Link>
-          <Link className={styles.navLink} href="/blog" aria-current="page">
-            Blog
-          </Link>
-        </nav>
-        <Link className={styles.countries} href="/#documents">
-          <span>Pays couverts</span>
-          <span>Allemagne · Belgique · Pays-Bas</span>
-        </Link>
-      </div>
-    </header>
-  );
+  return <Navbar links={NAV} />;
 }
 
 export function BlogFooter() {

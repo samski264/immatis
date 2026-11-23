@@ -16,24 +16,12 @@
   margin-inline: auto;
 }
 
-.nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: calc(40 * var(--u));
-  width: 100%;
-  height: calc(96 * var(--u));
-  flex-shrink: 0;
-}
-
 .lockup {
   width: calc(146.276 * var(--u));
   height: calc(30 * var(--u));
   flex-shrink: 0;
 }
 
-.navRight,
-.navLinks,
 .filters,
 .crumb,
 .meta,
@@ -44,17 +32,7 @@
   align-items: center;
 }
 
-.navRight {
-  gap: calc(40 * var(--u));
-}
-
-.navLinks {
-  gap: calc(32 * var(--u));
-}
-
-.navLink,
 .footerLink,
-.countries,
 .intro,
 .lede,
 .ruleText,
@@ -78,9 +56,7 @@
   letter-spacing: var(--tracking-normal);
 }
 
-.navLink,
 .footerLink,
-.countries,
 .ruleText,
 .cardMeta,
 .rowTitle,
@@ -98,34 +74,17 @@
   font-size: var(--size-body);
 }
 
-.navLink,
 .footerLink {
   color: var(--color-text-primary);
 }
 
-.navLink:focus-visible,
 .footerLink:focus-visible,
-.countries:focus-visible,
 .chip:focus-visible,
 .card:focus-visible,
 .deposit:focus-visible,
 .rowLink:focus-visible {
   outline: 2px solid var(--color-text-primary);
   outline-offset: 3px;
-}
-
-.countries {
-  display: flex;
-  align-items: center;
-  gap: calc(8 * var(--u));
-  padding: var(--s-10) calc(16 * var(--u));
-  border: 1px solid var(--color-grey-200);
-  border-radius: 999px;
-  white-space: nowrap;
-}
-
-.countries span:first-child {
-  color: var(--color-grey-500);
 }
 
 .crumb {

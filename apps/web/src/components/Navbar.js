@@ -7,9 +7,7 @@ import styles from "./css/Navbar.module.css";
 
 const LINKS = [
   ["Comment ça marche", "#comment-ca-marche"],
-  ["Pourquoi avant l'achat", "#avant-achat"],
-  ["Réponses", "#reponses"],
-  ["Blog", "/blog"],
+  ["Guide de l'import", "/blog"],
 ];
 
 export default function Navbar({ links = LINKS }) {

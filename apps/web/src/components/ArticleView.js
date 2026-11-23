@@ -6,9 +6,7 @@ import styles from "./css/ArticleView.module.css";
 
 const NAV = [
   ["Comment ça marche", "/#comment-ca-marche"],
-  ["Pourquoi avant l'achat", "/#avant-achat"],
-  ["Réponses", "/#reponses"],
-  ["Blog", "/blog"],
+  ["Guide de l'import", "/blog"],
 ];
 
 const PRODUCT_LINKS = [
