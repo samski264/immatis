@@ -712,7 +712,7 @@
                           "type": "text",
                           "id": "tn57w",
                           "name": "Statut",
-                          "fill": "$color/text/heading-lime",
+                          "fill": "$color/text/heading-neutral",
                           "content": "Dossier a priori recevable",
                           "fontFamily": "$font/family/display",
                           "fontSize": 35,
@@ -723,7 +723,7 @@
                           "type": "text",
                           "id": "M67zmN",
                           "name": "Explication",
-                          "fill": "$color/text/heading-lime",
+                          "fill": "$color/text/heading-neutral",
                           "textGrowth": "fixed-width",
                           "width": "fill_container",
                           "content": "Voie AVDT, véhicule non radié, ni TVA ni malus à régler. Seule la puissance fiscale reste une estimation.",
@@ -2914,7 +2914,7 @@
               "width": "fill_container",
               "height": 398,
               "layout": "vertical",
-              "gap": 16,
+              "gap": "$space/17",
               "justifyContent": "center",
               "alignItems": "center",
               "children": [
@@ -2928,6 +2928,12 @@
                       "content": "Carte grise allemande, belge ou néerlandaise · jusqu'à 3 volets · PDF, JPG ou PNG"
                     }
                   }
+                },
+                {
+                  "id": "BrMss",
+                  "type": "ref",
+                  "ref": "xTEi9",
+                  "name": "Garanties"
                 },
                 {
                   "type": "frame",
@@ -3682,6 +3688,147 @@
                     {
                       "type": "rectangle",
                       "id": "vZ2zy",
+                      "name": "Filet",
+                      "fill": "$color/grey/200",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "R4vNL",
+                      "name": "Question",
+                      "width": "fill_container",
+                      "gap": 39,
+                      "padding": [
+                        23,
+                        0
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "L1xdiO",
+                          "name": "Question",
+                          "fill": "$color/text/primary",
+                          "textGrowth": "fixed-width",
+                          "width": 320,
+                          "content": "C'est vraiment gratuit ?",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$font/family/body",
+                          "fontSize": "$font/size/intro",
+                          "fontWeight": "$font/weight/body"
+                        },
+                        {
+                          "type": "text",
+                          "id": "X5HWRx",
+                          "name": "Réponse",
+                          "fill": "$color/text/primary",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Oui. Le résultat s'affiche en entier, sans compte ni paiement. Le service se finance par une API payante pour les professionnels : mandataires, garages, importateurs. Aucune commission, aucun partenaire à vous recommander.",
+                          "lineHeight": 1.45,
+                          "fontFamily": "$font/family/body",
+                          "fontSize": "$font/size/body",
+                          "fontWeight": "$font/weight/body"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "rectangle",
+                      "id": "r7OoE",
+                      "name": "Filet",
+                      "fill": "$color/grey/200",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "b7cfT",
+                      "name": "Question",
+                      "width": "fill_container",
+                      "gap": 39,
+                      "padding": [
+                        23,
+                        0
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Z2dDH",
+                          "name": "Question",
+                          "fill": "$color/text/primary",
+                          "textGrowth": "fixed-width",
+                          "width": 320,
+                          "content": "Que devient ma photo ?",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$font/family/body",
+                          "fontSize": "$font/size/intro",
+                          "fontWeight": "$font/weight/body"
+                        },
+                        {
+                          "type": "text",
+                          "id": "L3vl1",
+                          "name": "Réponse",
+                          "fill": "$color/text/primary",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Elle est envoyée à Gemini, le modèle de Google qui lit les champs, puis effacée. Immatis n'en garde aucune copie, et le résultat reste dans votre navigateur.",
+                          "lineHeight": 1.45,
+                          "fontFamily": "$font/family/body",
+                          "fontSize": "$font/size/body",
+                          "fontWeight": "$font/weight/body"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "rectangle",
+                      "id": "SIh6z",
+                      "name": "Filet",
+                      "fill": "$color/grey/200",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "v9pOz1",
+                      "name": "Question",
+                      "width": "fill_container",
+                      "gap": 39,
+                      "padding": [
+                        23,
+                        0
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "mADYQ",
+                          "name": "Question",
+                          "fill": "$color/text/primary",
+                          "textGrowth": "fixed-width",
+                          "width": 320,
+                          "content": "Le code est-il ouvert ?",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$font/family/body",
+                          "fontSize": "$font/size/intro",
+                          "fontWeight": "$font/weight/body"
+                        },
+                        {
+                          "type": "text",
+                          "id": "SOK1T",
+                          "name": "Réponse",
+                          "fill": "$color/text/primary",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Oui. Le code, les règles et les barèmes sont publics, avec leur source et leur date de vérification. Seule la lecture de l'image repose sur un modèle fermé, Gemini de Google.",
+                          "lineHeight": 1.45,
+                          "fontFamily": "$font/family/body",
+                          "fontSize": "$font/size/body",
+                          "fontWeight": "$font/weight/body"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "rectangle",
+                      "id": "IeZ2l",
                       "name": "Filet",
                       "fill": "$color/grey/200",
                       "width": "fill_container",
@@ -11438,7 +11585,7 @@
                       "fill": "$color/text/primary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Qu'est-ce qui envoie mon dossier en AVDT plutôt qu'en RTI ?",
+                      "content": "COC, AVDT ou RTI : quelle voie pour mon dossier ?",
                       "fontFamily": "$font/family/display",
                       "fontSize": "$font/size/heading",
                       "fontWeight": "$font/weight/heading",
@@ -11451,7 +11598,7 @@
                       "fill": "$color/text/primary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Trois conditions, toutes lues sur le certificat d'immatriculation étranger. Les trois sont vraies : AVDT. Une seule manque : RTI.",
+                      "content": "Trois voies d'immatriculation, au même rang. Vous ne choisissez pas : la carte grise étrangère et les papiers du vendeur désignent celle qui s'applique.",
                       "lineHeight": 1.45,
                       "fontFamily": "$font/family/body",
                       "fontSize": "$font/size/body",
@@ -11468,160 +11615,649 @@
                   "gap": 17,
                   "children": [
                     {
-                      "id": "rA005",
-                      "type": "ref",
-                      "ref": "xaVwq",
-                      "name": "Rail de décision"
-                    },
-                    {
                       "type": "frame",
-                      "id": "Z2sOX",
-                      "name": "Sources",
+                      "id": "b4OVn",
+                      "name": "Schéma des voies",
                       "width": "fill_container",
                       "layout": "vertical",
-                      "gap": 8,
-                      "padding": [
-                        39,
-                        0,
-                        0,
-                        0
-                      ],
                       "children": [
                         {
-                          "type": "text",
-                          "id": "aIP37",
-                          "name": "Eyebrow",
-                          "fill": "$color/grey/500",
-                          "content": "SOURCES",
-                          "fontFamily": "$font/family/body",
-                          "fontSize": "$font/size/body",
-                          "fontWeight": "$font/weight/bold",
-                          "letterSpacing": 1.2
-                        },
-                        {
                           "type": "frame",
-                          "id": "LSB8H",
-                          "name": "Source",
-                          "width": "fill_container",
+                          "id": "V6OF2B",
+                          "name": "Départ",
                           "gap": 10,
+                          "alignItems": "center",
                           "children": [
                             {
-                              "type": "icon",
-                              "id": "xyWh9",
-                              "name": "Icône",
-                              "width": 14,
-                              "height": 14,
-                              "icon": "external-link",
-                              "library": "lucide",
-                              "fill": "$color/grey/500"
+                              "type": "frame",
+                              "id": "Y3dMlv",
+                              "name": "Station",
+                              "width": 16,
+                              "height": 16,
+                              "fill": "$color/bg/page",
+                              "cornerRadius": 999,
+                              "stroke": "$color/text/primary",
+                              "strokeWidth": 1.5
                             },
                             {
                               "type": "text",
-                              "id": "fNoib",
-                              "name": "Lien",
-                              "fill": "$color/grey/500",
-                              "textGrowth": "fixed-width",
-                              "width": "fill_container",
-                              "content": "Fiche de constitution de dossier AVDT, DREAL Nouvelle-Aquitaine (2024) : conditions, catégories M1 et N1, coût de 67,38 €",
-                              "lineHeight": 1.45,
+                              "id": "u70kmU",
+                              "name": "Libellé",
+                              "fill": "$color/text/primary",
+                              "content": "Votre dossier : la carte grise étrangère et les papiers du vendeur",
                               "fontFamily": "$font/family/body",
                               "fontSize": "$font/size/body",
-                              "fontWeight": "$font/weight/body"
+                              "fontWeight": "$font/weight/bold"
                             }
                           ]
                         },
                         {
                           "type": "frame",
-                          "id": "DVBaj",
-                          "name": "Source",
-                          "width": "fill_container",
-                          "gap": 10,
+                          "id": "y2Cpf",
+                          "name": "Tige",
+                          "padding": [
+                            0,
+                            0,
+                            0,
+                            7.5
+                          ],
                           "children": [
                             {
-                              "type": "icon",
-                              "id": "J5yggx",
-                              "name": "Icône",
-                              "width": 14,
-                              "height": 14,
-                              "icon": "external-link",
-                              "library": "lucide",
-                              "fill": "$color/grey/500"
-                            },
-                            {
-                              "type": "text",
-                              "id": "TEI4T",
-                              "name": "Lien",
-                              "fill": "$color/grey/500",
-                              "textGrowth": "fixed-width",
-                              "width": "fill_container",
-                              "content": "Fiche AVDT, DREAL Grand Est : titre définitif et harmonisé CE, pièces du dossier",
-                              "lineHeight": 1.45,
-                              "fontFamily": "$font/family/body",
-                              "fontSize": "$font/size/body",
-                              "fontWeight": "$font/weight/body"
+                              "type": "rectangle",
+                              "id": "hLeuT",
+                              "name": "Ligne",
+                              "fill": "$color/text/primary",
+                              "width": 1,
+                              "height": 20
                             }
                           ]
                         },
                         {
                           "type": "frame",
-                          "id": "yFLc2",
-                          "name": "Source",
-                          "width": "fill_container",
-                          "gap": 10,
+                          "id": "o9Zfn",
+                          "name": "Barre",
+                          "padding": [
+                            0,
+                            0,
+                            0,
+                            7.5
+                          ],
                           "children": [
                             {
-                              "type": "icon",
-                              "id": "jr6LF",
-                              "name": "Icône",
-                              "width": 14,
-                              "height": 14,
-                              "icon": "external-link",
-                              "library": "lucide",
-                              "fill": "$color/grey/500"
-                            },
-                            {
-                              "type": "text",
-                              "id": "ojVzm",
-                              "name": "Lien",
-                              "fill": "$color/grey/500",
-                              "textGrowth": "fixed-width",
-                              "width": "fill_container",
-                              "content": "Directive 1999/37/CE du Conseil : codes harmonisés des certificats d'immatriculation",
-                              "lineHeight": 1.45,
-                              "fontFamily": "$font/family/body",
-                              "fontSize": "$font/size/body",
-                              "fontWeight": "$font/weight/body"
+                              "type": "rectangle",
+                              "id": "OiQ3q",
+                              "name": "Ligne",
+                              "fill": "$color/text/primary",
+                              "width": 517,
+                              "height": 1
                             }
                           ]
                         },
                         {
                           "type": "frame",
-                          "id": "V23hV",
-                          "name": "Source",
+                          "id": "WeJUf",
+                          "name": "Voies",
                           "width": "fill_container",
-                          "gap": 10,
+                          "gap": 20,
                           "children": [
                             {
-                              "type": "icon",
-                              "id": "C4XQN",
-                              "name": "Icône",
-                              "width": 14,
-                              "height": 14,
-                              "icon": "external-link",
-                              "library": "lucide",
-                              "fill": "$color/grey/500"
+                              "type": "frame",
+                              "id": "ib31X",
+                              "name": "Voie COC",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "TJnYB",
+                                  "name": "Tige",
+                                  "padding": [
+                                    0,
+                                    0,
+                                    0,
+                                    7.5
+                                  ],
+                                  "children": [
+                                    {
+                                      "type": "rectangle",
+                                      "id": "V3dYA",
+                                      "name": "Ligne",
+                                      "fill": "$color/text/primary",
+                                      "width": 1,
+                                      "height": 20
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "Y7zUl",
+                                  "name": "Terminus COC",
+                                  "height": 32,
+                                  "fill": "$color/surface/card-sky",
+                                  "cornerRadius": 999,
+                                  "gap": 8,
+                                  "padding": [
+                                    0,
+                                    14
+                                  ],
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "mFTIk",
+                                      "name": "Libellé",
+                                      "fill": "$color/text/heading-sky",
+                                      "content": "COC",
+                                      "fontFamily": "$font/family/body",
+                                      "fontSize": "$font/size/body",
+                                      "fontWeight": "$font/weight/bold"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "A8MMUT",
+                                      "name": "Sous-titre",
+                                      "fill": "$color/text/heading-sky",
+                                      "content": "directement à l'ANTS",
+                                      "fontFamily": "$font/family/body",
+                                      "fontSize": "$font/size/caption",
+                                      "fontWeight": "$font/weight/body"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "Zv4l7",
+                                  "name": "Conditions",
+                                  "width": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 14,
+                                  "padding": [
+                                    17,
+                                    0,
+                                    0,
+                                    0
+                                  ],
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "tTDWS",
+                                      "name": "Condition",
+                                      "width": "fill_container",
+                                      "layout": "vertical",
+                                      "gap": 4,
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "sqtRU",
+                                          "name": "Titre",
+                                          "fill": "$color/text/primary",
+                                          "textGrowth": "fixed-width",
+                                          "width": "fill_container",
+                                          "content": "Réception CE du véhicule",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$font/family/body",
+                                          "fontSize": "$font/size/body",
+                                          "fontWeight": "$font/weight/bold"
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "X509CF",
+                                          "name": "Champ lu",
+                                          "fill": "$color/grey/500",
+                                          "textGrowth": "fixed-width",
+                                          "width": "fill_container",
+                                          "content": "Champ K renseigné",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$font/family/body",
+                                          "fontSize": "$font/size/body",
+                                          "fontWeight": "$font/weight/body"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "ijpT0",
+                                      "name": "Condition",
+                                      "width": "fill_container",
+                                      "layout": "vertical",
+                                      "gap": 4,
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "NQcYw",
+                                          "name": "Titre",
+                                          "fill": "$color/text/primary",
+                                          "textGrowth": "fixed-width",
+                                          "width": "fill_container",
+                                          "content": "Certificat de conformité en main",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$font/family/body",
+                                          "fontSize": "$font/size/body",
+                                          "fontWeight": "$font/weight/bold"
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "OssNY",
+                                          "name": "Champ lu",
+                                          "fill": "$color/grey/500",
+                                          "textGrowth": "fixed-width",
+                                          "width": "fill_container",
+                                          "content": "Délivré par le constructeur",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$font/family/body",
+                                          "fontSize": "$font/size/body",
+                                          "fontWeight": "$font/weight/body"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
                             },
                             {
+                              "type": "frame",
+                              "id": "T8xt7x",
+                              "name": "Voie AVDT",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "D0cIX",
+                                  "name": "Tige",
+                                  "padding": [
+                                    0,
+                                    0,
+                                    0,
+                                    7.5
+                                  ],
+                                  "children": [
+                                    {
+                                      "type": "rectangle",
+                                      "id": "NQrsw",
+                                      "name": "Ligne",
+                                      "fill": "$color/text/primary",
+                                      "width": 1,
+                                      "height": 20
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "G18IRF",
+                                  "name": "Terminus AVDT",
+                                  "height": 32,
+                                  "fill": "$color/surface/card-lime",
+                                  "cornerRadius": 999,
+                                  "gap": 8,
+                                  "padding": [
+                                    0,
+                                    14
+                                  ],
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "vKQMs",
+                                      "name": "Libellé",
+                                      "fill": "$color/text/heading-lime",
+                                      "content": "AVDT",
+                                      "fontFamily": "$font/family/body",
+                                      "fontSize": "$font/size/body",
+                                      "fontWeight": "$font/weight/bold"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "l5mew",
+                                      "name": "Sous-titre",
+                                      "fill": "$color/text/heading-lime",
+                                      "content": "attestation DREAL",
+                                      "fontFamily": "$font/family/body",
+                                      "fontSize": "$font/size/caption",
+                                      "fontWeight": "$font/weight/body"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "g1gwt7",
+                                  "name": "Conditions",
+                                  "width": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 14,
+                                  "padding": [
+                                    17,
+                                    0,
+                                    0,
+                                    0
+                                  ],
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "K4ved",
+                                      "name": "Condition",
+                                      "width": "fill_container",
+                                      "layout": "vertical",
+                                      "gap": 4,
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "M3AQkI",
+                                          "name": "Titre",
+                                          "fill": "$color/text/primary",
+                                          "textGrowth": "fixed-width",
+                                          "width": "fill_container",
+                                          "content": "Réception CE du véhicule",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$font/family/body",
+                                          "fontSize": "$font/size/body",
+                                          "fontWeight": "$font/weight/bold"
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "tVKt4",
+                                          "name": "Champ lu",
+                                          "fill": "$color/grey/500",
+                                          "textGrowth": "fixed-width",
+                                          "width": "fill_container",
+                                          "content": "Champ K",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$font/family/body",
+                                          "fontSize": "$font/size/body",
+                                          "fontWeight": "$font/weight/body"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "YwJ4w",
+                                      "name": "Condition",
+                                      "width": "fill_container",
+                                      "layout": "vertical",
+                                      "gap": 4,
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "nNmER",
+                                          "name": "Titre",
+                                          "fill": "$color/text/primary",
+                                          "textGrowth": "fixed-width",
+                                          "width": "fill_container",
+                                          "content": "Catégorie M1 ou N1",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$font/family/body",
+                                          "fontSize": "$font/size/body",
+                                          "fontWeight": "$font/weight/bold"
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "HBhvJ",
+                                          "name": "Champ lu",
+                                          "fill": "$color/grey/500",
+                                          "textGrowth": "fixed-width",
+                                          "width": "fill_container",
+                                          "content": "Champ J",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$font/family/body",
+                                          "fontSize": "$font/size/body",
+                                          "fontWeight": "$font/weight/body"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "wdCKX",
+                                      "name": "Condition",
+                                      "width": "fill_container",
+                                      "layout": "vertical",
+                                      "gap": 4,
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "QPpsE",
+                                          "name": "Titre",
+                                          "fill": "$color/text/primary",
+                                          "textGrowth": "fixed-width",
+                                          "width": "fill_container",
+                                          "content": "Quinze champs imprimés",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$font/family/body",
+                                          "fontSize": "$font/size/body",
+                                          "fontWeight": "$font/weight/bold"
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "I33Tj",
+                                          "name": "Champ lu",
+                                          "fill": "$color/grey/500",
+                                          "textGrowth": "fixed-width",
+                                          "width": "fill_container",
+                                          "content": "A à S.1, aucun vide",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$font/family/body",
+                                          "fontSize": "$font/size/body",
+                                          "fontWeight": "$font/weight/body"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "SgLIL",
+                              "name": "Voie RTI",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "BG9N4",
+                                  "name": "Tige",
+                                  "padding": [
+                                    0,
+                                    0,
+                                    0,
+                                    7.5
+                                  ],
+                                  "children": [
+                                    {
+                                      "type": "rectangle",
+                                      "id": "noRBw",
+                                      "name": "Ligne",
+                                      "fill": "$color/text/primary",
+                                      "width": 1,
+                                      "height": 20
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "mpLyp",
+                                  "name": "Terminus RTI",
+                                  "height": 32,
+                                  "fill": "$color/surface/card-neutral",
+                                  "cornerRadius": 999,
+                                  "gap": 8,
+                                  "padding": [
+                                    0,
+                                    14
+                                  ],
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "u18b0",
+                                      "name": "Libellé",
+                                      "fill": "$color/text/heading-neutral",
+                                      "content": "RTI",
+                                      "fontFamily": "$font/family/body",
+                                      "fontSize": "$font/size/body",
+                                      "fontWeight": "$font/weight/bold"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "TBUfS",
+                                      "name": "Sous-titre",
+                                      "fill": "$color/text/heading-neutral",
+                                      "content": "contrôle en DREAL",
+                                      "fontFamily": "$font/family/body",
+                                      "fontSize": "$font/size/caption",
+                                      "fontWeight": "$font/weight/body"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "JGEK7",
+                                  "name": "Conditions",
+                                  "width": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 14,
+                                  "padding": [
+                                    17,
+                                    0,
+                                    0,
+                                    0
+                                  ],
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "caXoe",
+                                      "name": "Condition",
+                                      "width": "fill_container",
+                                      "layout": "vertical",
+                                      "gap": 4,
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "iDH8X",
+                                          "name": "Titre",
+                                          "fill": "$color/text/primary",
+                                          "textGrowth": "fixed-width",
+                                          "width": "fill_container",
+                                          "content": "Pas de réception CE",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$font/family/body",
+                                          "fontSize": "$font/size/body",
+                                          "fontWeight": "$font/weight/bold"
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "G9RcFz",
+                                          "name": "Champ lu",
+                                          "fill": "$color/grey/500",
+                                          "textGrowth": "fixed-width",
+                                          "width": "fill_container",
+                                          "content": "Champ K vide",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$font/family/body",
+                                          "fontSize": "$font/size/body",
+                                          "fontWeight": "$font/weight/body"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "SN0Ev",
+                                      "name": "Condition",
+                                      "width": "fill_container",
+                                      "layout": "vertical",
+                                      "gap": 4,
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "QWRpz",
+                                          "name": "Titre",
+                                          "fill": "$color/text/primary",
+                                          "textGrowth": "fixed-width",
+                                          "width": "fill_container",
+                                          "content": "Ou une carte grise incomplète",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$font/family/body",
+                                          "fontSize": "$font/size/body",
+                                          "fontWeight": "$font/weight/bold"
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "sfWSK",
+                                          "name": "Champ lu",
+                                          "fill": "$color/grey/500",
+                                          "textGrowth": "fixed-width",
+                                          "width": "fill_container",
+                                          "content": "Champs manquants, sans COC",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$font/family/body",
+                                          "fontSize": "$font/size/body",
+                                          "fontWeight": "$font/weight/body"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "nJwgH",
+                                      "name": "Condition",
+                                      "width": "fill_container",
+                                      "layout": "vertical",
+                                      "gap": 4,
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "CPVb7",
+                                          "name": "Titre",
+                                          "fill": "$color/text/primary",
+                                          "textGrowth": "fixed-width",
+                                          "width": "fill_container",
+                                          "content": "Ou un véhicule transformé",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$font/family/body",
+                                          "fontSize": "$font/size/body",
+                                          "fontWeight": "$font/weight/bold"
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "dNFL2",
+                                          "name": "Champ lu",
+                                          "fill": "$color/grey/500",
+                                          "textGrowth": "fixed-width",
+                                          "width": "fill_container",
+                                          "content": "Plus conforme à sa réception",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$font/family/body",
+                                          "fontSize": "$font/size/body",
+                                          "fontWeight": "$font/weight/body"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Y3Lr2",
+                          "name": "Légende",
+                          "width": "fill_container",
+                          "padding": [
+                            23,
+                            0,
+                            0,
+                            0
+                          ],
+                          "children": [
+                            {
                               "type": "text",
-                              "id": "rF0nP",
-                              "name": "Lien",
+                              "id": "RsLQN",
+                              "name": "Texte",
                               "fill": "$color/grey/500",
                               "textGrowth": "fixed-width",
                               "width": "fill_container",
-                              "content": "Réception à titre isolé (art. R.321-15 du Code de la route) : plaquette usagers, DREAL Centre-Val de Loire",
-                              "lineHeight": 1.45,
+                              "content": "Une seule voie s'applique à un dossier. Ce sont vos papiers qui la désignent, pas un ordre de préférence.",
                               "fontFamily": "$font/family/body",
-                              "fontSize": "$font/size/body",
+                              "fontSize": "$font/size/caption",
                               "fontWeight": "$font/weight/body"
                             }
                           ]
@@ -11669,7 +12305,7 @@
                       "fill": "$color/text/primary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Six questions, du cas général au cas qui bloque.",
+                      "content": "Les questions du dossier, voie par voie.",
                       "fontFamily": "$font/family/display",
                       "fontSize": "$font/size/heading",
                       "fontWeight": "$font/weight/heading",
@@ -11679,444 +12315,702 @@
                 },
                 {
                   "type": "frame",
-                  "id": "aT9PE",
+                  "id": "GI0Vh",
                   "name": "Questions",
                   "width": "fill_container",
                   "layout": "vertical",
+                  "gap": 45,
                   "children": [
                     {
-                      "type": "rectangle",
-                      "id": "EWzUH",
-                      "name": "Filet",
-                      "fill": "$color/grey/200",
-                      "width": "fill_container",
-                      "height": 1
-                    },
-                    {
                       "type": "frame",
-                      "id": "V8gVMx",
-                      "name": "Question 1",
+                      "id": "z5uhKL",
+                      "name": "Toutes les voies",
                       "width": "fill_container",
-                      "gap": 39,
-                      "padding": [
-                        23,
-                        0
-                      ],
+                      "layout": "vertical",
                       "children": [
                         {
-                          "type": "text",
-                          "id": "KV944",
-                          "name": "Numéro",
-                          "fill": "$color/text/heading-neutral",
-                          "textGrowth": "fixed-width",
-                          "width": 56,
-                          "content": "01",
-                          "fontFamily": "$font/family/display",
-                          "fontSize": "$font/size/intro",
-                          "fontWeight": "200",
-                          "letterSpacing": -0.6
-                        },
-                        {
                           "type": "frame",
-                          "id": "yYRwt",
-                          "name": "Contenu",
-                          "width": "fill_container",
-                          "layout": "vertical",
-                          "gap": 6,
+                          "id": "gKp50",
+                          "name": "En-tête",
+                          "padding": [
+                            0,
+                            0,
+                            10,
+                            0
+                          ],
                           "children": [
                             {
                               "type": "text",
-                              "id": "qSr70",
+                              "id": "r0RHwE",
+                              "name": "Eyebrow",
+                              "fill": "$color/grey/500",
+                              "content": "POUR LES TROIS VOIES",
+                              "fontFamily": "$font/family/body",
+                              "fontSize": "$font/size/body",
+                              "fontWeight": "$font/weight/bold",
+                              "letterSpacing": 1.2
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "dDxDn",
+                          "name": "Filet",
+                          "fill": "$color/grey/200",
+                          "width": "fill_container",
+                          "height": 1
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Bp4yv",
+                          "name": "Article",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "padding": [
+                            17,
+                            0
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Bet6Z",
                               "name": "Titre",
                               "fill": "$color/text/primary",
                               "textGrowth": "fixed-width",
                               "width": "fill_container",
                               "content": "RTI ou AVDT : qu'est-ce qui décide de la voie de mon dossier ?",
-                              "lineHeight": 1.2,
+                              "lineHeight": 1.3,
                               "fontFamily": "$font/family/body",
-                              "fontSize": "$font/size/intro",
+                              "fontSize": 17,
+                              "fontWeight": "$font/weight/body"
+                            },
+                            {
+                              "type": "text",
+                              "id": "THLEZ",
+                              "name": "Date",
+                              "fill": "$color/grey/500",
+                              "content": "14 oct. 2026",
+                              "fontFamily": "$font/family/body",
+                              "fontSize": "$font/size/caption",
                               "fontWeight": "$font/weight/body"
                             }
                           ]
                         },
                         {
-                          "type": "text",
-                          "id": "lhhs0",
-                          "name": "Date",
-                          "fill": "$color/grey/500",
-                          "textGrowth": "fixed-width",
-                          "width": 110,
-                          "content": "14 oct. 2026",
-                          "lineHeight": 1.45,
-                          "textAlign": "right",
-                          "fontFamily": "$font/family/body",
-                          "fontSize": "$font/size/body",
-                          "fontWeight": "$font/weight/body"
+                          "type": "rectangle",
+                          "id": "ehnYU",
+                          "name": "Filet",
+                          "fill": "$color/grey/200",
+                          "width": "fill_container",
+                          "height": 1
                         }
                       ]
-                    },
-                    {
-                      "type": "rectangle",
-                      "id": "pLwce",
-                      "name": "Filet",
-                      "fill": "$color/grey/200",
-                      "width": "fill_container",
-                      "height": 1
                     },
                     {
                       "type": "frame",
-                      "id": "VoEoT",
-                      "name": "Question 2",
+                      "id": "kdX0s",
+                      "name": "Par voie",
                       "width": "fill_container",
-                      "gap": 39,
-                      "padding": [
-                        23,
-                        0
-                      ],
+                      "gap": 20,
                       "children": [
                         {
-                          "type": "text",
-                          "id": "ZEll6",
-                          "name": "Numéro",
-                          "fill": "$color/grey/500",
-                          "textGrowth": "fixed-width",
-                          "width": 56,
-                          "content": "02",
-                          "fontFamily": "$font/family/display",
-                          "fontSize": "$font/size/intro",
-                          "fontWeight": "200",
-                          "letterSpacing": -0.6
-                        },
-                        {
                           "type": "frame",
-                          "id": "x96K7",
-                          "name": "Contenu",
+                          "id": "m2gTlY",
+                          "name": "Voie COC",
                           "width": "fill_container",
                           "layout": "vertical",
-                          "gap": 6,
                           "children": [
                             {
-                              "type": "text",
-                              "id": "x5scGx",
-                              "name": "Titre",
-                              "fill": "$color/text/primary",
-                              "textGrowth": "fixed-width",
+                              "type": "frame",
+                              "id": "Af9n2",
+                              "name": "En-tête",
+                              "padding": [
+                                0,
+                                0,
+                                10,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "CtGdY",
+                                  "name": "Terminus COC",
+                                  "height": 32,
+                                  "fill": "$color/surface/card-sky",
+                                  "cornerRadius": 999,
+                                  "gap": 8,
+                                  "padding": [
+                                    0,
+                                    14
+                                  ],
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "zuaBp",
+                                      "name": "Libellé",
+                                      "fill": "$color/text/heading-sky",
+                                      "content": "COC",
+                                      "fontFamily": "$font/family/body",
+                                      "fontSize": "$font/size/body",
+                                      "fontWeight": "$font/weight/bold"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "L4xhN",
+                                      "name": "Sous-titre",
+                                      "fill": "$color/text/heading-sky",
+                                      "content": "directement à l'ANTS",
+                                      "fontFamily": "$font/family/body",
+                                      "fontSize": "$font/size/caption",
+                                      "fontWeight": "$font/weight/body"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "rectangle",
+                              "id": "n2udf",
+                              "name": "Filet",
+                              "fill": "$color/grey/200",
                               "width": "fill_container",
-                              "content": "AVDT, c'est quoi ?",
-                              "lineHeight": 1.2,
-                              "fontFamily": "$font/family/body",
-                              "fontSize": "$font/size/intro",
-                              "fontWeight": "$font/weight/body"
+                              "height": 1
+                            },
+                            {
+                              "type": "frame",
+                              "id": "v1kDSn",
+                              "name": "Article",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 6,
+                              "padding": [
+                                17,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "s0PBT",
+                                  "name": "Titre",
+                                  "fill": "$color/text/primary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Un COC, c'est quoi, et en ai-je besoin ?",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$font/family/body",
+                                  "fontSize": 17,
+                                  "fontWeight": "$font/weight/body"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "LJI3f",
+                                  "name": "Date",
+                                  "fill": "$color/grey/500",
+                                  "content": "1 oct. 2026",
+                                  "fontFamily": "$font/family/body",
+                                  "fontSize": "$font/size/caption",
+                                  "fontWeight": "$font/weight/body"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "rectangle",
+                              "id": "bu0F2",
+                              "name": "Filet",
+                              "fill": "$color/grey/200",
+                              "width": "fill_container",
+                              "height": 1
                             }
                           ]
                         },
                         {
+                          "type": "frame",
+                          "id": "lBPYk",
+                          "name": "Voie AVDT",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "dqmdk",
+                              "name": "En-tête",
+                              "padding": [
+                                0,
+                                0,
+                                10,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "cJkki",
+                                  "name": "Terminus AVDT",
+                                  "height": 32,
+                                  "fill": "$color/surface/card-lime",
+                                  "cornerRadius": 999,
+                                  "gap": 8,
+                                  "padding": [
+                                    0,
+                                    14
+                                  ],
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "K82Pn",
+                                      "name": "Libellé",
+                                      "fill": "$color/text/heading-lime",
+                                      "content": "AVDT",
+                                      "fontFamily": "$font/family/body",
+                                      "fontSize": "$font/size/body",
+                                      "fontWeight": "$font/weight/bold"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "R15e0q",
+                                      "name": "Sous-titre",
+                                      "fill": "$color/text/heading-lime",
+                                      "content": "attestation DREAL",
+                                      "fontFamily": "$font/family/body",
+                                      "fontSize": "$font/size/caption",
+                                      "fontWeight": "$font/weight/body"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "rectangle",
+                              "id": "EKRYJ",
+                              "name": "Filet",
+                              "fill": "$color/grey/200",
+                              "width": "fill_container",
+                              "height": 1
+                            },
+                            {
+                              "type": "frame",
+                              "id": "M14AqJ",
+                              "name": "Article",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 6,
+                              "padding": [
+                                17,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "c4lu1",
+                                  "name": "Titre",
+                                  "fill": "$color/text/primary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "AVDT, c'est quoi ?",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$font/family/body",
+                                  "fontSize": 17,
+                                  "fontWeight": "$font/weight/body"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "NyvT4",
+                                  "name": "Date",
+                                  "fill": "$color/grey/500",
+                                  "content": "7 oct. 2026",
+                                  "fontFamily": "$font/family/body",
+                                  "fontSize": "$font/size/caption",
+                                  "fontWeight": "$font/weight/body"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "rectangle",
+                              "id": "VSLNQ",
+                              "name": "Filet",
+                              "fill": "$color/grey/200",
+                              "width": "fill_container",
+                              "height": 1
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "qk2Pm",
+                          "name": "Voie RTI",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "O40n0H",
+                              "name": "En-tête",
+                              "padding": [
+                                0,
+                                0,
+                                10,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "crr3O",
+                                  "name": "Terminus RTI",
+                                  "height": 32,
+                                  "fill": "$color/surface/card-neutral",
+                                  "cornerRadius": 999,
+                                  "gap": 8,
+                                  "padding": [
+                                    0,
+                                    14
+                                  ],
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "knCKe",
+                                      "name": "Libellé",
+                                      "fill": "$color/text/heading-neutral",
+                                      "content": "RTI",
+                                      "fontFamily": "$font/family/body",
+                                      "fontSize": "$font/size/body",
+                                      "fontWeight": "$font/weight/bold"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "KuDze",
+                                      "name": "Sous-titre",
+                                      "fill": "$color/text/heading-neutral",
+                                      "content": "contrôle en DREAL",
+                                      "fontFamily": "$font/family/body",
+                                      "fontSize": "$font/size/caption",
+                                      "fontWeight": "$font/weight/body"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "rectangle",
+                              "id": "l2rF6",
+                              "name": "Filet",
+                              "fill": "$color/grey/200",
+                              "width": "fill_container",
+                              "height": 1
+                            },
+                            {
+                              "type": "frame",
+                              "id": "zEJUs",
+                              "name": "Article",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 6,
+                              "padding": [
+                                17,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "HtNLg",
+                                  "name": "Titre",
+                                  "fill": "$color/text/primary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "RTI, c'est quoi ?",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$font/family/body",
+                                  "fontSize": 17,
+                                  "fontWeight": "$font/weight/body"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "K277qB",
+                                  "name": "Date",
+                                  "fill": "$color/grey/500",
+                                  "content": "29 sept. 2026",
+                                  "fontFamily": "$font/family/body",
+                                  "fontSize": "$font/size/caption",
+                                  "fontWeight": "$font/weight/body"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "rectangle",
+                              "id": "t4jGk",
+                              "name": "Filet",
+                              "fill": "$color/grey/200",
+                              "width": "fill_container",
+                              "height": 1
+                            },
+                            {
+                              "type": "frame",
+                              "id": "xkQW5",
+                              "name": "Article",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 6,
+                              "padding": [
+                                17,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "wSnTN",
+                                  "name": "Titre",
+                                  "fill": "$color/text/primary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Pourquoi mon dossier part en RTI alors que la voiture est européenne ?",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$font/family/body",
+                                  "fontSize": 17,
+                                  "fontWeight": "$font/weight/body"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "CGBsF",
+                                  "name": "Date",
+                                  "fill": "$color/grey/500",
+                                  "content": "14 oct. 2026",
+                                  "fontFamily": "$font/family/body",
+                                  "fontSize": "$font/size/caption",
+                                  "fontWeight": "$font/weight/body"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "rectangle",
+                              "id": "E3VtU",
+                              "name": "Filet",
+                              "fill": "$color/grey/200",
+                              "width": "fill_container",
+                              "height": 1
+                            },
+                            {
+                              "type": "frame",
+                              "id": "sltzf",
+                              "name": "Article",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 6,
+                              "padding": [
+                                17,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "gYsnc",
+                                  "name": "Titre",
+                                  "fill": "$color/text/primary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Combien coûte une RTI et combien de temps ça prend ?",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$font/family/body",
+                                  "fontSize": 17,
+                                  "fontWeight": "$font/weight/body"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "pXKOQ",
+                                  "name": "Date",
+                                  "fill": "$color/grey/500",
+                                  "content": "20 sept. 2026",
+                                  "fontFamily": "$font/family/body",
+                                  "fontSize": "$font/size/caption",
+                                  "fontWeight": "$font/weight/body"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "rectangle",
+                              "id": "NOJXT",
+                              "name": "Filet",
+                              "fill": "$color/grey/200",
+                              "width": "fill_container",
+                              "height": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "BpCND",
+              "name": "Sources",
+              "width": "fill_container",
+              "gap": 81,
+              "padding": [
+                0,
+                39,
+                81,
+                39
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "jAloL",
+                  "name": "Titre",
+                  "width": 360,
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "aIP37",
+                      "name": "Eyebrow",
+                      "fill": "$color/grey/500",
+                      "content": "SOURCES",
+                      "fontFamily": "$font/family/body",
+                      "fontSize": "$font/size/body",
+                      "fontWeight": "$font/weight/bold",
+                      "letterSpacing": 1.2
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Z2sOX",
+                  "name": "Liste",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "LSB8H",
+                      "name": "Source",
+                      "width": "fill_container",
+                      "gap": 10,
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "xyWh9",
+                          "name": "Icône",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "external-link",
+                          "library": "lucide",
+                          "fill": "$color/grey/500"
+                        },
+                        {
                           "type": "text",
-                          "id": "jMoNS",
-                          "name": "Date",
+                          "id": "fNoib",
+                          "name": "Lien",
                           "fill": "$color/grey/500",
                           "textGrowth": "fixed-width",
-                          "width": 110,
-                          "content": "7 oct. 2026",
+                          "width": "fill_container",
+                          "content": "Fiche de constitution de dossier AVDT, DREAL Nouvelle-Aquitaine (2024) : conditions, catégories M1 et N1, coût de 67,38 €",
                           "lineHeight": 1.45,
-                          "textAlign": "right",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/body"
                         }
                       ]
-                    },
-                    {
-                      "type": "rectangle",
-                      "id": "U2WY6",
-                      "name": "Filet",
-                      "fill": "$color/grey/200",
-                      "width": "fill_container",
-                      "height": 1
                     },
                     {
                       "type": "frame",
-                      "id": "xEbyh",
-                      "name": "Question 3",
+                      "id": "DVBaj",
+                      "name": "Source",
                       "width": "fill_container",
-                      "gap": 39,
-                      "padding": [
-                        23,
-                        0
-                      ],
+                      "gap": 10,
                       "children": [
                         {
-                          "type": "text",
-                          "id": "Caoyy",
-                          "name": "Numéro",
-                          "fill": "$color/grey/500",
-                          "textGrowth": "fixed-width",
-                          "width": 56,
-                          "content": "03",
-                          "fontFamily": "$font/family/display",
-                          "fontSize": "$font/size/intro",
-                          "fontWeight": "200",
-                          "letterSpacing": -0.6
+                          "type": "icon",
+                          "id": "J5yggx",
+                          "name": "Icône",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "external-link",
+                          "library": "lucide",
+                          "fill": "$color/grey/500"
                         },
                         {
-                          "type": "frame",
-                          "id": "chgos",
-                          "name": "Contenu",
+                          "type": "text",
+                          "id": "TEI4T",
+                          "name": "Lien",
+                          "fill": "$color/grey/500",
+                          "textGrowth": "fixed-width",
                           "width": "fill_container",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "Nsr5D",
-                              "name": "Titre",
-                              "fill": "$color/text/primary",
-                              "textGrowth": "fixed-width",
-                              "width": "fill_container",
-                              "content": "RTI, c'est quoi ?",
-                              "lineHeight": 1.2,
-                              "fontFamily": "$font/family/body",
-                              "fontSize": "$font/size/intro",
-                              "fontWeight": "$font/weight/body"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "text",
-                          "id": "kwC2n",
-                          "name": "Date",
-                          "fill": "$color/grey/500",
-                          "textGrowth": "fixed-width",
-                          "width": 110,
-                          "content": "29 sept. 2026",
+                          "content": "Fiche AVDT, DREAL Grand Est : titre définitif et harmonisé CE, pièces du dossier",
                           "lineHeight": 1.45,
-                          "textAlign": "right",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/body"
                         }
                       ]
-                    },
-                    {
-                      "type": "rectangle",
-                      "id": "BFFmB",
-                      "name": "Filet",
-                      "fill": "$color/grey/200",
-                      "width": "fill_container",
-                      "height": 1
                     },
                     {
                       "type": "frame",
-                      "id": "SESRb",
-                      "name": "Question 4",
+                      "id": "yFLc2",
+                      "name": "Source",
                       "width": "fill_container",
-                      "gap": 39,
-                      "padding": [
-                        23,
-                        0
-                      ],
+                      "gap": 10,
                       "children": [
                         {
-                          "type": "text",
-                          "id": "JlDJT",
-                          "name": "Numéro",
-                          "fill": "$color/grey/500",
-                          "textGrowth": "fixed-width",
-                          "width": 56,
-                          "content": "04",
-                          "fontFamily": "$font/family/display",
-                          "fontSize": "$font/size/intro",
-                          "fontWeight": "200",
-                          "letterSpacing": -0.6
+                          "type": "icon",
+                          "id": "jr6LF",
+                          "name": "Icône",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "external-link",
+                          "library": "lucide",
+                          "fill": "$color/grey/500"
                         },
                         {
-                          "type": "frame",
-                          "id": "JONEC",
-                          "name": "Contenu",
+                          "type": "text",
+                          "id": "ojVzm",
+                          "name": "Lien",
+                          "fill": "$color/grey/500",
+                          "textGrowth": "fixed-width",
                           "width": "fill_container",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "m1Bk1",
-                              "name": "Titre",
-                              "fill": "$color/text/primary",
-                              "textGrowth": "fixed-width",
-                              "width": "fill_container",
-                              "content": "Un COC, c'est quoi, et en ai-je besoin ?",
-                              "lineHeight": 1.2,
-                              "fontFamily": "$font/family/body",
-                              "fontSize": "$font/size/intro",
-                              "fontWeight": "$font/weight/body"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "text",
-                          "id": "ua1tS",
-                          "name": "Date",
-                          "fill": "$color/grey/500",
-                          "textGrowth": "fixed-width",
-                          "width": 110,
-                          "content": "1 oct. 2026",
+                          "content": "Directive 1999/37/CE du Conseil : codes harmonisés des certificats d'immatriculation",
                           "lineHeight": 1.45,
-                          "textAlign": "right",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/body"
                         }
                       ]
-                    },
-                    {
-                      "type": "rectangle",
-                      "id": "BRAub",
-                      "name": "Filet",
-                      "fill": "$color/grey/200",
-                      "width": "fill_container",
-                      "height": 1
                     },
                     {
                       "type": "frame",
-                      "id": "zGOQX",
-                      "name": "Question 5",
+                      "id": "V23hV",
+                      "name": "Source",
                       "width": "fill_container",
-                      "gap": 39,
-                      "padding": [
-                        23,
-                        0
-                      ],
+                      "gap": 10,
                       "children": [
                         {
-                          "type": "text",
-                          "id": "Ykt9e",
-                          "name": "Numéro",
-                          "fill": "$color/grey/500",
-                          "textGrowth": "fixed-width",
-                          "width": 56,
-                          "content": "05",
-                          "fontFamily": "$font/family/display",
-                          "fontSize": "$font/size/intro",
-                          "fontWeight": "200",
-                          "letterSpacing": -0.6
+                          "type": "icon",
+                          "id": "C4XQN",
+                          "name": "Icône",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "external-link",
+                          "library": "lucide",
+                          "fill": "$color/grey/500"
                         },
                         {
-                          "type": "frame",
-                          "id": "XY73q",
-                          "name": "Contenu",
+                          "type": "text",
+                          "id": "rF0nP",
+                          "name": "Lien",
+                          "fill": "$color/grey/500",
+                          "textGrowth": "fixed-width",
                           "width": "fill_container",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "o8rds",
-                              "name": "Titre",
-                              "fill": "$color/text/primary",
-                              "textGrowth": "fixed-width",
-                              "width": "fill_container",
-                              "content": "Pourquoi mon dossier part en RTI alors que la voiture est européenne ?",
-                              "lineHeight": 1.2,
-                              "fontFamily": "$font/family/body",
-                              "fontSize": "$font/size/intro",
-                              "fontWeight": "$font/weight/body"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "text",
-                          "id": "iCIEc",
-                          "name": "Date",
-                          "fill": "$color/grey/500",
-                          "textGrowth": "fixed-width",
-                          "width": 110,
-                          "content": "14 oct. 2026",
+                          "content": "Réception à titre isolé (art. R.321-15 du Code de la route) : plaquette usagers, DREAL Centre-Val de Loire",
                           "lineHeight": 1.45,
-                          "textAlign": "right",
                           "fontFamily": "$font/family/body",
                           "fontSize": "$font/size/body",
                           "fontWeight": "$font/weight/body"
                         }
                       ]
-                    },
-                    {
-                      "type": "rectangle",
-                      "id": "qVcJg",
-                      "name": "Filet",
-                      "fill": "$color/grey/200",
-                      "width": "fill_container",
-                      "height": 1
-                    },
-                    {
-                      "type": "frame",
-                      "id": "xEQmX",
-                      "name": "Question 6",
-                      "width": "fill_container",
-                      "gap": 39,
-                      "padding": [
-                        23,
-                        0
-                      ],
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "QSKxi",
-                          "name": "Numéro",
-                          "fill": "$color/grey/500",
-                          "textGrowth": "fixed-width",
-                          "width": 56,
-                          "content": "06",
-                          "fontFamily": "$font/family/display",
-                          "fontSize": "$font/size/intro",
-                          "fontWeight": "200",
-                          "letterSpacing": -0.6
-                        },
-                        {
-                          "type": "frame",
-                          "id": "w2MEMn",
-                          "name": "Contenu",
-                          "width": "fill_container",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "Fu8pj",
-                              "name": "Titre",
-                              "fill": "$color/text/primary",
-                              "textGrowth": "fixed-width",
-                              "width": "fill_container",
-                              "content": "Combien coûte une RTI et combien de temps ça prend ?",
-                              "lineHeight": 1.2,
-                              "fontFamily": "$font/family/body",
-                              "fontSize": "$font/size/intro",
-                              "fontWeight": "$font/weight/body"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "text",
-                          "id": "XoGJf",
-                          "name": "Date",
-                          "fill": "$color/grey/500",
-                          "textGrowth": "fixed-width",
-                          "width": 110,
-                          "content": "20 sept. 2026",
-                          "lineHeight": 1.45,
-                          "textAlign": "right",
-                          "fontFamily": "$font/family/body",
-                          "fontSize": "$font/size/body",
-                          "fontWeight": "$font/weight/body"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "rectangle",
-                      "id": "DS2eG",
-                      "name": "Filet",
-                      "fill": "$color/grey/200",
-                      "width": "fill_container",
-                      "height": 1
                     }
                   ]
                 }
@@ -14163,8 +15057,109 @@
         },
         {
           "type": "frame",
+          "id": "Op6o3",
+          "name": "05 Garanties",
+          "width": "fill_container",
+          "stroke": "#E6E6E6",
+          "strokeWidth": {
+            "top": 1
+          },
+          "layout": "vertical",
+          "gap": 24,
+          "padding": [
+            56,
+            64
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "Sw4pU",
+              "name": "En-tête",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "end",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Rvnos",
+                  "name": "Titre",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "JHeYc",
+                      "name": "Numéro",
+                      "fill": "#8A8A8A",
+                      "content": "05",
+                      "fontFamily": "JetBrains Mono",
+                      "fontSize": 12,
+                      "fontWeight": "normal",
+                      "letterSpacing": 0.5
+                    },
+                    {
+                      "type": "text",
+                      "id": "D8C1U",
+                      "name": "Titre",
+                      "fill": "#141414",
+                      "content": "Garanties",
+                      "fontFamily": "Inter",
+                      "fontSize": 30,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.6
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "K9eXGu",
+                  "name": "Description",
+                  "fill": "#6B6B6B",
+                  "textGrowth": "fixed-width",
+                  "width": 480,
+                  "content": "Les trois promesses de l'accueil, posées sous la zone de dépôt. Chacune mène à sa réponse dans la FAQ.",
+                  "lineHeight": 1.5,
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "gJVb0",
+              "name": "Scène",
+              "width": "fill_container",
+              "fill": "$color/bg/page",
+              "cornerRadius": 10,
+              "gap": 24,
+              "padding": 32,
+              "children": [
+                {
+                  "id": "h20Xzr",
+                  "type": "ref",
+                  "ref": "xTEi9",
+                  "name": "Garanties"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "ju8Yp",
+              "name": "Source",
+              "fill": "#8A8A8A",
+              "content": "ref · xTEi9",
+              "fontFamily": "JetBrains Mono",
+              "fontSize": 11,
+              "fontWeight": "normal",
+              "letterSpacing": 0.5
+            }
+          ]
+        },
+        {
+          "type": "frame",
           "id": "CnBC7",
-          "name": "05 États interactifs",
+          "name": "06 États interactifs",
           "width": "fill_container",
           "stroke": "#E6E6E6",
           "strokeWidth": {
@@ -14197,7 +15192,7 @@
                       "id": "ehO96",
                       "name": "Numéro",
                       "fill": "#8A8A8A",
-                      "content": "05",
+                      "content": "06",
                       "fontFamily": "JetBrains Mono",
                       "fontSize": 12,
                       "fontWeight": "normal",
@@ -28990,7 +29985,8 @@
               "gap": "$space/7"
             },
             "lj5R9": {
-              "fontSize": "$font/size/caption"
+              "fontSize": "$font/size/caption",
+              "content": "Homologation"
             },
             "vpOcA": {
               "fill": "$color/status/error-bg",
@@ -29075,7 +30071,8 @@
               "gap": "$space/7"
             },
             "lj5R9": {
-              "fontSize": "$font/size/caption"
+              "fontSize": "$font/size/caption",
+              "content": "Homologation"
             },
             "vpOcA": {
               "fill": "$color/status/error-bg",
@@ -29167,7 +30164,8 @@
               "gap": "$space/7"
             },
             "lj5R9": {
-              "fontSize": "$font/size/caption"
+              "fontSize": "$font/size/caption",
+              "content": "Homologation"
             },
             "vpOcA": {
               "fill": "$color/status/ok-bg",
@@ -29260,7 +30258,8 @@
               "gap": "$space/7"
             },
             "lj5R9": {
-              "fontSize": "$font/size/caption"
+              "fontSize": "$font/size/caption",
+              "content": "Homologation"
             },
             "vpOcA": {
               "fill": "$color/status/error-bg",
@@ -30212,6 +31211,184 @@
               "fontSize": "$font/size/caption"
             }
           }
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "xTEi9",
+      "x": 8403.5,
+      "y": -3695.5,
+      "name": "Garanties",
+      "reusable": true,
+      "width": 786,
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "TGcxN",
+          "name": "Gratuit",
+          "width": "fill_container",
+          "gap": "$space/10",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "z4RJC5",
+              "name": "Icône",
+              "width": 20,
+              "height": 20,
+              "icon": "gift",
+              "library": "lucide",
+              "fill": "$color/text/primary"
+            },
+            {
+              "type": "frame",
+              "id": "XWfDc",
+              "name": "Texte",
+              "layout": "vertical",
+              "gap": "$space/3",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "w3Bzb5",
+                  "name": "Promesse",
+                  "fill": "$color/text/primary",
+                  "content": "Gratuit",
+                  "fontFamily": "$font/family/body",
+                  "fontSize": "$font/size/body",
+                  "fontWeight": "$font/weight/bold"
+                },
+                {
+                  "type": "text",
+                  "id": "r3PxiS",
+                  "name": "Détail",
+                  "fill": "$color/grey/700",
+                  "content": "Résultat complet, sans compte",
+                  "fontFamily": "$font/family/body",
+                  "fontSize": "$font/size/caption",
+                  "fontWeight": "$font/weight/body"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "dHLAg",
+          "name": "Séparateur",
+          "fill": "$color/grey/200",
+          "width": 1,
+          "height": 23
+        },
+        {
+          "type": "frame",
+          "id": "bAfAO",
+          "name": "Photo effacée",
+          "width": "fill_container",
+          "gap": "$space/10",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "m8ZBcQ",
+              "name": "Icône",
+              "width": 20,
+              "height": 20,
+              "icon": "image-off",
+              "library": "lucide",
+              "fill": "$color/text/primary"
+            },
+            {
+              "type": "frame",
+              "id": "o21UDi",
+              "name": "Texte",
+              "layout": "vertical",
+              "gap": "$space/3",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "gmwo8",
+                  "name": "Promesse",
+                  "fill": "$color/text/primary",
+                  "content": "Photo effacée",
+                  "fontFamily": "$font/family/body",
+                  "fontSize": "$font/size/body",
+                  "fontWeight": "$font/weight/bold"
+                },
+                {
+                  "type": "text",
+                  "id": "f1EtR",
+                  "name": "Détail",
+                  "fill": "$color/grey/700",
+                  "content": "Supprimée après la lecture",
+                  "fontFamily": "$font/family/body",
+                  "fontSize": "$font/size/caption",
+                  "fontWeight": "$font/weight/body"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "MSiI6",
+          "name": "Séparateur",
+          "fill": "$color/grey/200",
+          "width": 1,
+          "height": 23
+        },
+        {
+          "type": "frame",
+          "id": "G9JMi",
+          "name": "Code public",
+          "width": "fill_container",
+          "gap": "$space/10",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "riiJM",
+              "name": "Icône",
+              "width": 20,
+              "height": 20,
+              "icon": "code-xml",
+              "library": "lucide",
+              "fill": "$color/text/primary"
+            },
+            {
+              "type": "frame",
+              "id": "u98Ne",
+              "name": "Texte",
+              "layout": "vertical",
+              "gap": "$space/3",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "FKBEj",
+                  "name": "Promesse",
+                  "fill": "$color/text/primary",
+                  "content": "Code public",
+                  "fontFamily": "$font/family/body",
+                  "fontSize": "$font/size/body",
+                  "fontWeight": "$font/weight/bold"
+                },
+                {
+                  "type": "text",
+                  "id": "nXjdf",
+                  "name": "Détail",
+                  "fill": "$color/grey/700",
+                  "content": "Règles et barèmes ouverts",
+                  "fontFamily": "$font/family/body",
+                  "fontSize": "$font/size/caption",
+                  "fontWeight": "$font/weight/body"
+                }
+              ]
+            }
+          ]
         }
       ]
     }

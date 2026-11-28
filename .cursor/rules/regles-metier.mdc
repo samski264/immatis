@@ -1,0 +1,14 @@
+---
+description: Le verdict métier vient de rules.ts. Un texte d'interface ne le réécrit pas.
+alwaysApply: true
+---
+
+# Verdict métier
+
+`packages/core/rules.ts` décide du verdict. Les articles dans `apps/web/public/articles` décrivent cette même règle. Le rail, la carte de sortie, l'accueil et le tableau Rules du README la suivent.
+
+Une demande sur une carte, un texte, un rail ou une mise en page ne modifie ni `rules.ts`, ni `rules.test.ts`, ni ce tableau. « Aligner », « la même philosophie », « pour que la carte corresponde » ne sont pas une demande de changer le verdict.
+
+Si la fonction et les articles ne disent pas la même chose, arrête-toi et nomme l'écart. Ne choisis pas une source pour réécrire l'autre. Si elles disent la même chose et qu'un test dit l'inverse, le test est faux : restaure l'assertion, pas la fonction.
+
+Exemple : le rail liste « Réception CE » comme station à passer pour l'AVDT. `getReception` fait l'inverse, K rempli renvoie `null`. Le texte de la carte se corrige. La fonction ne se réécrit pas.

@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { EventSourceParserStream } from "eventsource-parser/stream";
 import { abortProcessing, completeProcessing, setScanStatus, startProcessing } from "@/lib/routeFlight";
 import { saveResult } from "@/lib/scanResult";
+import { scanTools } from "@/lib/scanTools";
+import { registerTools } from "@/lib/webmcp";
 import Dropzone from "./Dropzone";
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
@@ -17,6 +19,8 @@ function readEvent(event, data) {
 // L'upload SSE arrive dès que le fichier est reçu, bien avant la fin de l'OCR.
 const UPLOAD_BEAT_MS = 1200;
 
+const DEPOSIT_WAIT_MS = 120_000;
+
 export default function Scan({ inputId, formats }) {
   const router = useRouter();
   const [events, setEvents] = useState(null);
@@ -27,6 +31,13 @@ export default function Scan({ inputId, formats }) {
   const busy = useRef(false);
   const phaseTimer = useRef(0);
   const phaseRef = useRef(null);
+  const outcome = useRef(null);
+  const settled = useRef(new Set());
+
+  const settle = (next) => {
+    outcome.current = next;
+    settled.current.forEach((listener) => listener(next));
+  };
 
   const publishPhase = (next) => {
     phaseRef.current = next;
@@ -53,6 +64,7 @@ export default function Scan({ inputId, formats }) {
   useEffect(() => () => window.clearTimeout(phaseTimer.current), []);
 
   const finish = (payload) => {
+    settle({ payload });
     saveResult(payload);
     completeProcessing(router);
   };
@@ -63,6 +75,7 @@ export default function Scan({ inputId, formats }) {
     stopPhase();
     abortProcessing();
     if (error) setEvents({ error });
+    settle({ error: error || "Lecture interrompue." });
   };
 
   // Le payload RSC de /result est statique : le préfetch complet le met en cache
@@ -151,6 +164,45 @@ export default function Scan({ inputId, formats }) {
       abortReading(err.message);
     }
   };
+
+  const runForAgent = useEffectEvent(async (files) => {
+    if (busy.current) return { error: "Une lecture est déjà en cours." };
+    outcome.current = null;
+    await (files ? send(files) : tryExample());
+    return outcome.current ?? { error: "La lecture n'a pas abouti." };
+  });
+
+  const waitForDeposit = useEffectEvent((signal) => {
+    const zone = document.getElementById(inputId)?.parentElement;
+    zone?.scrollIntoView({ behavior: "smooth", block: "center" });
+    zone?.focus({ preventScroll: true });
+
+    return new Promise((resolve) => {
+      const done = (next) => {
+        settled.current.delete(done);
+        window.clearTimeout(timer);
+        resolve(next);
+      };
+      const timer = window.setTimeout(
+        () => done({ error: "Aucune carte grise déposée par l'utilisateur." }),
+        DEPOSIT_WAIT_MS,
+      );
+      signal?.addEventListener("abort", () => done({ error: "Attente annulée." }));
+      settled.current.add(done);
+    });
+  });
+
+  useEffect(
+    () =>
+      registerTools(
+        scanTools({
+          scan: (files) => runForAgent(files),
+          example: () => runForAgent(null),
+          awaitDeposit: (signal) => waitForDeposit(signal),
+        }),
+      ),
+    [],
+  );
 
   return (
     <>

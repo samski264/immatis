@@ -2,19 +2,14 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-const text = (value) => ({ content: [{ type: "text", text: value }] });
+import { registerTools, text } from "@/lib/webmcp";
 
 export default function WebMcp({ guides }) {
   const router = useRouter();
 
   useEffect(() => {
-    const context = document.modelContext;
-    if (!context?.registerTool) return;
-
-    const controller = new AbortController();
     const paths = guides.map((guide) => guide.path);
-    const tools = [
+    return registerTools([
       {
         name: "list_guides",
         description:
@@ -40,14 +35,17 @@ export default function WebMcp({ guides }) {
           return text(`Guide ouvert : ${guide.title}.`);
         },
       },
-    ];
-
-    for (const tool of tools) {
-      Promise.resolve()
-        .then(() => context.registerTool(tool, { signal: controller.signal }))
-        .catch(() => {});
-    }
-    return () => controller.abort();
+      {
+        name: "open_scan",
+        description:
+          "Ouvre la page d'accueil d'Immatis sur la zone de dépôt de la carte grise. Les outils scan_carte_grise et scan_example y deviennent disponibles.",
+        inputSchema: { type: "object", properties: {} },
+        execute: () => {
+          router.push("/#depot");
+          return text("Zone de dépôt ouverte. Appeler scan_carte_grise pour lire une carte grise.");
+        },
+      },
+    ]);
   }, [guides, router]);
 
   return null;
